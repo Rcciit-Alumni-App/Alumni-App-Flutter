@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/background.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'constants/colors.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +19,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         body: BackgroundDesign(),
       ),
+      home: HomePage(),
     );
   }
 }
