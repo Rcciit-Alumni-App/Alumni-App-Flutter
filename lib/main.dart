@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/background.dart';
 import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/screens/register/register_main.dart';
+import 'package:frontend/screens/register/register_profile_alumni.dart';
 import 'constants/colors.dart';
 
 
@@ -16,9 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: lightMode,
-      home: Scaffold(
-        body: HomePage(),
-      ),
+      home: RegisterProfileAlumni(),
     );
   }
 }
