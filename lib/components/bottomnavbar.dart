@@ -30,7 +30,7 @@ class _BottomnavbarState extends State<Bottomnavbar> {
     setState(() {
       _selectedIndex = index;
     });
-    navigationService.pushNamed(_routes[index]);
+    navigationService.pushReplacementNamed(_routes[index]);
   }
 
   @override
