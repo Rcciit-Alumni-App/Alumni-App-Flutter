@@ -4,14 +4,14 @@ import 'package:frontend/components/button.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 
-class RegisterMain extends StatefulWidget {
-  const RegisterMain({super.key});
+class RegisterProfileAlumni extends StatefulWidget {
+  const RegisterProfileAlumni({super.key});
 
   @override
-  State<RegisterMain> createState() => _RegisterMainState();
+  State<RegisterProfileAlumni> createState() => _RegisterProfileAlumniState();
 }
 
-class _RegisterMainState extends State<RegisterMain> {
+class _RegisterProfileAlumniState extends State<RegisterProfileAlumni> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -25,15 +25,24 @@ class _RegisterMainState extends State<RegisterMain> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hello Name",
+                  "Registered as Alumni",
                   style: kRegisterHeading,
                 ),
                 Text(
-                  "Please fill in the rest of your details",
+                  "Please set your profile",
                   style: kRegisterSubHeading,
                 ),
                 SizedBox(
-                  height: 65.0,
+                  height: 20.0,
+                ),
+                Center(
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundImage: AssetImage("assets/default-user.jpg"),
+                  ),
+                ),
+                SizedBox(
+                  height: 40.0,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -44,25 +53,13 @@ class _RegisterMainState extends State<RegisterMain> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
-                    label: "Email",
+                    label: "Year of Passout",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
-                    label: "Phone Number",
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "University Roll(you cannot change this later)",
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "College Roll",
+                    label: "Department",
                   ),
                 ),
                 SizedBox(

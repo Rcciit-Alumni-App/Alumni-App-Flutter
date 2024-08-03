@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class MyTextField extends StatefulWidget {
+class Socials extends StatefulWidget {
   final String? label;
   final String? hintText;
-  final double? height;
-  final int? maxLines;
-  final IconData? icons;
 
-  const MyTextField({
+  const Socials({
     this.label,
     this.hintText,
-    this.height,
-    this.maxLines,
-    this.icons,
   });
 
   @override
-  _MyTextFieldState createState() => _MyTextFieldState();
+  _SocialsState createState() => _SocialsState();
 }
 
-class _MyTextFieldState extends State<MyTextField> {
+class _SocialsState extends State<Socials> {
   final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
 
@@ -53,9 +46,8 @@ class _MyTextFieldState extends State<MyTextField> {
         ),
         Container(
           width: double.infinity,
-          height: widget.height ?? 47.0,
+          height: 47.0,
           child: TextField(
-            maxLines: widget.maxLines,
             focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: widget.hintText,
@@ -79,7 +71,6 @@ class _MyTextFieldState extends State<MyTextField> {
                 ),
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              suffixIcon: widget.icons != null ? Icon(widget.icons) : null,
             ),
           ),
         ),
