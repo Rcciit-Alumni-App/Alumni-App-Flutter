@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/services/auth_gate.dart';
 import 'package:frontend/services/navigation_service.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: lightMode.copyWith(
         textTheme: GoogleFonts.nunitoTextTheme(),
       ),
-      home: AuthGate(),
+      home: HomePage(),
     );
   }
   
