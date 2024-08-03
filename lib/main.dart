@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/bottomnavbar.dart';
-import 'package:frontend/screens/home_screen.dart';
-import 'package:frontend/screens/register/register_main.dart';
-import 'package:frontend/screens/register/register_profile_alumni.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:frontend/services/auth_gate.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/utils.dart';
 import 'package:get_it/get_it.dart';
@@ -31,10 +29,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigationService.navigatorKey,
       debugShowCheckedModeBanner: false,
-      initialRoute: "/home",
+      // initialRoute: "/home",
       routes: navigationService.routes,
-      theme: lightMode,
-      home: HomePage(),
+      theme: lightMode.copyWith(
+        textTheme: GoogleFonts.nunitoTextTheme(),
+      ),
+      home: AuthGate(),
     );
   }
   
