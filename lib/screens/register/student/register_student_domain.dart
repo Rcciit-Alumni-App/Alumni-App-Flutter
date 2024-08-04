@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/background_add_details_page.dart';
-import 'package:frontend/components/button.dart';
-import 'package:frontend/components/button2.dart';
-import 'package:frontend/components/button4.dart';
-import 'package:frontend/components/edu_history.dart';
+import 'package:frontend/components/Background/background_add_details_page.dart';
+import 'package:frontend/components/Buttons/button2.dart';
+import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/socials.dart';
 import 'package:frontend/constants/constants.dart';
-import 'package:frontend/models/higher_studies_model.dart';
 
 class RegisterStudentDomain extends StatefulWidget {
   @override
