@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/background_add_details_page.dart';
-import 'package:frontend/components/button.dart';
-import 'package:frontend/components/button3.dart';
+import 'package:frontend/components/Background/background_add_details_page.dart';
+import 'package:frontend/components/Buttons/button3.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 
