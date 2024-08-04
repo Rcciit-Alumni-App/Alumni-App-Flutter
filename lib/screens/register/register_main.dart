@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/background_add_details_page.dart';
 import 'package:frontend/components/button.dart';
+import 'package:frontend/components/button3.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 
@@ -70,7 +71,7 @@ class _RegisterMainState extends State<RegisterMain> {
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: CustomButton(
+                  child: CustomButton3(
                     label: "Next",
                     onPressed: () {},
                   ),

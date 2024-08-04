@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 class Socials extends StatefulWidget {
   final String? label;
   final String? hintText;
+  final int? index;
 
-  const Socials({
+  String? text;
+
+  Socials({
+    this.index,
     this.label,
     this.hintText,
   });
@@ -16,6 +20,7 @@ class Socials extends StatefulWidget {
 class _SocialsState extends State<Socials> {
   final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -48,6 +53,10 @@ class _SocialsState extends State<Socials> {
           width: double.infinity,
           height: 47.0,
           child: TextField(
+            controller: _controller,
+            onChanged: (value) {
+              widget.text = value;
+            },
             focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: widget.hintText,

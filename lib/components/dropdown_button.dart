@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
 
+class DropdownOptionController extends ChangeNotifier {
+  String? _selectedItem;
+
+  String? get selectedItem => _selectedItem;
+
+  set selectedItem(String? newItem) {
+    if (_selectedItem != newItem) {
+      _selectedItem = newItem;
+      notifyListeners();
+    }
+  }
+
+  void clear() {
+    selectedItem = null;
+  }
+}
+
 class DropdownOption extends StatefulWidget {
+  final DropdownOptionController controller;
   final String? caption;
+  final ValueChanged<String?>? onChanged;
+  final ValueChanged<String?>? onSaved;
 
   const DropdownOption({
+    required this.controller,
     this.caption,
+    this.onChanged,
+    this.onSaved,
   });
 
   @override
@@ -20,7 +43,26 @@ class _DropdownOptionState extends State<DropdownOption> {
     'E-commerce',
   ];
 
-  String? selectedMenu;
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_updateSelectedItem);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_updateSelectedItem);
+    super.dispose();
+  }
+
+  void _updateSelectedItem() {
+    setState(() {
+      // Call the onChanged callback whenever the selected item is updated
+      if (widget.onChanged != null) {
+        widget.onChanged!(widget.controller.selectedItem);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +75,7 @@ class _DropdownOptionState extends State<DropdownOption> {
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
           color: Color(0xFF2F80ED),
-          width: 2.5,
+          width: 1.11053,
         ),
         color: Colors.grey[200],
       ),
@@ -46,7 +88,7 @@ class _DropdownOptionState extends State<DropdownOption> {
             fontSize: 17.0,
           ),
         ),
-        value: selectedMenu,
+        value: widget.controller.selectedItem,
         icon: Icon(Icons.arrow_drop_down),
         iconSize: 24,
         elevation: 16,
@@ -56,9 +98,11 @@ class _DropdownOptionState extends State<DropdownOption> {
           color: Colors.transparent,
         ),
         onChanged: (String? newValue) {
-          setState(() {
-            selectedMenu = newValue;
-          });
+          widget.controller.selectedItem = newValue;
+          // Call the onSaved callback when the dropdown value is changed
+          if (widget.onSaved != null) {
+            widget.onSaved!(widget.controller.selectedItem);
+          }
         },
         items: menuItems.map<DropdownMenuItem<String>>((String menuItem) {
           return DropdownMenuItem<String>(
@@ -70,3 +114,4 @@ class _DropdownOptionState extends State<DropdownOption> {
     );
   }
 }
+
