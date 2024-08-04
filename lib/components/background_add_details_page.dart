@@ -32,17 +32,6 @@ class BackgroundAddDetailsPage extends StatelessWidget {
               ),
             ],
           ),
-      
-          Center(
-            child: SizedBox(
-              width: MediaQuery.sizeOf(context).width,
-              child: SvgPicture.asset(
-                'assets/5wfkk60lmqdlzcwhaei.svg',
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-      
         ],
       ),
     );

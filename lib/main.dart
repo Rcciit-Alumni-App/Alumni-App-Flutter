@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/register/alumni/register_alumni_edu.dart';
+import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
+import 'package:frontend/screens/register/student/register_profile_student.dart';
+import 'package:frontend/screens/register/student/register_student_domain.dart';
+import 'package:frontend/screens/register/student/register_student_work.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/services/auth_gate.dart';
@@ -38,8 +43,4 @@ class MyApp extends StatelessWidget {
       home: HomePage(),
     );
   }
-  
-
 }
-
-
