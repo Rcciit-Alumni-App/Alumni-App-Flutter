@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/background_add_details_page.dart';
 import 'package:frontend/components/button.dart';
-import 'package:frontend/components/button3.dart';
+import 'package:frontend/components/button4.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 
-class RegisterMain extends StatefulWidget {
-  const RegisterMain({super.key});
+class RegisterProfileStudent extends StatefulWidget {
+  const RegisterProfileStudent({super.key});
 
   @override
-  State<RegisterMain> createState() => _RegisterMainState();
+  State<RegisterProfileStudent> createState() => _RegisterProfileStudentState();
 }
 
-class _RegisterMainState extends State<RegisterMain> {
+class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -26,15 +26,24 @@ class _RegisterMainState extends State<RegisterMain> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hello Name",
+                  "Registered as Student",
                   style: kRegisterHeading,
                 ),
                 Text(
-                  "Please fill in the rest of your details",
+                  "Please set your profile",
                   style: kRegisterSubHeading,
                 ),
                 SizedBox(
-                  height: 65.0,
+                  height: 20.0,
+                ),
+                Center(
+                  child: CircleAvatar(
+                    radius: 60.0,
+                    backgroundImage: AssetImage("assets/default-user.jpg"),
+                  ),
+                ),
+                SizedBox(
+                  height: 40.0,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -45,33 +54,26 @@ class _RegisterMainState extends State<RegisterMain> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
-                    label: "Email",
+                    label: "Current year of study",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
-                    label: "Phone Number",
+                    label: "Year of Passout",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
-                    label: "University Roll(you cannot change this later)",
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "College Roll",
+                    label: "Department",
                   ),
                 ),
                 SizedBox(
                   height: 10.0,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: CustomButton3(
+                Center(
+                  child: CustomButton4(
                     label: "Next",
                     onPressed: () {},
                   ),
