@@ -22,7 +22,6 @@ class _SocialsState extends State<Socials> {
   bool _isFocused = false;
   final TextEditingController _controller = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
