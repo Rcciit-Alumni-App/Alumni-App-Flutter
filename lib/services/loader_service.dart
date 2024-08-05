@@ -1,60 +1,44 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:frontend/services/navigation_service.dart';
-import 'package:get_it/get_it.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-
+import 'loader_service.dart';
 class LoaderService {
-  final GetIt _getIt = GetIt.instance;
-  late NavigationService _navigationService;
-  OverlayEntry? _overlayEntry;
+  final _loadingStreamController = StreamController<bool>.broadcast();
 
-  LoaderService() {
-    _navigationService = _getIt.get<NavigationService>();
-  }
+  Stream<bool> get loadingStream => _loadingStreamController.stream;
 
   void showLoader() {
-    try {
-      final context = _navigationService.navigatorKey.currentContext;
-      if (context == null) {
-        print('Context is null');
-        return;
-      }
-
-      final overlay = Overlay.of(context);
-      if (overlay == null) {
-        print('Overlay not found');
-        return;
-      }
-
-      _overlayEntry = _createOverlayEntry();
-      overlay.insert(_overlayEntry!);
-    } catch (e) {
-      print('Error showing loader: $e');
-    }
+    _loadingStreamController.add(true);
   }
 
   void hideLoader() {
-    try {
-      _overlayEntry?.remove();
-      _overlayEntry = null;
-    } catch (e) {
-      print('Error hiding loader: $e');
-    }
+    _loadingStreamController.add(false);
   }
 
-  OverlayEntry _createOverlayEntry() {
-    return OverlayEntry(
-      builder: (context) => Positioned.fill(
-        child: Material(
-          color: Colors.black.withOpacity(0.5),
-          child: Center(
-            child: LoadingAnimationWidget.inkDrop(
-              color: Colors.white,
-              size: 50,
+  void dispose() {
+    _loadingStreamController.close();
+  }
+}
+
+class LoaderWidget extends StatelessWidget {
+  final LoaderService loaderService;
+
+  LoaderWidget({required this.loaderService});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+      stream: loaderService.loadingStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data!) {
+          return Container(
+            color: Colors.black.withOpacity(0.5),
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-        ),
-      ),
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 }
