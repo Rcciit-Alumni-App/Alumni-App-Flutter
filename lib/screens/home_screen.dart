@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   final AuthService _authService = AuthService();
   final NavigationService navigation = NavigationService();
   late AlertService _alertService;
-  UserModel? userr;
+  UserModel? user;
 
   
   @override
@@ -30,8 +30,8 @@ class _HomePageState extends State<HomePage> {
     _alertService = GetIt.instance.get<AlertService>();
     _getUser().then((value) {
       setState(() {
-        userr = value;
-        debugPrint(userr.toString());
+        user = value;
+        debugPrint(user.toString());
       });
     });
   }
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   Future<UserModel> _getUser() async {
     try {
       UserModel? user = await _authService.getUserProfile();
-      debugPrint(user.toString());
+      print(user.personalMail);
       return user;
     } catch (e) {
       throw e;
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                           userr?.personalMail ?? 'User',
+                           user?.personalMail ?? 'User',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -159,6 +159,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: CustomButton(label: 'Logout', onPressed: () {
                 _logout();
+                //_getUser();
               }),
             ),
           ],

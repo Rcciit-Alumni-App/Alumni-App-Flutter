@@ -1,12 +1,13 @@
+import 'dart:convert';
 
-class HigherStudies {
-  final int? id;
-  final String? institute;
-  final String? course;
-  final DateTime? startDate;
-  final DateTime? endDate;
+class HigherStudy {
+  int id;
+  String institute;
+  String course;
+  DateTime startDate;
+  DateTime endDate;
 
-  HigherStudies({
+  HigherStudy({
     required this.id,
     required this.institute,
     required this.course,
@@ -14,8 +15,8 @@ class HigherStudies {
     required this.endDate,
   });
 
-  factory HigherStudies.fromJson(Map<String, dynamic> json) {
-    return HigherStudies(
+  factory HigherStudy.fromJson(Map<String, dynamic> json) {
+    return HigherStudy(
       id: json['id'],
       institute: json['institute'],
       course: json['course'],
@@ -29,19 +30,20 @@ class HigherStudies {
       'id': id,
       'institute': institute,
       'course': course,
-      'start_date': startDate?.toIso8601String(),
-      'end_date': endDate?.toIso8601String(),
+      'start_date': startDate.toIso8601String(),
+      'end_date': endDate.toIso8601String(),
     };
   }
 }
 
 class Internship {
-  final int? id;
-  final String? company;
-  final String? role;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final List<String>? skills;
+  int id;
+  String company;
+  String role;
+  DateTime startDate;
+  DateTime endDate;
+  List<String> skills;
+  String description;
 
   Internship({
     required this.id,
@@ -50,6 +52,7 @@ class Internship {
     required this.startDate,
     required this.endDate,
     required this.skills,
+    required this.description,
   });
 
   factory Internship.fromJson(Map<String, dynamic> json) {
@@ -60,6 +63,7 @@ class Internship {
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
       skills: List<String>.from(json['skills']),
+      description: json['description'],
     );
   }
 
@@ -68,48 +72,107 @@ class Internship {
       'id': id,
       'company': company,
       'role': role,
-      'start_date': startDate?.toIso8601String(),
-      'end_date': endDate?.toIso8601String(),
+      'start_date': startDate.toIso8601String(),
+      'end_date': endDate.toIso8601String(),
       'skills': skills,
+      'description': description,
+    };
+  }
+}
+
+class WorkExperience {
+  int id;
+  String company;
+  String role;
+  DateTime startDate;
+  DateTime endDate;
+  List<String> skills;
+  String description;
+
+  WorkExperience({
+    required this.id,
+    required this.company,
+    required this.role,
+    required this.startDate,
+    required this.endDate,
+    required this.skills,
+    required this.description,
+  });
+
+  factory WorkExperience.fromJson(Map<String, dynamic> json) {
+    return WorkExperience(
+      id: json['id'],
+      company: json['company'],
+      role: json['role'],
+      startDate: DateTime.parse(json['start_date']),
+      endDate: DateTime.parse(json['end_date']),
+      skills: List<String>.from(json['skills']),
+      description: json['description'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'company': company,
+      'role': role,
+      'start_date': startDate.toIso8601String(),
+      'end_date': endDate.toIso8601String(),
+      'skills': skills,
+      'description': description,
     };
   }
 }
 
 class UserModel {
-  final String? fullName;
-  final String? phone;
-  final String? personalMail;
-  final String? collegeMail;
-  final String? universityRoll;
-  final String? profilePicUrl;
-  final List<HigherStudies>? higherStudies;
-  final List<Internship>? internships;
+  String fullName;
+  String phone;
+  String personalMail;
+  String collegeMail;
+  String password;
+  String collegeRoll;
+  String universityRoll;
+  String profilePicUrl;
+  String userType;
+  String stream;
+  String status;
+  List<HigherStudy> higherStudies;
+  List<Internship> internships;
+  List<WorkExperience> workExperiences;
 
   UserModel({
     required this.fullName,
     required this.phone,
     required this.personalMail,
     required this.collegeMail,
+    required this.password,
+    required this.collegeRoll,
     required this.universityRoll,
     required this.profilePicUrl,
+    required this.userType,
+    required this.stream,
+    required this.status,
     required this.higherStudies,
     required this.internships,
+    required this.workExperiences,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      fullName: json['full_name'],
-      phone: json['phone'],
-      personalMail: json['personal_mail'],
-      collegeMail: json['college_mail'],
-      universityRoll: json['university_roll'],
-      profilePicUrl: json['profile_pic_url'],
-      higherStudies: (json['higher_studies'] as List)
-          .map((i) => HigherStudies.fromJson(i))
-          .toList(),
-      internships: (json['internships'] as List)
-          .map((i) => Internship.fromJson(i))
-          .toList(),
+      fullName: json['full_name'] ?? '',
+      phone: json['phone'] ?? '',
+      personalMail: json['personal_mail'] ?? '',
+      collegeMail: json['college_mail'] ?? '',
+      password: json['password'] ?? '',
+      collegeRoll: json['college_roll'] ?? '',
+      universityRoll: json['university_roll'] ?? '',
+      profilePicUrl: json['profile_pic_url'] ?? '',
+      userType: json['user_type'] ?? '',
+      stream: json['stream'] ?? '',
+      status: json['status'] ?? '',
+      higherStudies: (json['higher_studies'] as List? ?? []).map((item) => HigherStudy.fromJson(item)).toList(),
+      internships: (json['internships'] as List? ?? []).map((item) => Internship.fromJson(item)).toList(),
+      workExperiences: (json['work_experiences'] as List? ?? []).map((item) => WorkExperience.fromJson(item)).toList(),
     );
   }
 
@@ -119,10 +182,16 @@ class UserModel {
       'phone': phone,
       'personal_mail': personalMail,
       'college_mail': collegeMail,
+      'password': password,
+      'college_roll': collegeRoll,
       'university_roll': universityRoll,
       'profile_pic_url': profilePicUrl,
-      'higher_studies': higherStudies?.map((e) => e.toJson()).toList(),
-      'internships': internships?.map((e) => e.toJson()).toList(),
+      'user_type': userType,
+      'stream': stream,
+      'status': status,
+      'higher_studies': higherStudies.map((item) => item.toJson()).toList(),
+      'internships': internships.map((item) => item.toJson()).toList(),
+      'work_experiences': workExperiences.map((item) => item.toJson()).toList(),
     };
   }
 }

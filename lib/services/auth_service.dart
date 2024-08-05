@@ -63,7 +63,7 @@ class AuthService {
     );
       debugPrint(jsonDecode(response.body)["access_token"]);
       var accesslogintoken =jsonDecode(response.body)["access_token"];
-      await storage.write(key: "acceessToken", value: accesslogintoken);
+      await storage.write(key: "accessToken", value: accesslogintoken);
       return jsonDecode(response.body);
     
   }
@@ -130,15 +130,15 @@ class AuthService {
 
   Future<UserModel> getUserProfile() async {
     String? accessToken = await storage.read(key: "accessToken");
+    print(accessToken);
     final url = Uri.parse('https://alumni-app-backend.onrender.com/api/v1/user/profile/details');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
     };
     final response = await http.get(url, headers: headers);
-    UserModel user = UserModel.fromJson(jsonDecode(response.body));
-    debugPrint(user.toString());
-    return user;
+    final jsonResponse = json.decode(response.body);
+    print(response.body);
+    return UserModel.fromJson(jsonResponse);
   }
-
 }
