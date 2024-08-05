@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/components/Buttons/button.dart';
+import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/screens/auth_view/login_page.dart';
+import 'package:frontend/services/alert_services.dart';
+import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +17,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  final AuthService _authService = AuthService();
+  final NavigationService navigation = NavigationService();
+  late AlertService _alertService;
+  UserModel? userr;
 
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _alertService = GetIt.instance.get<AlertService>();
+    _getUser().then((value) {
+      setState(() {
+        userr = value;
+        debugPrint(userr.toString());
+      });
+    });
+  }
+  Future<void> _logout() async {
+    try {
+      await _authService.logout();
+      _alertService.showSnackBar(
+          message: "Logout Successful",
+          color: Theme.of(context).colorScheme.secondary);
+      Navigator.of(context).pushReplacement(navigation.createRoute(route: LoginPage()));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<UserModel> _getUser() async {
+    try {
+      UserModel? user = await _authService.getUserProfile();
+      debugPrint(user.toString());
+      return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,8 +113,8 @@ class _HomePageState extends State<HomePage> {
                               AssetImage('assets/default-user.jpg'),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'Saban Adhikari',
+                        Text(
+                           userr?.personalMail ?? 'User',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -112,7 +157,9 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: CustomButton(label: 'Logout', onPressed: () {}),
+              child: CustomButton(label: 'Logout', onPressed: () {
+                _logout();
+              }),
             ),
           ],
         ),

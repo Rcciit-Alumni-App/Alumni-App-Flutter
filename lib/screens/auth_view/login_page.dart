@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/screens/auth_view/signup_page.dart';
 import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 import '../../components/Background/background.dart';
 import '../../components/Buttons/button.dart';
 import '../../components/formfield.dart'; // If using SvgPicture for SVGs
@@ -21,11 +23,13 @@ class _LoginPageState extends State<LoginPage>
   NavigationService navigation = NavigationService();
   late AnimationController _controller;
   late Animation<double> _animation;
+  late AlertService _alertService;
   final AuthService _authService = AuthService();
   String? personal_email, password;
   Future<void> _login(String personal_email, String password) async {
     try {
     await _authService.login(personal_email, password);
+    _alertService.showSnackBar(message: "Login Successful",color: Theme.of(context).colorScheme.secondary);
     Navigator.of(context).pushReplacement(navigation.createRoute(route: HomePage()));
     } catch (e) {
       print(e);
@@ -35,6 +39,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    _alertService = GetIt.instance.get<AlertService>();
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     _animation = Tween<double>(begin: 0.0, end: 1).animate(CurvedAnimation(
