@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/components/date.dart';
 import 'package:frontend/components/dropdown_button.dart';
+import 'package:frontend/components/dropdown_multiselect.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/models/work_experience_model.dart';
 
-
 class WorkExperienceFormWidget extends StatefulWidget {
   WorkExperienceFormWidget(
-      {Key? key, required this.contactModel, required this.onRemove, required this.index})
+      {Key? key,
+      required this.contactModel,
+      required this.onRemove,
+      required this.index})
       : super(key: key);
 
   final index;
@@ -26,11 +30,22 @@ class WorkExperienceFormWidget extends StatefulWidget {
   DateCalController startDateController = DateCalController();
   DateCalController endDateController = DateCalController();
   DropdownOptionController domainController = DropdownOptionController();
-  DropdownOptionController skillsController = DropdownOptionController();
+  DropdownMultiController skillsController = DropdownMultiController();
+
+  bool isValidated() => state.validate();
 }
 
 class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
   final formKey = GlobalKey<FormState>();
+
+  bool validate() {
+    // Validate Form Fields
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +65,8 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, left: 15.0, right: 15.0, bottom: 16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -76,7 +92,7 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                                 widget.contactModel.jobRole = "";
                                 widget.contactModel.description = "";
                                 widget.contactModel.domain = "";
-                                widget.contactModel.skills = "";
+                                widget.contactModel.skills = [];
                                 widget.contactModel.startDate = "";
                                 widget.contactModel.endDate = "";
                                 widget._nameController.clear();
@@ -92,7 +108,7 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                               "Clear",
                               style: TextStyle(color: Colors.blue),
                             )),
-                          TextButton(
+                        TextButton(
                             onPressed: () => widget.onRemove(),
                             child: const Text(
                               "Remove",
@@ -102,7 +118,6 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                     ),
                   ],
                 ),
-            
                 MyTextField(
                   controller: widget._nameController,
                   onChanged: (value) => widget.contactModel.name = value,
@@ -122,20 +137,23 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                   children: [
                     Expanded(
                       child: DateCal(
-                        controller: widget.startDateController,
-                        onChanged: (value) => widget.contactModel.startDate = value,
-                        onSaved: (value) => widget.contactModel.startDate = value,
-                        initialText: "Start Date"
-                      ),
+                          controller: widget.startDateController,
+                          onChanged: (value) =>
+                              widget.contactModel.startDate = value,
+                          onSaved: (value) =>
+                              widget.contactModel.startDate = value,
+                          initialText: "Start Date"),
                     ),
-                    const SizedBox(width: 10.0), // Add some space between the fields
+                    const SizedBox(
+                        width: 10.0), // Add some space between the fields
                     Expanded(
                       child: DateCal(
-                        controller: widget.endDateController,
-                        onChanged: (value) => widget.contactModel.endDate = value,
-                        onSaved: (value) => widget.contactModel.endDate = value,
-                        initialText: "End Date"
-                      ),
+                          controller: widget.endDateController,
+                          onChanged: (value) =>
+                              widget.contactModel.endDate = value,
+                          onSaved: (value) =>
+                              widget.contactModel.endDate = value,
+                          initialText: "End Date"),
                     ),
                   ],
                 ),
@@ -151,7 +169,7 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                DropdownOption(
+                DropdownMulti(
                   controller: widget.skillsController,
                   onChanged: (value) => widget.contactModel.skills = value,
                   onSaved: (value) => widget.contactModel.skills = value,

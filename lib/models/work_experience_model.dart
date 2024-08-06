@@ -5,7 +5,7 @@ class WorkExperienceModel {
   String? startDate;
   String? endDate;
   String? domain;
-  String? skills;
+  List<String?>? skills;
   String? description;
 
   WorkExperienceModel({this.id, this.name, this.jobRole, this.startDate, this.endDate, this.domain, this.skills, this.description});
