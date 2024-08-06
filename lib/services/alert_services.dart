@@ -14,7 +14,7 @@ class AlertService {
   void showSnackBar({required String message, IconData icon = Icons.info, Color color = Colors.blue}) {
     try {
       DelightToastBar(
-        snackbarDuration: Duration(seconds: 1),
+        snackbarDuration: Duration(seconds: 2),
         autoDismiss: true,
         position: DelightSnackbarPosition.top,
         builder: (context) => ToastCard(
@@ -28,6 +28,7 @@ class AlertService {
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 14,
+              color: Colors.white,
             ),
           ),
           color: color,
