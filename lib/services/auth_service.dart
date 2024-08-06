@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/UserModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -62,7 +63,7 @@ class AuthService {
     );
       debugPrint(jsonDecode(response.body)["access_token"]);
       var accesslogintoken =jsonDecode(response.body)["access_token"];
-      await storage.write(key: "acceessloginToken", value: accesslogintoken);
+      await storage.write(key: "accessToken", value: accesslogintoken);
       return jsonDecode(response.body);
     
   }
@@ -100,4 +101,44 @@ class AuthService {
     }
   }
 
+  Future<void> logout() async {
+    await storage.delete(key: "accessToken");
+  }
+
+  Future<void> updateUserProfile(UserModel user) async {
+    String? accessToken = await storage.read(key: "accessToken");
+    final url = Uri.parse('https://alumni-app-backend.onrender.com/api/v1/user/profile/update');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+    final body = jsonEncode(user.toJson());
+
+    final response = await http.put(
+      url,
+      headers: headers,
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      print('Profile updated successfully');
+    } else {
+      print('Failed to update profile: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
+
+  Future<UserModel> getUserProfile() async {
+    String? accessToken = await storage.read(key: "accessToken");
+    print(accessToken);
+    final url = Uri.parse('https://alumni-app-backend.onrender.com/api/v1/user/profile/details');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+    final response = await http.get(url, headers: headers);
+    final jsonResponse = json.decode(response.body);
+    print(response.body);
+    return UserModel.fromJson(jsonResponse);
+  }
 }

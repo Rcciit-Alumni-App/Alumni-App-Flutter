@@ -40,6 +40,9 @@ dependencies:
   get_it: ^7.7.0
   http: ^1.2.2
   flutter_secure_storage: ^9.2.2
+  provider: ^6.1.2
+  delightful_toast: ^1.1.0
+  loading_animation_widget: ^1.2.1
 
 dev_dependencies:
   flutter_test:
