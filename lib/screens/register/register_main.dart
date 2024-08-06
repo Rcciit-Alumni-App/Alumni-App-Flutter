@@ -28,7 +28,7 @@ class _RegisterMainState extends State<RegisterMain> {
       user.fullName = full_name;
       user.phone = phone_number;
       user.universityRoll = university_roll;
-      user.status="PROFILE_DETAILS";
+      user.status = user.userType == "ALUMNI" ? "EDUCATION_DETAILS":"PROFILE_DETAILS";
       debugPrint(jsonEncode(user));
       await storage.write(key: "user", value: jsonEncode(user));
       await authService.updateUserProfile(user);
