@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage>
   Future<void> _login(String personal_email, String password, UserProvider userProvider) async {
     try {
       _loaderService.showLoader();
-      final user = await _authService.login(personal_email, password);
+       await _authService.login(personal_email, password);
       //userProvider.setUser(user);
       _alertService.showSnackBar(
         message: "Login Successful",

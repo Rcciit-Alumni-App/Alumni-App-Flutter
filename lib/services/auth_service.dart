@@ -45,7 +45,10 @@ class AuthService {
       debugPrint(response.body);
       await storage.delete(key: "verificationToken");
       var accesstoken =jsonDecode(response.body)["access_token"];
-      await storage.write(key: "acceessToken", value: accesstoken);
+      await storage.write(key: "accessToken", value: accesstoken);
+      UserModel? user = await getUserProfile();
+      debugPrint(jsonEncode(user));
+      await storage.write(key: "user", value: jsonEncode(user));
       return jsonDecode(response.body);
     
   }
@@ -64,6 +67,8 @@ class AuthService {
       debugPrint(jsonDecode(response.body)["access_token"]);
       var accesslogintoken =jsonDecode(response.body)["access_token"];
       await storage.write(key: "accessToken", value: accesslogintoken);
+      UserModel? user = await getUserProfile();
+      await storage.write(key: "user", value: jsonEncode(user));
       return jsonDecode(response.body);
     
   }
@@ -120,12 +125,7 @@ class AuthService {
       body: body,
     );
 
-    if (response.statusCode == 200) {
-      print('Profile updated successfully');
-    } else {
-      print('Failed to update profile: ${response.statusCode}');
-      print('Response body: ${response.body}');
-    }
+    debugPrint(response.body);
   }
 
   Future<UserModel> getUserProfile() async {
