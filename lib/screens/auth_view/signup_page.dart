@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/screens/auth_view/verification_screen.dart';
+import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 import '../../components/Background/background.dart';
 import '../../components/Buttons/button.dart';
 import '../../components/formfield.dart'; // If using SvgPicture for SVGs
@@ -18,7 +20,9 @@ class _SignUpPageState extends State<SignUpPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  late AlertService _alertService;
   final AuthService authService = AuthService();
+  final NavigationService navigation = NavigationService();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? personal_email,
       college_email,
@@ -28,6 +32,8 @@ class _SignUpPageState extends State<SignUpPage>
   @override
   void initState() {
     super.initState();
+    _alertService = GetIt.instance.get<AlertService>();
+
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 500));
     _animation = Tween<double>(begin: 0.0, end: 1).animate(CurvedAnimation(
@@ -58,12 +64,14 @@ class _SignUpPageState extends State<SignUpPage>
         }
         await authService.signup(
             personal_email, college_email, college_roll, password);
+        _alertService.showSnackBar(message: "Otp Sent Successfully",
+            color: Theme.of(context).colorScheme.secondary);
+        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(verificationTypeText: 'Phone', userType: 'Sign Up')));
       } catch (e) {
         print(e);
       }
     }
 
-    NavigationService navigation = NavigationService();
 
     return Stack(
       children: [

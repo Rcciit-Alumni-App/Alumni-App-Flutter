@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_verification_page.dart';
+import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/screens/register/register_main.dart';
+import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:get_it/get_it.dart';
 import '../../components/Buttons/button.dart';
 import '../../components/formfield.dart';
 import '../../services/navigation_service.dart';
@@ -20,12 +24,18 @@ class _VerificationPageState extends State<VerificationPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  final NavigationService navigation = NavigationService();
+  late AlertService _alertService;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthService authService = AuthService();
   String? otp;
   Future<void> verify(String otp) async {
     try {
       await authService.verify(otp);
+      _alertService.showSnackBar(
+          message: "Verification Successful",
+          color: Theme.of(context).colorScheme.secondary);
+      Navigator.of(context).pushReplacement(navigation.createRoute(route: RegisterMain()));
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -33,6 +43,7 @@ class _VerificationPageState extends State<VerificationPage>
   @override
   void initState() {
     super.initState();
+    _alertService = GetIt.instance.get<AlertService>();
     _controller =
         AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
     _animation = Tween<double>(begin: 0.0, end: 1).animate(CurvedAnimation(
@@ -144,6 +155,7 @@ class _VerificationPageState extends State<VerificationPage>
                           child: CustomButton(label: widget.userType, onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
                               _formKey.currentState?.save();
+                              debugPrint(otp!);
                               verify(otp!);
                             }
                           })),
