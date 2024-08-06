@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
+import 'package:frontend/screens/auth_view/signup_page.dart';
+import 'package:frontend/screens/register/register_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/utils.dart';
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode.copyWith(
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
-        home: LoginPage(),
+        home: SignUpPage(),
       ),
     );
   }

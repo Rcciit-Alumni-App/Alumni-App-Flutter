@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_verification_page.dart';
 import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/screens/register/register_main.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:get_it/get_it.dart';
@@ -34,7 +35,7 @@ class _VerificationPageState extends State<VerificationPage>
       _alertService.showSnackBar(
           message: "Verification Successful",
           color: Theme.of(context).colorScheme.secondary);
-      Navigator.of(context).pushReplacement(navigation.createRoute(route: HomePage()));
+      Navigator.of(context).pushReplacement(navigation.createRoute(route: RegisterMain()));
     } catch (e) {
       debugPrint(e.toString());
     }
