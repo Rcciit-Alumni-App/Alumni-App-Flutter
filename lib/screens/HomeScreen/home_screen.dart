@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/components/Buttons/button.dart';
 import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/screens/HomeScreen/CampusSection/campus_news.dart';
+import 'package:frontend/screens/HomeScreen/EventsSection/events.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -16,13 +18,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 10;
   final AuthService _authService = AuthService();
   final NavigationService navigation = NavigationService();
   late AlertService _alertService;
   UserModel? user;
 
-  
   @override
   void initState() {
     // TODO: implement initState
@@ -35,13 +36,15 @@ class _HomePageState extends State<HomePage> {
       });
     });
   }
+
   Future<void> _logout() async {
     try {
       await _authService.logout();
       _alertService.showSnackBar(
           message: "Logout Successful",
           color: Theme.of(context).colorScheme.secondary);
-      Navigator.of(context).pushReplacement(navigation.createRoute(route: LoginPage()));
+      Navigator.of(context)
+          .pushReplacement(navigation.createRoute(route: LoginPage()));
     } catch (e) {
       print(e);
     }
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       throw e;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                           user?.personalMail ?? 'User',
+                          user?.personalMail ?? 'User',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -124,55 +127,31 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            _createDrawerItem(
-              context,
-              text: 'Jobs/Internships',
-              index: 0,
-            ),
-            _createDrawerItem(
-              context,
-              text: 'Workshops',
-              index: 1,
-            ),
-            _createDrawerItem(
-              context,
-              text: 'Career Counselling',
-              index: 2,
-            ),
-            _createDrawerItem(
-              context,
-              text: 'Referrals',
-              index: 3,
-            ),
-            _createDrawerItem(
-              context,
-              text: 'Donations',
-              index: 4,
-            ),
-            _createDrawerItem(
-              context,
-              text: 'Settings',
-              index: 5,
-            ),
+            _createDrawerItem(context, text: 'Jobs/Internships', index: 0),
+            _createDrawerItem(context, text: 'Workshops', index: 1),
+            _createDrawerItem(context, text: 'Career Counselling', index: 2),
+            _createDrawerItem(context, text: 'Referrals', index: 3),
+            _createDrawerItem(context, text: 'Donations', index: 4),
+            _createDrawerItem(context, text: 'Settings', index: 5),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: CustomButton(label: 'Logout', onPressed: () {
-                _logout();
-                //_getUser();
-              }),
+              child: CustomButton(
+                label: 'Logout',
+                onPressed: () {
+                  _logout();
+                },
+              ),
             ),
           ],
         ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Welcome to the Home Page',
-              style: TextStyle(fontSize: 20),
-            ),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CampusNews(),
+            Events()
           ],
         ),
       ),
@@ -180,6 +159,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  
   Widget _createDrawerItem(BuildContext context,
       {required String text, required int index}) {
     bool selected = _selectedIndex == index;
