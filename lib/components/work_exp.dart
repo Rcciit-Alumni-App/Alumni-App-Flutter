@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/components/date.dart';
-import 'package:frontend/components/dropdown_button.dart';
-import 'package:frontend/components/dropdown_multiselect.dart';
+import 'package:frontend/components/Dropdown/dropdown_button.dart';
+import 'package:frontend/components/Dropdown/dropdown_multiselect.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/models/work_experience_model.dart';
 
