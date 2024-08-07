@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
+  int? height;
+  int? width;
   final VoidCallback onPressed;
 
-  CustomButton({required this.label, required this.onPressed});
+  CustomButton({required this.label, required this.onPressed,this.height,this.width});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 108,
-        height: 49,
+        width: width?.toDouble() ?? 108,
+        height: height?.toDouble() ?? 49,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(4.92958),
