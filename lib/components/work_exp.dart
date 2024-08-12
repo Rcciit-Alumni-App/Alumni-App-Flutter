@@ -30,7 +30,7 @@ class WorkExperienceFormWidget extends StatefulWidget {
   DropdownOptionController domainController = DropdownOptionController();
   DropdownMultiController skillsController = DropdownMultiController();
 
-  bool isValidated() => state.validate();
+  // bool isValidated() => state.validate();
 }
 
 class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
@@ -159,8 +159,8 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                 ),
                 DropdownMulti(
                   controller: widget.skillsController,
-                  onChanged: (value) => widget.workExperience.skills = [value],
-                  onSaved: (value) => widget.workExperience.skills = [value],
+                  onChanged: (value) => widget.workExperience.skills = value,
+                  onSaved: (value) => widget.workExperience.skills = value,
                   caption: "Skills",
                 ),
                 MyTextField(

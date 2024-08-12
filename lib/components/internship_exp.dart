@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/components/Dropdown/dropdown_button.dart';
+import 'package:frontend/components/Dropdown/dropdown_multiselect.dart';
 import 'package:frontend/components/date.dart';
-import 'package:frontend/components/dropdown_button.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
@@ -27,7 +28,7 @@ class InternshipExperienceFormWidget extends StatefulWidget {
   DateCalController startDateController = DateCalController();
   DateCalController endDateController = DateCalController();
   DropdownOptionController domainController = DropdownOptionController();
-  DropdownOptionController skillsController = DropdownOptionController();
+  DropdownMultiController skillsController = DropdownMultiController();
 }
 
 class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFormWidget> {
@@ -179,10 +180,10 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                 const SizedBox(
                   height: 15.0,
                 ),
-                DropdownOption(
+                DropdownMulti(
                   controller: widget.skillsController,
-                  onChanged: (value) => widget.internshipExperience.skills = [value],
-                  onSaved: (value) => widget.internshipExperience.skills = [value],
+                  onChanged: (value) => widget.internshipExperience.skills = value,
+                  onSaved: (value) => widget.internshipExperience.skills = value,
                   caption: "Skills",
                 ),
                 MyTextField(
