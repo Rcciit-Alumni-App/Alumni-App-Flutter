@@ -10,6 +10,7 @@ class MyTextField extends StatefulWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final void Function(String?)? onSaved;
+  final bool? enabled;
 
   const MyTextField({
     this.label,
@@ -20,6 +21,7 @@ class MyTextField extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.onSaved,
+    this.enabled
   });
 
   @override
@@ -61,6 +63,7 @@ class _MyTextFieldState extends State<MyTextField> {
           width: double.infinity,
           height: widget.height ?? 47.0,
           child: TextFormField(
+            enabled: widget.enabled,
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary
             ),
