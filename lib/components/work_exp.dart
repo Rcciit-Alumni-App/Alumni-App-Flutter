@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/components/date.dart';
-import 'package:frontend/components/dropdown_button.dart';
+import 'package:frontend/components/Dropdown/dropdown_button.dart';
+import 'package:frontend/components/Dropdown/dropdown_multiselect.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
 
@@ -26,7 +28,9 @@ class WorkExperienceFormWidget extends StatefulWidget {
   DateCalController startDateController = DateCalController();
   DateCalController endDateController = DateCalController();
   DropdownOptionController domainController = DropdownOptionController();
-  DropdownOptionController skillsController = DropdownOptionController();
+  DropdownMultiController skillsController = DropdownMultiController();
+
+  bool isValidated() => state.validate();
 }
 
 class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
@@ -52,7 +56,8 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 16.0),
+            padding: const EdgeInsets.only(
+                top: 10.0, left: 15.0, right: 15.0, bottom: 16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -94,7 +99,7 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                               "Clear",
                               style: TextStyle(color: Colors.blue),
                             )),
-                          TextButton(
+                        TextButton(
                             onPressed: () => widget.onRemove(),
                             child: const Text(
                               "Remove",
@@ -104,7 +109,6 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                     ),
                   ],
                 ),
-            
                 MyTextField(
                   controller: widget._nameController,
                   onChanged: (value) => widget.workExperience.company = value,
@@ -153,7 +157,7 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                 const SizedBox(
                   height: 15.0,
                 ),
-                DropdownOption(
+                DropdownMulti(
                   controller: widget.skillsController,
                   onChanged: (value) => widget.workExperience.skills = [value],
                   onSaved: (value) => widget.workExperience.skills = [value],
