@@ -6,7 +6,6 @@ import 'package:frontend/components/Dropdown/dropdown_multiselect.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
 
-
 class WorkExperienceFormWidget extends StatefulWidget {
   WorkExperienceFormWidget(
       {Key? key, required this.workExperience, required this.onRemove, required this.index})
@@ -37,6 +36,15 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
   final formKey = GlobalKey<FormState>();
 
   bool checked = false;
+
+  bool validate() {
+    // Validate Form Fields
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +142,8 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                         initialText: "Start Date"
                       ),
                     ),
-                    const SizedBox(width: 10.0), // Add some space between the fields
+                    const SizedBox(
+                        width: 10.0), // Add some space between the fields
                     Expanded(
                       child: DateCal(
                         controller: widget.endDateController,

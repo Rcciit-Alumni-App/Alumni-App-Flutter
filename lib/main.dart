@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode.copyWith(
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
-        home: RegisterMain(),
+        home: CampusScreen(),
       ),
     );
   }
