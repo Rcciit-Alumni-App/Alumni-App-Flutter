@@ -7,6 +7,9 @@ class MyTextField extends StatefulWidget {
   final double? height;
   final int? maxLines;
   final IconData? icons;
+  final TextEditingController? controller;
+  final void Function(String)? onChanged;
+  final void Function(String?)? onSaved;
 
   const MyTextField({
     this.label,
@@ -14,6 +17,9 @@ class MyTextField extends StatefulWidget {
     this.height,
     this.maxLines,
     this.icons,
+    this.controller,
+    this.onChanged,
+    this.onSaved,
   });
 
   @override
@@ -54,8 +60,14 @@ class _MyTextFieldState extends State<MyTextField> {
         Container(
           width: double.infinity,
           height: widget.height ?? 47.0,
-          child: TextField(
+          child: TextFormField(
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary
+            ),
+            controller: widget.controller,
             maxLines: widget.maxLines,
+            onChanged: widget.onChanged,
+            onSaved: widget.onSaved,
             focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: widget.hintText,
@@ -78,7 +90,7 @@ class _MyTextFieldState extends State<MyTextField> {
                   width: 1.11053,
                 ),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+              contentPadding: widget.maxLines == null ? const EdgeInsets.symmetric(horizontal: 10) : const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               suffixIcon: widget.icons != null ? Icon(widget.icons) : null,
             ),
           ),

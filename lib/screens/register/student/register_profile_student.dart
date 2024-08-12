@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/background_add_details_page.dart';
-import 'package:frontend/components/button.dart';
+import 'package:frontend/components/Background/background_add_details_page.dart';
+import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 
@@ -71,9 +71,8 @@ class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
                 SizedBox(
                   height: 10.0,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: CustomButton(
+                Center(
+                  child: CustomButton4(
                     label: "Next",
                     onPressed: () {},
                   ),

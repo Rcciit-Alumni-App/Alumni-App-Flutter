@@ -1,21 +1,60 @@
 import 'package:flutter/material.dart';
 
-class DateCal extends StatefulWidget {
-  final String initialText;
+class DateCalController extends ChangeNotifier {
+  String? _text = '';
 
-  DateCal({required this.initialText});
+  String? get text => _text;
+
+  set text(String? newText) {
+    if (_text != newText) {
+      _text = newText;
+      notifyListeners();
+    }
+  }
+
+  void clear() {
+    text = null;
+  }
+}
+
+class DateCal extends StatefulWidget {
+  final DateCalController controller;
+  final String initialText;
+  final ValueChanged<String?>? onChanged;
+  final ValueChanged<String?>? onSaved;
+
+  DateCal({
+    required this.controller,
+    required this.initialText,
+    this.onChanged,
+    this.onSaved,
+  });
 
   @override
   _DateCalState createState() => _DateCalState();
 }
 
 class _DateCalState extends State<DateCal> {
-  late String text;
-
   @override
   void initState() {
     super.initState();
-    text = widget.initialText;
+    widget.controller.text = widget.initialText;
+    widget.controller.addListener(_updateText);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_updateText);
+    super.dispose();
+  }
+
+  void _updateText() {
+    setState(() {
+      // Call the onChanged callback whenever the text is updated
+      if (widget.onChanged != null) {
+        widget.onChanged!(widget.controller.text);
+      }
+    });
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -25,10 +64,13 @@ class _DateCalState extends State<DateCal> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        text = "${picked.toLocal()}".split(' ')[0];
-      });
+
+    if (picked != null) {
+      widget.controller.text = "${picked.toLocal()}".split(' ')[0];
+      // Call the onSaved callback when the date is picked
+      if (widget.onSaved != null) {
+        widget.onSaved!(widget.controller.text);
+      }
     }
   }
 
@@ -40,7 +82,7 @@ class _DateCalState extends State<DateCal> {
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.grey[200],
         border: Border.all(
-          width: 2.5,
+          width: 1.11053,
           color: Color(0xFF2F80ED),
         ),
       ),
@@ -50,7 +92,7 @@ class _DateCalState extends State<DateCal> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              text,
+              widget.controller.text ?? widget.initialText,
               style: TextStyle(
                 color: Color(0xFF2F80ED),
               ),
