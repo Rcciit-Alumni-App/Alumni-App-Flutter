@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 class HigherStudy {
-  int id;
-  String institute;
-  String course;
-  DateTime startDate;
-  DateTime endDate;
+  int? id;
+  String? institute;
+  String? course;
+  DateTime? startDate;
+  DateTime? endDate;
 
   HigherStudy({
-    required this.id,
-    required this.institute,
-    required this.course,
-    required this.startDate,
-    required this.endDate,
+    this.id,
+    this.institute,
+    this.course,
+    this.startDate,
+    this.endDate,
   });
 
   factory HigherStudy.fromJson(Map<String, dynamic> json) {
@@ -30,29 +30,31 @@ class HigherStudy {
       'id': id,
       'institute': institute,
       'course': course,
-      'start_date': startDate.toIso8601String(),
-      'end_date': endDate.toIso8601String(),
+      'start_date': startDate == null ? startDate : startDate!.toIso8601String(),
+      'end_date': endDate == null ? endDate : endDate!.toIso8601String(),
     };
   }
 }
 
 class Internship {
-  int id;
-  String company;
-  String role;
-  DateTime startDate;
-  DateTime endDate;
-  List<String> skills;
-  String description;
+  int? id;
+  String? company;
+  String? domain;
+  String? role;
+  DateTime? startDate;
+  DateTime? endDate;
+  List<String?>? skills;
+  String? description;
 
   Internship({
-    required this.id,
-    required this.company,
-    required this.role,
-    required this.startDate,
-    required this.endDate,
-    required this.skills,
-    required this.description,
+    this.id,
+    this.company,
+    this.role,
+    this.startDate,
+    this.endDate,
+    this.skills,
+    this.description,
+    this.domain
   });
 
   factory Internship.fromJson(Map<String, dynamic> json) {
@@ -64,6 +66,7 @@ class Internship {
       endDate: DateTime.parse(json['end_date']),
       skills: List<String>.from(json['skills']),
       description: json['description'],
+      domain: json['domain']
     );
   }
 
@@ -72,31 +75,34 @@ class Internship {
       'id': id,
       'company': company,
       'role': role,
-      'start_date': startDate.toIso8601String(),
-      'end_date': endDate.toIso8601String(),
+      'start_date': startDate == null ? startDate : startDate!.toIso8601String(),
+      'end_date': endDate == null ? endDate : endDate!.toIso8601String(),
       'skills': skills,
       'description': description,
+      'domain': domain
     };
   }
 }
 
 class WorkExperience {
-  int id;
-  String company;
-  String role;
-  DateTime startDate;
-  DateTime endDate;
-  List<String> skills;
-  String description;
+  int? id;
+  String? company;
+  String? domain;
+  String? role;
+  DateTime? startDate;
+  DateTime? endDate;
+  List<String?>? skills;
+  String? description;
 
   WorkExperience({
-    required this.id,
-    required this.company,
-    required this.role,
-    required this.startDate,
-    required this.endDate,
-    required this.skills,
-    required this.description,
+    this.id,
+    this.company,
+    this.role,
+    this.startDate,
+    this.endDate,
+    this.skills,
+    this.description,
+    this.domain
   });
 
   factory WorkExperience.fromJson(Map<String, dynamic> json) {
@@ -108,6 +114,7 @@ class WorkExperience {
       endDate: DateTime.parse(json['end_date']),
       skills: List<String>.from(json['skills']),
       description: json['description'],
+      domain: json['domain']
     );
   }
 
@@ -116,10 +123,11 @@ class WorkExperience {
       'id': id,
       'company': company,
       'role': role,
-      'start_date': startDate.toIso8601String(),
-      'end_date': endDate.toIso8601String(),
+      'start_date': startDate == null ? startDate : startDate!.toIso8601String(),
+      'end_date': endDate == null ? endDate : endDate!.toIso8601String(),
       'skills': skills,
       'description': description,
+      'domain': domain
     };
   }
 }
@@ -136,6 +144,8 @@ class UserModel {
   String userType;
   String stream;
   String status;
+  List<String> domains;
+  List<String> socials;
   List<HigherStudy> higherStudies;
   List<Internship> internships;
   List<WorkExperience> workExperiences;
@@ -155,6 +165,8 @@ class UserModel {
     required this.higherStudies,
     required this.internships,
     required this.workExperiences,
+    required this.domains,
+    required this.socials,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -170,6 +182,8 @@ class UserModel {
       userType: json['user_type'] ?? '',
       stream: json['stream'] ?? '',
       status: json['status'] ?? '',
+      socials: json['socials'] ?? '',
+      domains: json['domains'] ?? '',
       higherStudies: (json['higher_studies'] as List? ?? []).map((item) => HigherStudy.fromJson(item)).toList(),
       internships: (json['internships'] as List? ?? []).map((item) => Internship.fromJson(item)).toList(),
       workExperiences: (json['work_experiences'] as List? ?? []).map((item) => WorkExperience.fromJson(item)).toList(),

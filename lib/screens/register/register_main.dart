@@ -6,6 +6,8 @@ import 'package:frontend/components/Buttons/button3.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/screens/register/alumni/register_profile_alumni.dart';
+import 'package:frontend/screens/register/student/register_profile_student.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -32,10 +34,16 @@ class _RegisterMainState extends State<RegisterMain> {
       debugPrint(jsonEncode(user));
       await storage.write(key: "user", value: jsonEncode(user));
       await authService.updateUserProfile(user);
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return user.userType == 'ALUMNI' ? RegisterProfileAlumni() : RegisterProfileStudent();
+      }));
+
     } catch (e) {
       debugPrint(e.toString());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -65,6 +73,7 @@ class _RegisterMainState extends State<RegisterMain> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: MyTextField(
+                        enabled: false,
                         label: "Full Name",
                         onSaved: (value) {
                           setState(() {
@@ -87,6 +96,7 @@ class _RegisterMainState extends State<RegisterMain> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: MyTextField(
+                        enabled: false,
                         label: "Phone Number",
                         onSaved: (value) {
                           setState(() {

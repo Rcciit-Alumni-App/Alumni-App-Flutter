@@ -3,6 +3,7 @@ import 'package:frontend/components/Background/background_add_details_page.dart'
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
 
 class RegisterProfileAlumni extends StatefulWidget {
   const RegisterProfileAlumni({super.key});
@@ -47,18 +48,21 @@ class _RegisterProfileAlumniState extends State<RegisterProfileAlumni> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Full Name",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Year of Passout",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Department",
                   ),
                 ),
@@ -68,7 +72,11 @@ class _RegisterProfileAlumniState extends State<RegisterProfileAlumni> {
                 Center(
                   child: CustomButton4(
                     label: "Next",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return RegisterAlumniWork();
+                      }));
+                    },
                   ),
                 )
               ],

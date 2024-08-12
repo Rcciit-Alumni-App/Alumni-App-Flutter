@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/edu_history.dart';
 import 'package:frontend/components/socials.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/models/higher_studies_model.dart';
+import 'package:frontend/services/alert_services.dart';
+import 'package:frontend/services/auth_service.dart';
 
 class RegisterAlumniEdu extends StatefulWidget {
   @override
@@ -16,6 +22,10 @@ class RegisterAlumniEdu extends StatefulWidget {
 }
 
 class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
+  final AlertService alertService = AlertService();
+  final AuthService authService = AuthService();
+  final storage = new FlutterSecureStorage();
+
   List<HigherStudiesFormWidget> higherStudiesForms = List.empty(growable: true);
   List<Socials> socialsList = List.empty(growable: true);
 
@@ -26,8 +36,35 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
     onAddSocials();
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
+
+    Future<void> updateProfile() async {
+      try {
+        UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+        
+        user.higherStudies = higherStudiesForms
+          .map((e) => e.higherStudiesModel)
+          .toList();
+
+        user.socials = socialsList.map((e) => e.text ?? "").toList();
+
+        await storage.write(key: "user", value: jsonEncode(user));
+
+        // WRITE API CALLS HERE //
+        await authService.updateUserProfile(user);
+        alertService.showSnackBar(message: "Profile created successfully",
+            color: Theme.of(context).colorScheme.secondary);
+
+        Navigator.pushNamed(context, '/home');
+
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
     return Stack(children: [
       BackgroundAddDetailsPage(),
       Scaffold(
@@ -47,7 +84,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                 CustomButton4(
                   label: "Next",
                   onPressed: () {
-                    onSave();
+                    updateProfile();
                   },
                 ),
               ],
@@ -143,25 +180,8 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
     ]);
   }
 
-  onSave() {
-
-    // --------------------------------------- HANDLE VALIDATION HERE---------------------------------------------
-
-    List<Map?> data = higherStudiesForms
-        .map((e) => {
-              'name': e.contactModel.name,
-              'startDate': e.contactModel.startDate,
-            })
-        .toList();
-
-    print(data);
-
-    print(socialsList);
-
-  }
-
   //Delete specific form
-  onRemove(HigherStudiesModel contact) {
+  onRemove(HigherStudy higherStudiesModel) {
 
     if (higherStudiesForms.length == 1) {
       return null;
@@ -169,7 +189,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
 
     setState(() {
       int index = higherStudiesForms
-          .indexWhere((element) => element.contactModel.id == contact.id);
+          .indexWhere((element) => element.higherStudiesModel.id == higherStudiesModel.id);
 
       if (higherStudiesForms != null) higherStudiesForms.removeAt(index);
     });
@@ -177,10 +197,10 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
 
   onAdd() {
     setState(() {
-      HigherStudiesModel _higherStudiesModel = HigherStudiesModel(id: higherStudiesForms.length);
+      HigherStudy _higherStudiesModel = HigherStudy(id: higherStudiesForms.length);
       higherStudiesForms.add(HigherStudiesFormWidget(
         index: higherStudiesForms.length,
-        contactModel: _higherStudiesModel,
+        higherStudiesModel: _higherStudiesModel,
         onRemove: () => onRemove(_higherStudiesModel),
       ));
     });
