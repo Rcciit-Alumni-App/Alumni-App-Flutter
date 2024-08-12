@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/components/Buttons/button3.dart';
+import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 
 class NewsDetails extends StatefulWidget {
@@ -16,7 +17,7 @@ class _NewsDetailsState extends State<NewsDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(20.0),
         child: Stack(
           children: [
             Center(
@@ -48,6 +49,11 @@ class _NewsDetailsState extends State<NewsDetails> {
                     textAlign: TextAlign.justify,
                   ),
                   SizedBox(height: 40.0),
+                  MyTextField(
+                    hintText: "Add Comments...",
+                    icons: Icons.send,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                  ),
                 ],
               ),
             ),
