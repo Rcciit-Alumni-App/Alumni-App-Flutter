@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/auth_view/forgot_password_page_email.dart';
 import 'package:frontend/screens/auth_view/signup_page.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/services/alert_services.dart';
@@ -125,14 +126,21 @@ class _LoginPageState extends State<LoginPage>
                             });
                           },
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: MediaQuery.sizeOf(context).width * 0.03),
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) {
+                              return ForgotPasswordPageEmail();
+                            }));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: MediaQuery.sizeOf(context).width * 0.03),
+                            child: Text(
+                              'Forgot Password?',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary),
+                            ),
                           ),
                         ),
                         Center(
