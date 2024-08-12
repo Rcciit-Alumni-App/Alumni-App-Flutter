@@ -3,6 +3,7 @@ import 'package:frontend/components/Background/background_add_details_page.dart'
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/screens/register/student/register_student_work.dart';
 
 class RegisterProfileStudent extends StatefulWidget {
   const RegisterProfileStudent({super.key});
@@ -47,24 +48,28 @@ class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Full Name",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Current year of study",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Year of Passout",
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: MyTextField(
+                    enabled: false,
                     label: "Department",
                   ),
                 ),
@@ -74,7 +79,11 @@ class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
                 Center(
                   child: CustomButton4(
                     label: "Next",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return RegisterStudentWork();
+                      }));
+                    },
                   ),
                 )
               ],

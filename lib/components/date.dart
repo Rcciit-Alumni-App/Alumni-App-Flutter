@@ -38,7 +38,6 @@ class _DateCalState extends State<DateCal> {
   @override
   void initState() {
     super.initState();
-    widget.controller.text = widget.initialText;
     widget.controller.addListener(_updateText);
   }
 
@@ -66,7 +65,7 @@ class _DateCalState extends State<DateCal> {
     );
 
     if (picked != null) {
-      widget.controller.text = "${picked.toLocal()}".split(' ')[0];
+      widget.controller.text = picked.toIso8601String();
       // Call the onSaved callback when the date is picked
       if (widget.onSaved != null) {
         widget.onSaved!(widget.controller.text);
@@ -92,7 +91,13 @@ class _DateCalState extends State<DateCal> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.controller.text ?? widget.initialText,
+              widget.controller.text!.isNotEmpty
+                ? DateTime.parse(widget.controller.text!)
+                    .toLocal()
+                    .toString()
+                    .split(' ')[0]
+                : widget.initialText,
+              
               style: TextStyle(
                 color: Color(0xFF2F80ED),
               ),
