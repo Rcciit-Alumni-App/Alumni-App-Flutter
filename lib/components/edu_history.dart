@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/date.dart';
 import 'package:frontend/components/formfield.dart';
+import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/models/higher_studies_model.dart';
 
 
 class HigherStudiesFormWidget extends StatefulWidget {
   HigherStudiesFormWidget(
-      {Key? key, required this.contactModel, required this.onRemove, required this.index})
+      {Key? key, required this.higherStudiesModel, required this.onRemove, required this.index})
       : super(key: key);
 
   final index;
-  HigherStudiesModel contactModel;
+  HigherStudy higherStudiesModel;
   final Function onRemove;
   final state = _HigherStudiesFormWidgetState();
 
@@ -68,10 +69,10 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                             onPressed: () {
                               setState(() {
                                 //Clear All forms Data
-                                widget.contactModel.name = "";
-                                widget.contactModel.jobRole = "";
-                                widget.contactModel.startDate = "";
-                                widget.contactModel.endDate = "";
+                                widget.higherStudiesModel.institute = null;
+                                widget.higherStudiesModel.course = null;
+                                widget.higherStudiesModel.startDate = null;
+                                widget.higherStudiesModel.endDate = null;
                                 widget._nameController.clear();
                                 widget._jobRoleController.clear();
                                 widget.startDateController.clear();
@@ -95,14 +96,14 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
             
                 MyTextField(
                   controller: widget._nameController,
-                  onChanged: (value) => widget.contactModel.name = value,
-                  onSaved: (value) => widget.contactModel.name = value,
+                  onChanged: (value) => widget.higherStudiesModel.institute = value,
+                  onSaved: (value) => widget.higherStudiesModel.institute = value,
                   hintText: "Company name",
                 ),
                 MyTextField(
                   controller: widget._jobRoleController,
-                  onChanged: (value) => widget.contactModel.jobRole = value,
-                  onSaved: (value) => widget.contactModel.jobRole = value,
+                  onChanged: (value) => widget.higherStudiesModel.course = value,
+                  onSaved: (value) => widget.higherStudiesModel.course = value,
                   hintText: "Job role",
                 ),
                 const SizedBox(
@@ -113,8 +114,8 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                     Expanded(
                       child: DateCal(
                         controller: widget.startDateController,
-                        onChanged: (value) => widget.contactModel.startDate = value,
-                        onSaved: (value) => widget.contactModel.startDate = value,
+                        onChanged: (value) => widget.higherStudiesModel.startDate = DateTime.parse(value!),
+                        onSaved: (value) => widget.higherStudiesModel.startDate = DateTime.parse(value!),
                         initialText: "Start Date"
                       ),
                     ),
@@ -122,8 +123,8 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                     Expanded(
                       child: DateCal(
                         controller: widget.endDateController,
-                        onChanged: (value) => widget.contactModel.endDate = value,
-                        onSaved: (value) => widget.contactModel.endDate = value,
+                        onChanged: (value) => widget.higherStudiesModel.endDate = DateTime.parse(value!),
+                        onSaved: (value) => widget.higherStudiesModel.endDate = DateTime.parse(value!),
                         initialText: "End Date"
                       ),
                     ),

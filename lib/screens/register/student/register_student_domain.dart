@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/socials.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/services/alert_services.dart';
+import 'package:frontend/services/auth_service.dart';
 
 class RegisterStudentDomain extends StatefulWidget {
   @override
@@ -13,6 +19,10 @@ class RegisterStudentDomain extends StatefulWidget {
 }
 
 class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
+  final AlertService alertService = AlertService();
+  final AuthService authService = AuthService();
+  final storage = new FlutterSecureStorage();
+
   
   List<Socials> domainList = List.empty(growable: true);
   List<Socials> socialsList = List.empty(growable: true);
@@ -26,6 +36,28 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
 
   @override
   Widget build(BuildContext context) {
+
+    Future<void> updateProfile() async {
+      try {
+        UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+        user.domains = domainList.map((e) => e.text ?? "").toList();
+        user.socials = socialsList.map((e) => e.text ?? "").toList();
+
+        await storage.write(key: "user", value: jsonEncode(user));
+
+
+        // HANDLE API CALLS HERE //
+        await authService.updateUserProfile(user);
+        alertService.showSnackBar(message: "Profile created successfully",
+            color: Theme.of(context).colorScheme.secondary);
+
+        Navigator.pushNamed(context, '/home');
+
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
     return Stack(children: [
       BackgroundAddDetailsPage(),
       Scaffold(
@@ -45,7 +77,7 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                 CustomButton4(
                   label: "Next",
                   onPressed: () {
-                    onSave();
+                    updateProfile();
                   },
                 ),
               ],
@@ -140,37 +172,7 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
     ]);
   }
 
-  onSave() {
-
-    // --------------------------------------- HANDLE VALIDATION HERE---------------------------------------------
-
-    // List<Map?> data = higherStudiesForms
-    //     .map((e) => {
-    //           'name': e.contactModel.name,
-    //           'startDate': e.contactModel.startDate,
-    //         })
-    //     .toList();
-
-    // print(data);
-
-
-    // print(domainList);
-    // print(socialsList);
-
-  }
-
-
   onAddDomain() {
-    // setState(() {
-    //   HigherStudiesModel _higherStudiesModel = HigherStudiesModel(id: higherStudiesForms.length);
-    //   higherStudiesForms.add(HigherStudiesFormWidget(
-    //     index: higherStudiesForms.length,
-    //     contactModel: _higherStudiesModel,
-    //     onRemove: () => onRemove(_higherStudiesModel),
-    //   ));
-    // });
-
-
       setState(() {
       domainList.add(
         Socials(
@@ -179,8 +181,6 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
         )
       );
     });
-
-
   }
 
   onAddSocials() {
