@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/CampusScreen/campus_screen.dart';
+import 'package:frontend/screens/DonationScreen/donation_screen.dart';
+import 'package:frontend/screens/JobScreen/job_screen_details.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/screens/auth_view/verification_screen.dart';
+import 'package:frontend/screens/news_details.dart';
 import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
 import 'package:frontend/screens/auth_view/signup_page.dart';
 import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
 import 'package:frontend/screens/register/register_main.dart';
+import 'package:frontend/screens/register/student/register_student_domain.dart';
 import 'package:frontend/screens/register/student/register_student_work.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontend/services/navigation_service.dart';
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode.copyWith(
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
-        home: LoginPage(),
+        home: JobDetails(),
       ),
     );
   }
