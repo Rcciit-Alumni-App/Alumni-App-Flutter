@@ -12,6 +12,7 @@ class MyTextField extends StatefulWidget {
   final void Function(String?)? onSaved;
   final bool? enabled;
   final Color? iconColor;
+  final double? opacity;
 
   const MyTextField({
     this.label,
@@ -24,6 +25,7 @@ class MyTextField extends StatefulWidget {
     this.onSaved,
     this.enabled,
     this.iconColor,
+    this.opacity,
   });
 
   @override
@@ -80,7 +82,7 @@ class _MyTextFieldState extends State<MyTextField> {
                 color: Color(0xFF2F80ED),
               ),
               filled: true,
-              fillColor: _isFocused ? Colors.white : Colors.grey[200],
+              fillColor: _isFocused ? Colors.white : Colors.grey[200]!.withOpacity(widget.opacity ?? 1.0),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(11.1053),
                 borderSide: const BorderSide(
