@@ -76,7 +76,9 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/home');
+                  },
                 ),
                 SizedBox(
                   width: 25.0,
