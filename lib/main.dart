@@ -3,6 +3,7 @@ import 'package:frontend/screens/CampusScreen/campus_screen.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/screens/auth_view/verification_screen.dart';
+import 'package:frontend/screens/create_post.dart';
 import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
 import 'package:frontend/screens/auth_view/signup_page.dart';
 import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode.copyWith(
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
-        home: LoginPage(),
+        home: CreatePost(),
       ),
     );
   }
