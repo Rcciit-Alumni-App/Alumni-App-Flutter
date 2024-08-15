@@ -43,6 +43,7 @@ class _RegisterAlumniWorkState extends State<RegisterAlumniWork> {
           .map((e) => e.workExperience)
           .toList();
         await storage.write(key: "user", value: jsonEncode(user));
+        Navigator.pushNamed(context, '/alumni-education');
       } catch (e) {
         debugPrint(e.toString());
       }
@@ -59,7 +60,11 @@ class _RegisterAlumniWorkState extends State<RegisterAlumniWork> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+
+                    Navigator.pushNamed(context, '/alumni-education');
+
+                  },
                 ),
                 SizedBox(
                   width: 25.0,
