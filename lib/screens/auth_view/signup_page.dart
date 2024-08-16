@@ -66,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage>
         _alertService.showSnackBar(message: "Otp Sent Successfully",
             color: Theme.of(context).colorScheme.secondary);
             loaderService.hideLoader();
-        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(verificationTypeText: 'Phone', userType: 'Sign Up')));
+        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(userType: '',)));
       } catch (e) {
         print(e);
       }
