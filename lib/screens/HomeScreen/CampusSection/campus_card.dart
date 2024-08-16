@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/Buttons/button.dart';
 
 class CampusCard extends StatelessWidget {
-  const CampusCard({super.key});
+  final String? title;
+  final String? desc;
+  const CampusCard({required this.title, required this.desc});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class CampusCard extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'CAMPUS NEWS',
+              title ?? 'Title',
               style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -44,7 +46,7 @@ class CampusCard extends StatelessWidget {
             ),
             const SizedBox(height: 5),
             Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+              desc ?? 'Description',
               style: TextStyle(fontSize: 10),
               overflow: TextOverflow.ellipsis,
             ),

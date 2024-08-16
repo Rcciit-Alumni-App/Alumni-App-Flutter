@@ -37,7 +37,7 @@ class _CampusScreenState extends State<CampusScreen> {
               
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: CampusCard(),
+                  child: CampusCard(title: "",desc: "",),
                 );
               
             }),

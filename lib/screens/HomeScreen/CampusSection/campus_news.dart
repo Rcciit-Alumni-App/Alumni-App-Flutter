@@ -1,8 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/NewsModel.dart';
 import 'package:frontend/screens/HomeScreen/CampusSection/campus_card.dart';
+import 'package:frontend/services/news_service.dart';
+import 'package:get_it/get_it.dart';
 
-class CampusNews extends StatelessWidget {
+class CampusNews extends StatefulWidget {
   const CampusNews({super.key});
+
+  @override
+  State<CampusNews> createState() => _CampusNewsState();
+}
+
+class _CampusNewsState extends State<CampusNews> {
+  late NewsService newsService;
+  List<NewsCardModel>? newsModel;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    newsService = GetIt.instance<NewsService>();
+    getNews().then((value) => {
+          setState(() {
+            newsModel = value;
+            debugPrint("NewsModel" + newsModel.toString());
+          })
+        });
+  }
+
+  Future getNews() async {
+    try {
+      return await newsService.getAllnews();
+    } catch (e) {
+      debugPrint("Error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,41 +71,42 @@ class CampusNews extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Container(
-            height: MediaQuery.of(context).size.height * 0.32,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 4, 
-              itemBuilder: (context, index) {
-                if (index == 3) {
-                  return CircularViewMore();
-                } else {
-                  return CampusCard();
-                }
-              },
-            ),
+            height: MediaQuery.of(context).size.height * 0.33,
+            child: newsModel == null
+                ? Center(
+                    child: CircularProgressIndicator()) 
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      if (index == 3) {
+                        return CircularViewMore();
+                      } else {
+                        return CampusCard(
+                          title: newsModel![index].title,
+                          desc: newsModel![index].description,
+                        );
+                      }
+                    },
+                  ),
           ),
           const SizedBox(height: 10),
         ],
       ),
     );
   }
- 
+}
 
-  Widget CircularViewMore() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: CircleAvatar(
-        radius: 25,
-        backgroundColor: Colors.blue,
-        child: IconButton(
-          icon: Icon(Icons.arrow_forward, color: Colors.white),
-          onPressed: () {
-          },
-        ),
+Widget CircularViewMore() {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: CircleAvatar(
+      radius: 25,
+      backgroundColor: Colors.blue,
+      child: IconButton(
+        icon: Icon(Icons.arrow_forward, color: Colors.white),
+        onPressed: () {},
       ),
-    );
-  }
-
-
-
+    ),
+  );
 }
