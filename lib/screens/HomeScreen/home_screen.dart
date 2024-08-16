@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Drawer/drawer_screen.dart';
 import 'package:frontend/components/bottomnavbar.dart';
-import 'package:frontend/components/Buttons/button.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/screens/HomeScreen/CampusSection/campus_news.dart';
 import 'package:frontend/screens/HomeScreen/EventsSection/events.dart';
+import 'package:frontend/screens/HomeScreen/JobsSection/jobs.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -19,7 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   final AuthService _authService = AuthService();
   final NavigationService navigation = NavigationService();
   late AlertService _alertService;
@@ -27,7 +26,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _alertService = GetIt.instance.get<AlertService>();
     _getUser().then((value) {
@@ -54,8 +52,8 @@ class _HomePageState extends State<HomePage> {
   Future<UserModel> _getUser() async {
     try {
       UserModel? user = await _authService.getUserProfile();
-      print(user.personalMail);
-      return user;
+      print(user?.personalMail);
+      return user!;
     } catch (e) {
       throw e;
     }
@@ -65,40 +63,43 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: uiBuild(),
-    );
-  }
-
-  Widget uiBuild() {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/opendraw.png'),
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-      ),
       drawer: DrawerScreen(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CampusNews(),
-            Events()
-          ],
-        ),
-      ),
       bottomNavigationBar: Bottomnavbar(),
     );
   }
 
-  
- 
+  Widget uiBuild() {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          floating: true,
+          pinned: false,
+          snap: true,
+          elevation: 0,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: ImageIcon(
+                  AssetImage('assets/opendraw.png'),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              CampusNews(),
+              Events(),
+              Jobs(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }

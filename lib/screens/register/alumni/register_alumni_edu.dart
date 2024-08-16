@@ -49,7 +49,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
           .map((e) => e.higherStudiesModel)
           .toList();
 
-        user.socials = socialsList.map((e) => e.text ?? "").toList();
+        //user.socials = socialsList.map((e) => e.text ?? "").toList();
 
         await storage.write(key: "user", value: jsonEncode(user));
 

@@ -3,6 +3,7 @@ import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/screens/auth_view/verification_screen.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/loader_service.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Background/background.dart';
@@ -23,6 +24,7 @@ class _SignUpPageState extends State<SignUpPage>
   late AlertService _alertService;
   final AuthService authService = AuthService();
   final NavigationService navigation = NavigationService();
+  final LoaderService loaderService = LoaderService();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? personal_email,
       college_email,
@@ -58,13 +60,13 @@ class _SignUpPageState extends State<SignUpPage>
           debugPrint('Passwords do not match');
           return;
         }
+        loaderService.showLoader();
         await authService.signup(
             personal_email, college_email, college_roll, password);
         _alertService.showSnackBar(message: "Otp Sent Successfully",
             color: Theme.of(context).colorScheme.secondary);
-        
-        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(userType: 'Sign Up')));
-      
+            loaderService.hideLoader();
+        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(verificationTypeText: 'Phone', userType: 'Sign Up')));
       } catch (e) {
         print(e);
       }

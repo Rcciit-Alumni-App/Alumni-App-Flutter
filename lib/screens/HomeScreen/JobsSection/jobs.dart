@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/HomeScreen/EventsSection/events_card.dart';
+import 'package:frontend/screens/HomeScreen/JobsSection/jobs_card.dart';
 
-class Events extends StatelessWidget {
-  const Events({super.key});
+class Jobs extends StatelessWidget {
+  const Jobs({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class Events extends StatelessWidget {
           Row(
             children: [
               Text(
-                'EVENTS',
+                'Jobs/Internships',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -39,7 +40,7 @@ class Events extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Container(
-            height: MediaQuery.of(context).size.height * 0.32,
+            height: MediaQuery.of(context).size.height * 0.3,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 4, 
@@ -47,7 +48,7 @@ class Events extends StatelessWidget {
                 if (index == 3) {
                   return CircularViewMore();
                 } else {
-                  return EventsCard();
+                  return JobsCard();
                 }
               },
             ),
