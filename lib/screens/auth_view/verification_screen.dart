@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_verification_page.dart';
+import 'package:frontend/screens/DigitalID/digital_id.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/screens/register/register_main.dart';
 import 'package:frontend/services/alert_services.dart';
@@ -35,9 +36,10 @@ class _VerificationPageState extends State<VerificationPage>
       _alertService.showSnackBar(
           message: "Verification Successful",
           color: Theme.of(context).colorScheme.secondary);
-      Navigator.of(context).pushReplacement(navigation.createRoute(route: RegisterMain()));
+      print("Verification Successful");
+      Navigator.of(context).pushReplacement(navigation.createRoute(route: DigitalId()));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error "+e.toString());
     }
   }
   @override

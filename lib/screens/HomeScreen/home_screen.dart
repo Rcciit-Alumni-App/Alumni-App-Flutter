@@ -5,6 +5,7 @@ import 'package:frontend/components/Buttons/button.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/screens/HomeScreen/CampusSection/campus_news.dart';
 import 'package:frontend/screens/HomeScreen/EventsSection/events.dart';
+import 'package:frontend/screens/HomeScreen/JobsSection/jobs.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -91,7 +92,8 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CampusNews(),
-            Events()
+            Events(),
+            Jobs()
           ],
         ),
       ),

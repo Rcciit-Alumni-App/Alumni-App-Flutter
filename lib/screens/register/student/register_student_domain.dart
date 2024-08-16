@@ -40,8 +40,8 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
     Future<void> updateProfile() async {
       try {
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
-        user.domains = domainList.map((e) => e.text ?? "").toList();
-        user.socials = socialsList.map((e) => e.text ?? "").toList();
+        //user.domain = domainList.map((e) => e.text ?? "").toList();
+        //user.socials = socialsList.map((e) => e.text ?? "").toList();
 
         await storage.write(key: "user", value: jsonEncode(user));
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/CampusScreen/campus_screen.dart';
+import 'package:frontend/screens/DigitalID/digital_id.dart';
+import 'package:frontend/screens/EventsScreen/event_details.dart';
+import 'package:frontend/screens/EventsScreen/event_screen.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
@@ -45,7 +48,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode.copyWith(
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
-        home: CampusScreen(),
+        home: HomePage(),
       ),
     );
   }

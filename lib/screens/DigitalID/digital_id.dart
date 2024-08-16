@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Background/background_digital_id.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/UserModel.dart';
 
 class DigitalId extends StatefulWidget {
   const DigitalId({super.key});
@@ -12,6 +16,29 @@ class DigitalId extends StatefulWidget {
 }
 
 class _DigitalIdState extends State<DigitalId> {
+   final storage = new FlutterSecureStorage();
+   UserModel? user;
+  //final UserModel? user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+  Future<UserModel?> _getUser() async {
+    try {
+      UserModel? user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+      print(user?.personalMail);
+      return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getUser().then((value) {
+      setState(() {
+        user = value;
+        debugPrint(user.toString());
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -22,7 +49,7 @@ class _DigitalIdState extends State<DigitalId> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
-                padding: const EdgeInsets.all(15.0), // Added padding to the container
+                padding: const EdgeInsets.all(15.0), 
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
@@ -31,7 +58,7 @@ class _DigitalIdState extends State<DigitalId> {
                   ),
                 ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min, // Minimize the size to fit content
+                  mainAxisSize: MainAxisSize.min, 
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
@@ -50,11 +77,11 @@ class _DigitalIdState extends State<DigitalId> {
                     SizedBox(height: 30.0),
                     CircleAvatar(
                       radius: 80.0,
-                      backgroundImage: AssetImage("assets/default-user.jpg"),
+                      backgroundImage: AssetImage(user?.profilePicUrl ?? "assets/default-user.jpg"),
                     ),
                     SizedBox(height: 10.0),
                     Text(
-                      "XYZ ABC",
+                      user?.fullName ?? "UserName",
                       style: kIdNameStyle,
                     ),
                     SizedBox(height: 10.0),
@@ -67,7 +94,7 @@ class _DigitalIdState extends State<DigitalId> {
                         ),
                         Flexible(
                           child: Text(
-                            "2027",
+                            user?.collegeRoll ?? "2021",
                             style: kIdDetailsFieldStyle,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
@@ -85,7 +112,7 @@ class _DigitalIdState extends State<DigitalId> {
                         ),
                         Flexible(
                           child: Text(
-                            "Computer Science and Engineering",
+                            user?.stream ?? "Computer Science",
                             style: kIdDetailsFieldStyle,
                             overflow: TextOverflow.visible,
                             maxLines: 2,
@@ -103,7 +130,7 @@ class _DigitalIdState extends State<DigitalId> {
                         ),
                         Flexible(
                           child: Text(
-                            "XXXXXXXXXX",
+                            user?.universityRoll ?? "",
                             style: kIdDetailsFieldStyle,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,

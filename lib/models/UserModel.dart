@@ -132,6 +132,30 @@ class WorkExperience {
   }
 }
 
+class SocialLink {
+  String? platform;
+  String? url;
+
+  SocialLink({
+    this.platform,
+    this.url,
+  });
+
+  factory SocialLink.fromJson(Map<String, dynamic> json) {
+    return SocialLink(
+      platform: json['platform'],
+      url: json['url'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'platform': platform,
+      'url': url,
+    };
+  }
+}
+
 class UserModel {
   String fullName;
   String phone;
@@ -144,8 +168,8 @@ class UserModel {
   String userType;
   String stream;
   String status;
-  List<String> domains;
-  List<String> socials;
+  String domain;
+  List<SocialLink> socials;
   List<HigherStudy> higherStudies;
   List<Internship> internships;
   List<WorkExperience> workExperiences;
@@ -165,7 +189,7 @@ class UserModel {
     required this.higherStudies,
     required this.internships,
     required this.workExperiences,
-    required this.domains,
+    required this.domain,
     required this.socials,
   });
 
@@ -182,8 +206,8 @@ class UserModel {
       userType: json['user_type'] ?? '',
       stream: json['stream'] ?? '',
       status: json['status'] ?? '',
-      socials: json['socials'] ?? '',
-      domains: json['domains'] ?? '',
+      domain: json['domain'] ?? '',
+      socials: (json['socials'] as List? ?? []).map((item) => SocialLink.fromJson(item)).toList(),
       higherStudies: (json['higher_studies'] as List? ?? []).map((item) => HigherStudy.fromJson(item)).toList(),
       internships: (json['internships'] as List? ?? []).map((item) => Internship.fromJson(item)).toList(),
       workExperiences: (json['work_experiences'] as List? ?? []).map((item) => WorkExperience.fromJson(item)).toList(),
@@ -203,6 +227,8 @@ class UserModel {
       'user_type': userType,
       'stream': stream,
       'status': status,
+      'domain': domain,
+      'socials': socials.map((item) => item.toJson()).toList(),
       'higher_studies': higherStudies.map((item) => item.toJson()).toList(),
       'internships': internships.map((item) => item.toJson()).toList(),
       'work_experiences': workExperiences.map((item) => item.toJson()).toList(),
