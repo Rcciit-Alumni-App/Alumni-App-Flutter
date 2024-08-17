@@ -11,6 +11,8 @@ class MyTextField extends StatefulWidget {
   final void Function(String)? onChanged;
   final void Function(String?)? onSaved;
   final bool? enabled;
+  final Color? iconColor;
+  final double? opacity;
 
   const MyTextField({
     this.label,
@@ -21,7 +23,9 @@ class MyTextField extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.onSaved,
-    this.enabled
+    this.enabled,
+    this.iconColor,
+    this.opacity,
   });
 
   @override
@@ -78,7 +82,7 @@ class _MyTextFieldState extends State<MyTextField> {
                 color: Color(0xFF2F80ED),
               ),
               filled: true,
-              fillColor: _isFocused ? Colors.white : Colors.grey[200],
+              fillColor: _isFocused ? Colors.white : Colors.grey[200]!.withOpacity(widget.opacity ?? 1.0),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(11.1053),
                 borderSide: const BorderSide(
@@ -94,7 +98,7 @@ class _MyTextFieldState extends State<MyTextField> {
                 ),
               ),
               contentPadding: widget.maxLines == null ? const EdgeInsets.symmetric(horizontal: 10) : const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              suffixIcon: widget.icons != null ? Icon(widget.icons) : null,
+              suffixIcon: widget.icons != null ? Icon(widget.icons, color: widget.iconColor,) : null,
             ),
           ),
         ),

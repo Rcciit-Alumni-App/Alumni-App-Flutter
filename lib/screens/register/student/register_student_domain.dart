@@ -24,13 +24,16 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
   final storage = new FlutterSecureStorage();
 
   
-  List<Socials> domainList = List.empty(growable: true);
   List<Socials> socialsList = List.empty(growable: true);
+
+  Socials social = Socials(
+    label: 'Domain of Interest',
+    hintText: 'Domain',  
+  );
 
   @override
   void initState() {
     super.initState();
-    onAddDomain();
     onAddSocials();
   }
 
@@ -69,7 +72,9 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/home');
+                  },
                 ),
                 SizedBox(
                   width: 25.0,
@@ -106,29 +111,35 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                       Column(
                         children: [
                           // Higher Studies List
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(), // Disable scrolling
-                            itemCount: domainList.length,
-                            itemBuilder: (_, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: domainList[index],
-                              );
-                            },
+                          // ListView.builder(
+                          //   shrinkWrap: true,
+                          //   physics: NeverScrollableScrollPhysics(), // Disable scrolling
+                          //   itemCount: domainList.length,
+                          //   itemBuilder: (_, index) {
+                          //     return Padding(
+                          //       padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          //       child: domainList[index],
+                          //     );
+                          //   },
+                          // ),
+
+                          // Align(
+                          //   alignment: Alignment.centerRight,
+                          //   child: CustomButton2(
+                          //     height: 35,
+                          //     width: 100,
+                          //     label: "Add more",
+                          //     onPressed: () {
+                          //       onAddDomain();
+                          //     },
+                          //   ),
+                          // ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.0),
+                            child: social,  
                           ),
 
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: CustomButton2(
-                              height: 35,
-                              width: 100,
-                              label: "Add more",
-                              onPressed: () {
-                                onAddDomain();
-                              },
-                            ),
-                          ),
                           // Socials List
                           ListView.builder(
                             shrinkWrap: true,
@@ -172,16 +183,16 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
     ]);
   }
 
-  onAddDomain() {
-      setState(() {
-      domainList.add(
-        Socials(
-          label: 'Domain of Interest',
-          hintText: 'Domain',  
-        )
-      );
-    });
-  }
+  // onAddDomain() {
+  //     setState(() {
+  //     domainList.add(
+  //       Socials(
+  //         label: 'Domain of Interest',
+  //         hintText: 'Domain',  
+  //       )
+  //     );
+  //   });
+  // }
 
   onAddSocials() {
     setState(() {

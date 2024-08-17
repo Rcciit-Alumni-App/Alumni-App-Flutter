@@ -9,6 +9,28 @@ class BackgroundDigitalId extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Stack(
+            children: [
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  // child: SvgPicture.asset(
+                  //   'assets/z3klenjs3jlzcqv7ry.svg',
+                  //   fit: BoxFit.fill,
+                  // ),
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  // child: SvgPicture.asset(
+                  //   'assets/verification_page_bg_1.svg',
+                  //   fit: BoxFit.fill,
+                  // ),
+                ),
+              ),
+            ],
+          ),
           Center(
             child: SizedBox(
               width: MediaQuery.sizeOf(context).width,

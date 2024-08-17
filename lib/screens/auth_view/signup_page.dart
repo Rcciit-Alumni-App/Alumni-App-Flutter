@@ -53,10 +53,6 @@ class _SignUpPageState extends State<SignUpPage>
 
   @override
   Widget build(BuildContext context) {
-    // initState() {
-    //   super.initState();
-    //   authService = GetIt.instance.get<AuthService>();
-    // }
     Future<void> signUp(String personal_email, String college_email,
         String college_roll, String password) async {
       try {
@@ -70,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage>
         _alertService.showSnackBar(message: "Otp Sent Successfully",
             color: Theme.of(context).colorScheme.secondary);
             loaderService.hideLoader();
-        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(verificationTypeText: 'Phone', userType: 'Sign Up')));
+        Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(userType: '',)));
       } catch (e) {
         print(e);
       }
@@ -189,10 +185,9 @@ class _SignUpPageState extends State<SignUpPage>
                               _formKey.currentState
                                   ?.save(); 
                                 
-                              signUp(personal_email!, college_email!,
-                                  college_roll!, password!);
+                              // signUp(personal_email!, college_email!,
+                              //     college_roll!, password!);
                             }
-                             Navigator.of(context).pushReplacement(navigation.createRoute(route: VerificationPage(verificationTypeText: 'Phone', userType: 'Sign Up')));
                           },
                         ),
                       ),

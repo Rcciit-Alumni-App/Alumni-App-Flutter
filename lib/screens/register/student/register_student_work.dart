@@ -169,7 +169,13 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return RegisterStudentDomain();
+                    }));
+
+                  },
                 ),
                 SizedBox(
                   width: 25.0,
