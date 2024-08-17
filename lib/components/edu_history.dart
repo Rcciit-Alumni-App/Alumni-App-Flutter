@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/date.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
-import 'package:frontend/models/higher_studies_model.dart';
 
 
 class HigherStudiesFormWidget extends StatefulWidget {
