@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/models/EventsModel.dart';
 import 'package:frontend/screens/HomeScreen/CampusSection/campus_card.dart';
-import 'package:frontend/screens/HomeScreen/EventsSection/events_card.dart';
 import 'package:frontend/services/event_service.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';

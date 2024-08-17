@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/HomeScreen/EventsSection/events_card.dart';
 import 'package:frontend/screens/HomeScreen/JobsSection/jobs_card.dart';
 
 class Jobs extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/NewsModel.dart';
 import 'package:frontend/screens/CampusScreen/campus_screen.dart';
-import 'package:frontend/screens/CampusScreen/news_details.dart';
 import 'package:frontend/screens/HomeScreen/CampusSection/campus_card.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/services/news_service.dart';

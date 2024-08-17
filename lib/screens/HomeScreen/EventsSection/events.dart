@@ -6,7 +6,6 @@ import 'package:frontend/screens/EventsScreen/event_screen.dart';
 import 'package:frontend/screens/HomeScreen/EventsSection/events_card.dart';
 import 'package:frontend/services/event_service.dart';
 import 'package:frontend/services/navigation_service.dart';
-import 'package:frontend/services/news_service.dart';
 import 'package:get_it/get_it.dart';
 
 
@@ -29,7 +28,7 @@ class _EventsState extends State<Events> {
     getNews().then((value) => {
           setState(() {
             eventsModel = value;
-            debugPrint("EventsModel" + jsonEncode(eventsModel));
+           // debugPrint("EventsModel" + jsonEncode(eventsModel));
           })
         });
   }

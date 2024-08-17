@@ -1,42 +1,4 @@
-// type EventAttraction {
-//   label String
-//   value String
-// }
 
-// type EventAnnouncements {
-//   title       String
-//   description String
-// }
-
-// model Events {
-//   id     String @id @default(auto()) @map("_id") @db.ObjectId
-//   userId String @db.ObjectId
-//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-//   event_image    String
-//   banner_image   String
-//   venue          String
-//   description    String[]
-//   images         String[]
-//   schedule       String
-//   attractions    EventAttraction
-//   rules          String[]
-//   announcements  EventAnnouncements
-//   eventInterests EventInterests[]
-//   expires_at     DateTime
-
-//   created_at DateTime @default(now())
-//   updated_at DateTime @updatedAt
-// }
-
-// model EventInterests {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   userId    String   @unique @db.ObjectId
-//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   eventId   String   @unique @db.ObjectId
-//   event     Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)
-//   expiresAt DateTime
-// }
 
 import 'package:frontend/models/UserModel.dart';
 
@@ -74,7 +36,36 @@ class EventInterests {
         'expiresAt': expiresAt.toString()
       };
 }
-
+// {
+//   "id": "66c0a051ce5e1816793b866a",
+//   "venue": "Grand Ballroom, New York",
+//   "schedule": "07:00 PM - Dinner Served",
+//   "banner_image": "https://example.com/charity-gala-banner.jpg",
+//   "images": [
+//     "https://example.com/gala-image1.jpg",
+//     "https://example.com/gala-image2.jpg"
+//   ],
+//   "announcements": {
+//     "title": "Donation Matching",
+//     "description": "All donations will be matched dollar for dollar!"
+//   },
+//   "event_name": "Annual Charity Gala",
+//   "rules": [
+//     "Formal attire required",
+//     "No photography during the auction"
+//   ],
+//   "description": [
+//     "Dinner and silent auction",
+//     "Guest speeches and awards",
+//     "Fundraising activities"
+//   ],
+//   "attractions": {
+//     "label": "Special Guest",
+//     "value": "celebrity-guest"
+//   },
+//   "eventInterests": [],
+//   "created_at": "2024-08-17T13:06:20.818Z"
+// }
 class Eventsmodel {
   String id;
   String userId;
@@ -125,7 +116,7 @@ class Eventsmodel {
         attractions: EventAttraction.fromJson(json['attractions']),
         rules: List<String>.from(json['rules']),
         announcements: EventAnnouncement.fromJson(json['announcements']),
-        eventInterests: List<EventInterests>.from(json['eventInterests']),
+        eventInterests: (json['eventInterests'] as List? ?? []).map((item) => EventInterests.fromJson(item)).toList(),
         expiresAt: DateTime.parse(json['expires_at']),
         createdAt: DateTime.parse(json['created_at']),
         updatedAt: DateTime.parse(json['updated_at']));

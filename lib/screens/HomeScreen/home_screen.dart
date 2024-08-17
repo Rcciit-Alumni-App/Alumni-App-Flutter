@@ -52,8 +52,8 @@ class _HomePageState extends State<HomePage> {
   Future<UserModel> _getUser() async {
     try {
       UserModel? user = await _authService.getUserProfile();
-      print(user?.personalMail);
-      return user!;
+      //print(user?.personalMail);
+      return user;
     } catch (e) {
       throw e;
     }

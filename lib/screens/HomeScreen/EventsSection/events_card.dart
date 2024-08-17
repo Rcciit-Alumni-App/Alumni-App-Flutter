@@ -9,9 +9,9 @@ import 'package:get_it/get_it.dart';
 
 
 class EventsCard extends StatefulWidget {
-  final String title;
-  final String desc;
-  final String id;
+  final String? title;
+  final String? desc;
+  final String? id;
   const EventsCard({super.key, required this.title, required this.desc, required this.id});
 
   @override
@@ -33,7 +33,7 @@ class _EventsCardState extends State<EventsCard> {
 
   Future getEvents() async {
     try {
-      return await eventService.getEventsById(widget.id);
+      return await eventService.getEventsById(widget.id!);
     } catch (e) {
       debugPrint("Error: $e");
     }
@@ -84,7 +84,7 @@ class _EventsCardState extends State<EventsCard> {
               ),
               const SizedBox(height: 10),
               Text(
-                widget.title,
+                widget.title!,
                 style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class _EventsCardState extends State<EventsCard> {
               ),
               const SizedBox(height: 5),
               Text(
-                widget.desc,
+                widget.desc!,
                 style: TextStyle(fontSize: 10),
                 overflow: TextOverflow.ellipsis,
               ),

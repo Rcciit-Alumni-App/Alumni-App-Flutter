@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/bottomnavbar.dart';
-import 'package:frontend/components/Buttons/button3.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/NewsModel.dart';
 import 'package:intl/intl.dart';  

@@ -23,7 +23,7 @@ class EventService {
     List<EventsCardmodel> events = eventsJson
         .map((json) => EventsCardmodel.fromJson(json as Map<String, dynamic>))
         .toList();
-    debugPrint("Events: ${events.toString()}");
+    //debugPrint("Events: ${events.toString()}");
     return events;
   }
   return [];
@@ -38,9 +38,12 @@ class EventService {
         'Authorization': 'Bearer $token',
       },
     );
-    print("Response"+response.body);
-    Eventsmodel events = Eventsmodel.fromJson(json.decode(response.body));
-    return events;
+    //print("Response"+response.body);
+    
+    debugPrint("Response"+json.decode(response.body));
+    Eventsmodel event = Eventsmodel.fromJson(json.decode(response.body));
+    return event;
+  
   }
 
 
