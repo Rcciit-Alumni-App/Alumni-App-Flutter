@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth_view/signup_page.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/screens/auth_view/verification_screen.dart';
-import 'package:frontend/screens/auth_view/verification_screen_reset.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/navigation_service.dart';
@@ -133,7 +132,7 @@ class _ForgotPasswordPageEmailState extends State<ForgotPasswordPageEmail> {
                               if (_formKey.currentState?.validate() ?? false) {
                                 _formKey.currentState?.save();
                                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return VerificationPageReset(verificationTypeText: 'Email', userType: 'Reset Password');
+                                  return VerificationPage(userType: 'Reset Password');
                                 }));
                               }
                             },
