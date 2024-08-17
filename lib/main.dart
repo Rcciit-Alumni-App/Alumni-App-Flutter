@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/CampusScreen/campus_screen.dart';
+import 'package:frontend/screens/CampusScreen/news_details.dart';
 import 'package:frontend/screens/DigitalID/digital_id.dart';
 import 'package:frontend/screens/EventsScreen/event_details.dart';
 import 'package:frontend/screens/EventsScreen/event_screen.dart';

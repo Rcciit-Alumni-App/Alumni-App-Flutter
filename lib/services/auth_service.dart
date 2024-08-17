@@ -139,7 +139,7 @@ class AuthService {
     };
     final response = await http.get(url, headers: headers);
     final jsonResponse = json.decode(response.body);
-    print(response.body);
+    //print(response.body);
     return UserModel.fromJson(jsonResponse);
   }
 }

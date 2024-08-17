@@ -3,30 +3,37 @@ import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/components/Buttons/button3.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/EventsModel.dart';
+import 'package:frontend/services/event_service.dart';
+import 'package:frontend/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 
 class EventDetails extends StatefulWidget {
-  const EventDetails({super.key});
+  final Eventsmodel? event;
+  const EventDetails({super.key, required this.event});
 
   @override
   State<EventDetails> createState() => _EventDetailsState();
 }
 
 class _EventDetailsState extends State<EventDetails> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Stack(
           children: [
             Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Event Name",
+                      widget.event!.eventName,
                       style: kEventNewsHeading,
                     ),
                   ),
@@ -44,7 +51,7 @@ class _EventDetailsState extends State<EventDetails> {
                     height: 20.0,
                   ),
                   Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    widget.event!.description[0],
                     textAlign: TextAlign.justify,
                   ),
                   SizedBox(height: 40.0),
@@ -65,13 +72,7 @@ class _EventDetailsState extends State<EventDetails> {
                 ],
               ),
             ),
-            Positioned(
-                top: 10.0,
-                left: 10.0,
-                child: CustomButton2(
-                  label: "Back",
-                  onPressed: () {},
-                )),
+           
           ],
         ),
       ),
