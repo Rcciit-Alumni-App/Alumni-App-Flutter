@@ -3,13 +3,14 @@ import 'package:frontend/models/UserModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+// Reference : https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
 class AuthService {
-  static const String baseUrl = 'https://alumni-app-backend.onrender.com/api/v1/user/auth';
+  //static const String baseUrl = 'https://alumni-app-backend.onrender.com/api/v1/user/auth';
+  static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user';
   final storage = new FlutterSecureStorage();
   Future<Map<String, dynamic>> signup(String personal_email, String college_email, String college_roll, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/signup'),
+      Uri.parse('$baseUrl/auth/signup'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -32,7 +33,7 @@ class AuthService {
   Future<Map<String, dynamic>> verify(String otp) async {
     String? token = await storage.read(key: "verificationToken");
     final response = await http.post(
-      Uri.parse('$baseUrl/verify'),
+      Uri.parse('$baseUrl/auth/verify'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -42,7 +43,7 @@ class AuthService {
       }),
     );
  
-      debugPrint(response.body);
+      debugPrint("Response"+response.body);
       await storage.delete(key: "verificationToken");
       var accesstoken =jsonDecode(response.body)["access_token"];
       await storage.write(key: "accessToken", value: accesstoken);
@@ -55,7 +56,7 @@ class AuthService {
 
   Future<Map<String, dynamic>> login(String personal_email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('http://10.0.2.2:8000/api/v1/user/auth/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -131,14 +132,14 @@ class AuthService {
   Future<UserModel> getUserProfile() async {
     String? accessToken = await storage.read(key: "accessToken");
     print(accessToken);
-    final url = Uri.parse('https://alumni-app-backend.onrender.com/api/v1/user/profile/details');
+    final url = Uri.parse('$baseUrl/profile/details');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
     };
     final response = await http.get(url, headers: headers);
     final jsonResponse = json.decode(response.body);
-    print(response.body);
+    //print(response.body);
     return UserModel.fromJson(jsonResponse);
   }
 }

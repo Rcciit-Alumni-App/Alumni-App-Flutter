@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
+import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/Buttons/buttonProfile.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/components/formfield.dart';
@@ -16,7 +17,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return  Stack(
+    return Stack(
       children: [
         BackgroundAddDetailsPage(),
         Scaffold(
@@ -34,6 +35,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(
                   height: 30.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton4(
+                      label: "View Profile",
+                      onPressed: () {},
+                    ),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    CustomButton4(
+                      label: "Edit Profile",
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 ProfileButton(
                   text: "My Posts",

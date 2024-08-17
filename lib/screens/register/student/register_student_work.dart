@@ -114,7 +114,6 @@ import 'package:frontend/components/internship_exp.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/components/work_exp.dart';
 import 'package:frontend/models/UserModel.dart';
-import 'package:frontend/models/work_experience_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/screens/register/student/register_student_domain.dart';
 import 'package:frontend/services/alert_services.dart';
@@ -170,7 +169,13 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return RegisterStudentDomain();
+                    }));
+
+                  },
                 ),
                 SizedBox(
                   width: 25.0,

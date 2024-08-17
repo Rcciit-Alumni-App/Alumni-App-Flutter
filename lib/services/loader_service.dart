@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'loader_service.dart';
 class LoaderService {
   final _loadingStreamController = StreamController<bool>.broadcast();
 

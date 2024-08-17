@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Buttons/button.dart';
 import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/screens/DigitalID/digital_id.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -28,7 +29,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
     _getUser().then((value) {
       setState(() {
         user = value;
-        debugPrint(user.toString());
+        //debugPrint(user.toString());
       });
     });
   }
@@ -115,6 +116,16 @@ class _DrawerScreenState extends State<DrawerScreen> {
               label: 'Logout',
               onPressed: () {
                 _logout();
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: CustomButton(
+              label: 'Digital ID',
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                    navigation.createRoute(route: DigitalId()));
               },
             ),
           ),

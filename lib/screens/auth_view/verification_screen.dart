@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_verification_page.dart';
-import 'package:frontend/screens/HomeScreen/home_screen.dart';
-import 'package:frontend/screens/register/register_main.dart';
+import 'package:frontend/screens/DigitalID/digital_id.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:get_it/get_it.dart';
@@ -12,11 +11,10 @@ import '../../components/formfield.dart';
 import '../../services/navigation_service.dart';
 
 class VerificationPage extends StatefulWidget {
-  final String verificationTypeText;
   final void Function()? onTap;
   final String userType;
 
-  const VerificationPage({super.key, required this.verificationTypeText, required this.userType, this.onTap});
+  const VerificationPage({super.key, required this.userType, this.onTap});
 
   @override
   State<VerificationPage> createState() => _VerificationPageState();
@@ -44,9 +42,10 @@ class _VerificationPageState extends State<VerificationPage>
       _alertService.showSnackBar(
           message: "Verification Successful",
           color: Theme.of(context).colorScheme.secondary);
-      Navigator.of(context).pushReplacement(navigation.createRoute(route: RegisterMain()));
+      print("Verification Successful");
+      Navigator.of(context).pushReplacement(navigation.createRoute(route: DigitalId()));
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error "+e.toString());
     }
   }
 
@@ -143,7 +142,7 @@ class _VerificationPageState extends State<VerificationPage>
                       padding:
                           EdgeInsets.only(top: MediaQuery.sizeOf(context).width * 0.1),
                       child: Text(
-                        'Please enter the OTP we have sent to\nyour ${widget.verificationTypeText.toLowerCase()}',
+                        'Please enter the OTP we have sent to\nyour email',
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary),
                       ),

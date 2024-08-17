@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/bottomnavbar.dart';
-import 'package:frontend/models/NewsModel.dart';
+import 'package:frontend/models/EventsModel.dart';
 import 'package:frontend/screens/HomeScreen/CampusSection/campus_card.dart';
+import 'package:frontend/services/event_service.dart';
 import 'package:frontend/services/navigation_service.dart';
-import 'package:frontend/services/news_service.dart';
 import 'package:get_it/get_it.dart';
 
-class CampusScreen extends StatefulWidget {
-  const CampusScreen({super.key});
+class EventScreen extends StatefulWidget {
+  const EventScreen({super.key});
 
   @override
-  State<CampusScreen> createState() => _CampusScreenState();
+  State<EventScreen> createState() => _EventScreenState();
 }
 
-class _CampusScreenState extends State<CampusScreen> {
-  late NewsService newsService;
-  List<NewsCardModel>? newsModel;
+class _EventScreenState extends State<EventScreen> {
+  late EventService eventService;
+  List<EventsCardmodel>? eventsModel;
   NavigationService navigation = NavigationService();
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    newsService = GetIt.instance<NewsService>();
-    getNews().then((value) => {
+    eventService= GetIt.instance<EventService>();
+    getEvents().then((value) => {
           setState(() {
-            newsModel = value;
-            debugPrint("NewsModel" + newsModel.toString());
+            eventsModel = value;
+            debugPrint("EventsModel" + eventsModel.toString());
           })
         });
   }
-  Future getNews() async {
+
+  Future getEvents() async {
     try {
-      return await newsService.getAllnews();
+      return await eventService.getAllEvents();
     } catch (e) {
       debugPrint("Error: $e");
     }
@@ -40,7 +40,8 @@ class _CampusScreenState extends State<CampusScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,7 +63,7 @@ class _CampusScreenState extends State<CampusScreen> {
           Row(
             children: [
               Text(
-                'CAMPUS NEWS',
+                'Events',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -74,14 +75,14 @@ class _CampusScreenState extends State<CampusScreen> {
           const SizedBox(height: 10),
           Container(
             height: MediaQuery.of(context).size.height * 1,
-            child: newsModel == null
+            child: eventsModel == null
                 ? Center(
                     child: CircularProgressIndicator()) 
                 : ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: newsModel!.length+1,
+                    itemCount: eventsModel!.length+1,
                     itemBuilder: (context, index) {
-                      if(index == newsModel!.length){
+                      if(index == eventsModel!.length){
                         return Container(
                           height: 50,
                           width: 50,
@@ -92,9 +93,9 @@ class _CampusScreenState extends State<CampusScreen> {
                       }
                       else{
                         return CampusCard(
-                          title: newsModel![index].title,
-                          desc: newsModel![index].description,
-                          id: newsModel![index].id,
+                          title: eventsModel![index].eventName,
+                          desc: eventsModel![index].description[0],
+                          id: eventsModel![index].id,
                         );
                     
                       }
