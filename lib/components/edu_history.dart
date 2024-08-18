@@ -19,14 +19,25 @@ class HigherStudiesFormWidget extends StatefulWidget {
     return state;
   }
 
+  bool isValidated() => state.validate();
+
   TextEditingController _nameController = TextEditingController();
-  TextEditingController _jobRoleController = TextEditingController();
+  TextEditingController _courseNameController = TextEditingController();
   DateCalController startDateController = DateCalController();
   DateCalController endDateController = DateCalController();
 }
 
 class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
   final formKey = GlobalKey<FormState>();
+
+  bool validate() {
+    // Validate Form Fields
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +84,7 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                                 widget.higherStudiesModel.startDate = null;
                                 widget.higherStudiesModel.endDate = null;
                                 widget._nameController.clear();
-                                widget._jobRoleController.clear();
+                                widget._courseNameController.clear();
                                 widget.startDateController.clear();
                                 widget.endDateController.clear();
                               });
@@ -94,16 +105,18 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                 ),
             
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Institute Name",
                   controller: widget._nameController,
                   onChanged: (value) => widget.higherStudiesModel.institute = value,
                   onSaved: (value) => widget.higherStudiesModel.institute = value,
-                  hintText: "Company name",
+                  hintText: "Institute name",
                 ),
                 MyTextField(
-                  controller: widget._jobRoleController,
+                  validator: (value) => value!.length > 3 ? null : "Enter Course Name",
+                  controller: widget._courseNameController,
                   onChanged: (value) => widget.higherStudiesModel.course = value,
                   onSaved: (value) => widget.higherStudiesModel.course = value,
-                  hintText: "Job role",
+                  hintText: "Course Name",
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -113,7 +126,7 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                     Expanded(
                       child: DateCal(
                         controller: widget.startDateController,
-                        onChanged: (value) => widget.higherStudiesModel.startDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.higherStudiesModel.startDate = value != '' ? DateTime.parse(value!) : null,
                         onSaved: (value) => widget.higherStudiesModel.startDate = DateTime.parse(value!),
                         initialText: "Start Date"
                       ),
@@ -122,7 +135,7 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                     Expanded(
                       child: DateCal(
                         controller: widget.endDateController,
-                        onChanged: (value) => widget.higherStudiesModel.endDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.higherStudiesModel.endDate = value != '' ? DateTime.parse(value!) : null,
                         onSaved: (value) => widget.higherStudiesModel.endDate = DateTime.parse(value!),
                         initialText: "End Date"
                       ),

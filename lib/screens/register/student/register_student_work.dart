@@ -129,6 +129,7 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
   final storage = new FlutterSecureStorage();
 
   List<InternshipExperienceFormWidget> internshipExperienceForms = List.empty(growable: true);
+  int nextAvailableIdInternship = 0;
 
   @override
   void initState() {
@@ -139,13 +140,31 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
   @override
   Widget build(BuildContext context) {
 
+    bool validateForms() {
+      bool allValid = true;
+
+      internshipExperienceForms
+        .forEach((element) => allValid = (allValid && element.isValidated()));
+
+      return allValid;
+    }
+
     Future<void> updateProfile() async {
       try {
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
 
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
         user.internships = internshipExperienceForms
-          .map((e) => e.internshipExperience)
-          .toList();
+          .asMap().entries.map((e) {
+          int index = e.key;
+          InternshipExperienceFormWidget element = e.value;
+          element.internshipExperience.id = index + 1;
+          return element.internshipExperience;
+        }).toList();
+
         await storage.write(key: "user", value: jsonEncode(user));
 
         Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -160,7 +179,6 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
     return Stack(children: [
       BackgroundAddDetailsPage(),
       Scaffold(
-
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Row(
@@ -262,7 +280,8 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
 
   onAdd() {
     setState(() {
-      Internship _internshipExperience = Internship(id: internshipExperienceForms.length);
+      Internship _internshipExperience = Internship(id: nextAvailableIdInternship);
+      nextAvailableIdInternship++;
       internshipExperienceForms.add(InternshipExperienceFormWidget(
         index: internshipExperienceForms.length,
         internshipExperience: _internshipExperience,
