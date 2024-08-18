@@ -127,7 +127,7 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                     Expanded(
                       child: DateCal(
                         controller: widget.startDateController,
-                        onChanged: (value) => widget.internshipExperience.startDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.internshipExperience.startDate = value != '' ? DateTime.parse(value!) : null,
                         onSaved: (value) => widget.internshipExperience.startDate = DateTime.parse(value!),
                         initialText: "Start Date"
                       ),
@@ -136,7 +136,7 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                     !checked ? Expanded(
                       child: DateCal(
                         controller: widget.endDateController,
-                        onChanged: (value) => widget.internshipExperience.endDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.internshipExperience.endDate = value != '' ? DateTime.parse(value!) : null,
                         onSaved: (value) => widget.internshipExperience.endDate = DateTime.parse(value!),
                         initialText: "End Date"
                       ),

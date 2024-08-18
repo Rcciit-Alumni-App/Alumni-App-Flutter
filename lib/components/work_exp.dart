@@ -137,23 +137,51 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                     Expanded(
                       child: DateCal(
                         controller: widget.startDateController,
-                        onChanged: (value) => widget.workExperience.startDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.workExperience.startDate = value != '' ? DateTime.parse(value!) : null,
                         onSaved: (value) => widget.workExperience.startDate = DateTime.parse(value!),
                         initialText: "Start Date"
                       ),
                     ),
                     const SizedBox(
                         width: 10.0), // Add some space between the fields
-                    Expanded(
+                    !checked ? Expanded(
                       child: DateCal(
                         controller: widget.endDateController,
-                        onChanged: (value) => widget.workExperience.endDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.workExperience.endDate = value != '' ? DateTime.parse(value!) : null,
                         onSaved: (value) => widget.workExperience.endDate = DateTime.parse(value!),
                         initialText: "End Date"
                       ),
-                    ),
+                    ) : Expanded(child: Container())
                   ],
                 ),
+
+                 const SizedBox(
+                  height: 15.0,
+                ),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: checked,
+                        onChanged: (_) {
+                          setState(() {
+                            checked = !checked;
+                          });
+                        }
+                      ),
+                      Text(
+                        'I Currently Work Here',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary
+                        )
+                      )
+                    ],
+                  ),
+
+                ),
+
                 const SizedBox(
                   height: 15.0,
                 ),

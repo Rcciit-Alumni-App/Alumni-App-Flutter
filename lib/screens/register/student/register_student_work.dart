@@ -130,6 +130,7 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
   final storage = new FlutterSecureStorage();
 
   List<InternshipExperienceFormWidget> internshipExperienceForms = List.empty(growable: true);
+  int nextAvailableIdInternship = 0;
 
   @override
   void initState() {
@@ -263,7 +264,8 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
 
   onAdd() {
     setState(() {
-      Internship _internshipExperience = Internship(id: internshipExperienceForms.length);
+      Internship _internshipExperience = Internship(id: nextAvailableIdInternship);
+      nextAvailableIdInternship++;
       internshipExperienceForms.add(InternshipExperienceFormWidget(
         index: internshipExperienceForms.length,
         internshipExperience: _internshipExperience,

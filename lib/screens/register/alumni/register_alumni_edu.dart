@@ -7,7 +7,7 @@ import 'package:frontend/components/Background/background_add_details_page.dart'
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/edu_history.dart';
-import 'package:frontend/components/socials.dart';
+import 'package:frontend/components/Socials/socials.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/services/alert_services.dart';
@@ -25,17 +25,20 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   final AuthService authService = AuthService();
   final storage = new FlutterSecureStorage();
 
+  // Higher Studies List
   List<HigherStudiesFormWidget> higherStudiesForms = List.empty(growable: true);
-  List<Socials> socialsList = List.empty(growable: true);
+  int nextAvailableIdStudy = 0;
+
+  // Socials List
+  int nextAvailableIdSocial = 0;
+  List<Socials?> socialsList = List.empty(growable: true);
 
   @override
   void initState() {
     super.initState();
-    onAdd();
+    onAddHigherStudies();
     onAddSocials();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,15 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
           .map((e) => e.higherStudiesModel)
           .toList();
 
-        //user.socials = socialsList.map((e) => e.text ?? "").toList();
+        List<SocialLink> list = [];
+
+        for (Socials? element in socialsList) {
+          if (element != null) {
+            list.add(element.socialLinkModel);
+          }
+        }
+
+        user.socials = list;
 
         await storage.write(key: "user", value: jsonEncode(user));
 
@@ -137,7 +148,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                               width: 100,
                               label: "Add more",
                               onPressed: () {
-                                onAdd();
+                                onAddHigherStudies();
                               },
                             ),
                           ),
@@ -149,7 +160,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                             itemCount: socialsList.length,
                             itemBuilder: (_, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 0.0),
                                 child: socialsList[index],
                               );
                             },
@@ -182,7 +193,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   }
 
   //Delete specific form
-  onRemove(HigherStudy higherStudiesModel) {
+  onRemoveHigherStudies(HigherStudy higherStudiesModel) {
 
     if (higherStudiesForms.length == 1) {
       return null;
@@ -196,25 +207,56 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
     });
   }
 
-  onAdd() {
+  onAddHigherStudies() {
     setState(() {
-      HigherStudy _higherStudiesModel = HigherStudy(id: higherStudiesForms.length);
+      HigherStudy _higherStudiesModel = HigherStudy(id: nextAvailableIdStudy);
       higherStudiesForms.add(HigherStudiesFormWidget(
         index: higherStudiesForms.length,
         higherStudiesModel: _higherStudiesModel,
-        onRemove: () => onRemove(_higherStudiesModel),
+        onRemove: () => onRemoveHigherStudies(_higherStudiesModel),
       ));
     });
   }
 
   onAddSocials() {
     setState(() {
+      SocialLink _socialLink = SocialLink(id: nextAvailableIdSocial);
+      nextAvailableIdSocial++;
+      
       socialsList.add(
         Socials(
+          socialLinkModel: _socialLink,
           label: 'Social',
-          hintText: 'Link',  
+          hintText: 'Link',
+          onRemove: () => onRemoveSocials(_socialLink),
         )
       );
+    });
+  }
+
+  onRemoveSocials(SocialLink socialLink) {
+    int notNullElements = 0;
+
+    for (Socials? element in socialsList) {
+      if (element != null) {
+        notNullElements++;
+      }
+    }
+
+    if (notNullElements == 1) {
+      return null;
+    }
+
+    setState(() {
+      int index = socialsList
+          .indexWhere((element) {
+            if (element != null) 
+              return element.socialLinkModel.id == socialLink.id;
+            return false;
+          });
+
+      // if (socialsList != null) socialsList.removeAt(index);
+      if (socialsList != null) socialsList[index] = null;
     });
   }
 }

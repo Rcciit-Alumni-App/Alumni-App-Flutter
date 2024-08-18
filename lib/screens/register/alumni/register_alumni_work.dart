@@ -26,6 +26,7 @@ class _RegisterAlumniWorkState extends State<RegisterAlumniWork> {
   final storage = new FlutterSecureStorage();
 
   List<WorkExperienceFormWidget> workExperienceForms = List.empty(growable: true);
+  int nextAvailableIdWork = 0;
 
   @override
   void initState() {
@@ -152,7 +153,7 @@ class _RegisterAlumniWorkState extends State<RegisterAlumniWork> {
 
   onAdd() {
     setState(() {
-      WorkExperience _workExperience = WorkExperience(id: workExperienceForms.length);
+      WorkExperience _workExperience = WorkExperience(id: nextAvailableIdWork);
       workExperienceForms.add(WorkExperienceFormWidget(
         index: workExperienceForms.length,
         workExperience: _workExperience,

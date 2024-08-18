@@ -13,7 +13,7 @@ class DateCalController extends ChangeNotifier {
   }
 
   void clear() {
-    text = null;
+    text = '';
   }
 }
 

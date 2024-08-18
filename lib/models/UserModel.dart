@@ -132,16 +132,19 @@ class WorkExperience {
 }
 
 class SocialLink {
+  int? id;
   String? platform;
   String? url;
 
   SocialLink({
+    this.id,
     this.platform,
     this.url,
   });
 
   factory SocialLink.fromJson(Map<String, dynamic> json) {
     return SocialLink(
+      id: json['id'],
       platform: json['platform'],
       url: json['url'],
     );
@@ -149,6 +152,7 @@ class SocialLink {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'platform': platform,
       'url': url,
     };
