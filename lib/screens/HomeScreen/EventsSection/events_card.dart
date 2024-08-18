@@ -12,7 +12,8 @@ class EventsCard extends StatefulWidget {
   final String? title;
   final String? desc;
   final String? id;
-  const EventsCard({super.key, required this.title, required this.desc, required this.id});
+  final String? date;
+  const EventsCard({super.key, required this.title, required this.desc, required this.id, required this.date});
 
   @override
   State<EventsCard> createState() => _EventsCardState();
@@ -91,6 +92,11 @@ class _EventsCardState extends State<EventsCard> {
                     color: Theme.of(context).colorScheme.primary),
               ),
               const SizedBox(height: 5),
+               Text(
+                widget.date!,
+                style: TextStyle(fontSize: 10),
+                overflow: TextOverflow.ellipsis,
+              ),
               Text(
                 widget.desc!,
                 style: TextStyle(fontSize: 10),
