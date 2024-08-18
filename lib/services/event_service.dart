@@ -40,8 +40,8 @@ class EventService {
     );
     //print("Response"+response.body);
     
-    debugPrint("Response"+json.decode(response.body));
     Eventsmodel event = Eventsmodel.fromJson(json.decode(response.body));
+    //debugPrint("Response"+response.body);
     return event;
   
   }

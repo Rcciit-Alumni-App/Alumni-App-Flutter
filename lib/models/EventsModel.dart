@@ -33,7 +33,7 @@ class EventInterests {
         'user': user?.toJson(),
         'eventId': eventId,
         'event': event.toJson(),
-        'expiresAt': expiresAt.toString()
+        'expiresAt': expiresAt.toIso8601String()
       };
 }
 // {
@@ -68,8 +68,6 @@ class EventInterests {
 // }
 class Eventsmodel {
   String id;
-  String userId;
-  UserModel? user;
   String eventName;
   String bannerImage;
   String venue;
@@ -79,15 +77,12 @@ class Eventsmodel {
   EventAttraction attractions;
   List<String> rules;
   EventAnnouncement announcements;
-  List<EventInterests> eventInterests;
-  DateTime expiresAt;
+  List<EventInterests>? eventInterests;
   DateTime createdAt;
-  DateTime updatedAt;
+
 
   Eventsmodel(
       {required this.id,
-      required this.userId,
-      required this.user,
       required this.eventName,
       required this.bannerImage,
       required this.venue,
@@ -98,15 +93,12 @@ class Eventsmodel {
       required this.rules,
       required this.announcements,
       required this.eventInterests,
-      required this.expiresAt,
       required this.createdAt,
-      required this.updatedAt});
+});
 
   factory Eventsmodel.fromJson(Map<String, dynamic> json) {
     return Eventsmodel(
         id: json['id'] ?? '',
-        userId: json['userId'] ?? '',
-        user: UserModel.fromJson(json['user']) ,
         eventName: json['event_name'] ?? '',
         bannerImage: json['banner_image'] ?? '',
         venue: json['venue'] ?? '',
@@ -117,14 +109,10 @@ class Eventsmodel {
         rules: List<String>.from(json['rules']),
         announcements: EventAnnouncement.fromJson(json['announcements']),
         eventInterests: (json['eventInterests'] as List? ?? []).map((item) => EventInterests.fromJson(item)).toList(),
-        expiresAt: DateTime.parse(json['expires_at']),
-        createdAt: DateTime.parse(json['created_at']),
-        updatedAt: DateTime.parse(json['updated_at']));
+        createdAt: DateTime.parse(json['created_at']),);
   }
   Map<String, dynamic> toJson() => {
         'id': id,
-        'userId': userId,
-        'user': user?.toJson(),
         'event_name': eventName,
         'banner_image': bannerImage,
         'venue': venue,
@@ -134,10 +122,8 @@ class Eventsmodel {
         'attractions': attractions.toJson(),
         'rules': rules,
         'announcements': announcements.toJson(),
-        'eventInterests': eventInterests.map((e) => e.toJson()).toList(),
-        'expires_at': expiresAt.toString(),
-        'created_at': createdAt.toString(),
-        'updated_at': updatedAt.toString()
+        'eventInterests': eventInterests?.map((e) => e.toJson()).toList(),
+        'created_at': createdAt.toIso8601String(),
       };
 }
 
