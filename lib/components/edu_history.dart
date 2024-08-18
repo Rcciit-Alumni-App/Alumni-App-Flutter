@@ -19,6 +19,8 @@ class HigherStudiesFormWidget extends StatefulWidget {
     return state;
   }
 
+  bool isValidated() => state.validate();
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _courseNameController = TextEditingController();
   DateCalController startDateController = DateCalController();
@@ -27,6 +29,15 @@ class HigherStudiesFormWidget extends StatefulWidget {
 
 class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
   final formKey = GlobalKey<FormState>();
+
+  bool validate() {
+    // Validate Form Fields
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +105,14 @@ class _HigherStudiesFormWidgetState extends State<HigherStudiesFormWidget> {
                 ),
             
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Institute Name",
                   controller: widget._nameController,
                   onChanged: (value) => widget.higherStudiesModel.institute = value,
                   onSaved: (value) => widget.higherStudiesModel.institute = value,
                   hintText: "Institute name",
                 ),
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Course Name",
                   controller: widget._courseNameController,
                   onChanged: (value) => widget.higherStudiesModel.course = value,
                   onSaved: (value) => widget.higherStudiesModel.course = value,

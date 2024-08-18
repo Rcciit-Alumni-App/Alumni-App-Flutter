@@ -22,6 +22,8 @@ class InternshipExperienceFormWidget extends StatefulWidget {
     return state;
   }
 
+  bool isValidated() => state.validate();
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _jobRoleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -33,6 +35,15 @@ class InternshipExperienceFormWidget extends StatefulWidget {
 
 class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFormWidget> {
   final formKey = GlobalKey<FormState>();
+
+  bool validate() {
+    // Validate Form Fields
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    return isValid;
+  }
 
   bool checked = false;
 
@@ -108,12 +119,14 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                 ),
             
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Company Name",
                   controller: widget._nameController,
                   onChanged: (value) => widget.internshipExperience.company = value,
                   onSaved: (value) => widget.internshipExperience.company = value,
                   hintText: "Company name",
                 ),
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Job Role",
                   controller: widget._jobRoleController,
                   onChanged: (value) => widget.internshipExperience.role = value,
                   onSaved: (value) => widget.internshipExperience.role = value,

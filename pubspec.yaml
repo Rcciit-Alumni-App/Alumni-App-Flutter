@@ -48,6 +48,7 @@ dependencies:
   font_awesome_flutter:
   uuid:
   url_launcher: ^6.3.0
+  flutter_staggered_grid_view:
 
 dev_dependencies:
   flutter_test:

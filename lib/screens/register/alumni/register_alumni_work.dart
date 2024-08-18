@@ -37,14 +37,34 @@ class _RegisterAlumniWorkState extends State<RegisterAlumniWork> {
   @override
   Widget build(BuildContext context) {
 
+    bool validateForms() {
+      bool allValid = true;
+
+      workExperienceForms
+        .forEach((element) => allValid = (allValid && element.isValidated()));
+
+      return allValid;
+    }
+
     Future<void> updateProfile() async {
       try {
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
         user.workExperiences = workExperienceForms
-          .map((e) => e.workExperience)
-          .toList();
+          .asMap().entries.map((e) {
+          int index = e.key;
+          WorkExperienceFormWidget element = e.value;
+          element.workExperience.id = index + 1;
+          return element.workExperience;
+        }).toList();
+
         await storage.write(key: "user", value: jsonEncode(user));
         Navigator.pushNamed(context, '/alumni-education');
+        
       } catch (e) {
         debugPrint(e.toString());
       }

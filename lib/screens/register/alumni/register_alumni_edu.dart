@@ -43,18 +43,48 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   @override
   Widget build(BuildContext context) {
 
+    bool validateForms() {
+      bool allValid = true;
+
+      higherStudiesForms
+        .forEach((element) => allValid = (allValid && element.isValidated()));
+
+      socialsList
+        .forEach((element) {
+          if (element != null) {
+            allValid = (allValid && element.isValidated());
+          }
+      });
+
+      return allValid;
+    }
+
     Future<void> updateProfile() async {
       try {
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
         
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
         user.higherStudies = higherStudiesForms
           .map((e) => e.higherStudiesModel)
           .toList();
 
+        user.higherStudies = higherStudiesForms
+          .asMap().entries.map((e) {
+          int index = e.key;
+          HigherStudiesFormWidget element = e.value;
+          element.higherStudiesModel.id = index + 1;
+          return element.higherStudiesModel;
+        }).toList();
+
         List<SocialLink> list = [];
+        int id = 0;
 
         for (Socials? element in socialsList) {
           if (element != null) {
+            element.socialLinkModel.id = id++;
             list.add(element.socialLinkModel);
           }
         }
@@ -69,7 +99,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
             color: Theme.of(context).colorScheme.secondary);
 
         Navigator.pushNamed(context, '/home');
-
+        
       } catch (e) {
         debugPrint(e.toString());
       }

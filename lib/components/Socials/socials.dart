@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/components/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/components/Socials/socials_regex.dart';
@@ -27,7 +28,7 @@ class Socials extends StatefulWidget {
 
   TextEditingController _urlController = TextEditingController();
 
-  // bool isValidated() => state.validate();
+  bool isValidated() => state.validate();
 }
 
 class _SocialsState extends State<Socials> {
@@ -64,9 +65,12 @@ class _SocialsState extends State<Socials> {
           children: [
             Expanded(
               child: MyTextField(
+                leadingIcon: _icon,
+                icons: FontAwesomeIcons.xmark,
+                validator: (value) => value!.length > 3 ? null : "Enter Social Link",
                 maxLines: 1,
                 iconColor: Theme.of(context).colorScheme.primary,
-                icons: _icon,
+                button: widget.onRemove,
                 label: widget.label,
                 controller: widget._urlController,
                 onChanged: (value) {
@@ -80,13 +84,13 @@ class _SocialsState extends State<Socials> {
                 hintText: widget.hintText,
               ),
             ),
-            TextButton(
-              onPressed: widget.onRemove,
-              child: const Text(
-                "Remove",
-                style: TextStyle(color: Colors.blue),
-              ),
-            ),
+            // TextButton(
+            //   onPressed: widget.onRemove,
+            //   child: const Text(
+            //     "Remove",
+            //     style: TextStyle(color: Colors.blue),
+            //   ),
+            // ),
           ],
         ),
       ),

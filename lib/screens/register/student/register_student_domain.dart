@@ -40,24 +40,35 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
   @override
   Widget build(BuildContext context) {
 
+    bool validateForms() {
+      bool allValid = true;
+
+      socialsList
+        .forEach((element) {
+          if (element != null) {
+            allValid = (allValid && element.isValidated());
+          }
+      });
+
+      return allValid;
+    }
+
     Future<void> updateProfile() async {
       try {
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
         
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
         user.domain = _domain ?? '';
-        
-        // user.socials = socialsList.map((e) {
-        //   if (e == null) {
-        //     return false;
-        //   } else {
-        //     return e.socialLinkModel;
-        //   }
-        // }).toList();
 
         List<SocialLink> list = [];
+        int id = 0;
 
         for (Socials? element in socialsList) {
           if (element != null) {
+            element.socialLinkModel.id = id++;
             list.add(element.socialLinkModel);
           }
         }
