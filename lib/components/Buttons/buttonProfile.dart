@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProfileButton extends StatefulWidget {
   final String? text;
-  final IconData? icons;
+  final Widget? icons;
 
   ProfileButton({
     this.text,
@@ -39,10 +39,7 @@ class _ProfileButtonState extends State<ProfileButton> {
                 fontWeight: FontWeight.w700
               ),
             ),
-            Icon(
-              widget.icons,
-              color: Theme.of(context).colorScheme.primary,
-            )
+            widget.icons ?? Container(),
           ],
         ),
       ),

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/models/NewsModel.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +23,7 @@ class NewsService {
     List<NewsCardModel> news = newsJson
         .map((json) => NewsCardModel.fromJson(json as Map<String, dynamic>))
         .toList();
-    debugPrint("News: ${news.toString()}");
+    //debugPrint("News: ${news.toString()}");
     return news;
   }
   return [];
@@ -38,10 +38,21 @@ class NewsService {
         'Authorization': 'Bearer $token',
       },
     );
-    print(response.body);
+    //print(response.body);
     NewsModel news = NewsModel.fromJson(json.decode(response.body));
     return news;
   }
 
-
+  Future<void> createNews(NewsSendModel news) async {
+    final token = await storage.read(key: "accessToken");
+    final response = await http.post(
+      Uri.parse('$baseUrl/news/create-post'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(news.toJson()),
+    );
+    print(response.body);
+}
 }

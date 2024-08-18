@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/components/Buttons/button3.dart';
-import 'package:frontend/components/formfield.dart';
-import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/JobsModel.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+// ignore: must_be_immutable
 class JobDetails extends StatefulWidget {
-  const JobDetails({super.key});
+  JobModel job;
+  JobDetails({super.key, required this.job});
 
   @override
   State<JobDetails> createState() => _JobDetailsState();
@@ -16,38 +18,41 @@ class _JobDetailsState extends State<JobDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-              child: CustomButton2(
-                label: "Back",
-                onPressed: () {},
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+            //   child: CustomButton2(
+            //     label: "Back",
+            //     onPressed: () {},
+            //   ),
+            // ),
             Row(
               children: [
                 CircleAvatar(
-                  radius: 70,
+                  radius: 50,
                   backgroundColor: Colors.grey,
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
                 Column(
                   children: [
                     Text(
-                      'NYZ ABC',
+                      widget.job.title,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
-                          fontSize: 30,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Has posted this job opportunity\non' + 'dd/mm/yyyy',
-                      style: TextStyle(
-                          fontSize: 10, fontWeight: FontWeight.bold),
+                      'Has posted this job opportunity\non ' + DateFormat.yMd().format(DateTime.parse(widget.job.posted_at)),
+                      style:
+                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -90,7 +95,7 @@ class _JobDetailsState extends State<JobDetails> {
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'hehe',
+                          text: widget.job.company_name,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.normal,
@@ -110,30 +115,29 @@ class _JobDetailsState extends State<JobDetails> {
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text:
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.',
+                          text: widget.job.description,
                         ),
                         TextSpan(
                           text: '\n\n',
                         ),
                         TextSpan(
-                          text: 'Responsibilities:',
+                          text: 'Location:',
                         ),
                         TextSpan(
-                          text: '\n\n',
+                          text: widget.job.location,
                         ),
                         TextSpan(
-                          text: 'random stuff',
+                          text: '\nApplication Deadline:',
                         ),
-                        TextSpan(text: '\n\n'),
+                        TextSpan(text: DateFormat.yMd().format(DateTime.parse(widget.job.application_deadline))),
 
-                        TextSpan(
-                          text: 'Responsibilities:',
-                        ),
+                        // TextSpan(
+                        //   text: 'Responsibilities:',
+                        // ),
 
-                        TextSpan(text: '\n\n'),
+                        // TextSpan(text: '\n\n'),
 
-                        TextSpan(text: 'some more random stuff')
+                        // TextSpan(text: 'some more random stuff')
                       ],
                     ),
                   ),
@@ -147,7 +151,14 @@ class _JobDetailsState extends State<JobDetails> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          CustomButton3(label: 'Apply Now', onPressed: () {}),
+          CustomButton3(
+              label: 'Apply Now',
+              onPressed: () async {
+                Uri url = Uri.parse(widget.job.apply_link);
+                if (!await launchUrl(url)) {
+                  throw 'Could not launch $url';
+                }
+              }),
           SizedBox(height: 20),
           Bottomnavbar(),
         ],

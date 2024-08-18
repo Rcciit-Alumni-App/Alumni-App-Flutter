@@ -108,12 +108,20 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    await http.delete(
+      Uri.parse('$baseUrl/auth/logout'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${await storage.read(key: "accessToken")}',
+      },
+    );
     await storage.delete(key: "accessToken");
+
   }
 
   Future<void> updateUserProfile(UserModel user) async {
     String? accessToken = await storage.read(key: "accessToken");
-    final url = Uri.parse('https://alumni-app-backend.onrender.com/api/v1/user/profile/update');
+    final url = Uri.parse('$baseUrl/profile/update');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
@@ -142,4 +150,6 @@ class AuthService {
     //print(response.body);
     return UserModel.fromJson(jsonResponse);
   }
+
+
 }

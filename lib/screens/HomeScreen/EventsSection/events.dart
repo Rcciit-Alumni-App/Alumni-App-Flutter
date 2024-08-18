@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/models/EventsModel.dart';
@@ -92,6 +91,7 @@ class _EventsState extends State<Events> {
                           title: eventsModel![index].eventName,
                           desc: eventsModel![index].description[0],
                           id: eventsModel![index].id,
+                          date: eventsModel![index].schedule,
                         );
                       }
                     },

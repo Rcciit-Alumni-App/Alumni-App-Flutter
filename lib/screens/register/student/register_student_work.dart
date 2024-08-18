@@ -112,7 +112,6 @@ import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/internship_exp.dart';
 import 'package:frontend/constants/constants.dart';
-import 'package:frontend/components/work_exp.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/screens/register/student/register_student_domain.dart';
@@ -258,7 +257,7 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
       int index = internshipExperienceForms
           .indexWhere((element) => element.internshipExperience.id == internshipExperience.id);
 
-      if (internshipExperienceForms != null) internshipExperienceForms.removeAt(index);
+      internshipExperienceForms.removeAt(index);
     });
   }
 

@@ -10,7 +10,7 @@ import 'package:frontend/components/work_exp.dart';
 import 'package:frontend/models/UserModel.dart';
 // import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/services/alert_services.dart';
-import 'package:frontend/services/auth_service.dart';
+//import 'package:frontend/services/auth_service.dart';
 // import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -147,7 +147,7 @@ class _RegisterAlumniWorkState extends State<RegisterAlumniWork> {
       int index = workExperienceForms
           .indexWhere((element) => element.workExperience.id == workExperience.id);
 
-      if (workExperienceForms != null) workExperienceForms.removeAt(index);
+      workExperienceForms.removeAt(index);
     });
   }
 
