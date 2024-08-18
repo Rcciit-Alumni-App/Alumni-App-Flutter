@@ -92,6 +92,7 @@ class _EventsState extends State<Events> {
                           title: eventsModel![index].eventName,
                           desc: eventsModel![index].description[0],
                           id: eventsModel![index].id,
+                          date: eventsModel![index].schedule,
                         );
                       }
                     },
