@@ -137,7 +137,7 @@ class _FormFieldChipsState extends State<FormFieldChips> {
                         deleteIconColor: Colors.white,
                         labelStyle: TextStyle(
                           color: Colors.white,
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                         ),
                       ),
                 ))
