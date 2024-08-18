@@ -1,9 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/JobsModel.dart';
 import 'package:frontend/screens/HomeScreen/JobsSection/jobs_card.dart';
+import 'package:frontend/screens/JobScreen/jobs_screen.dart';
+import 'package:frontend/services/job_service.dart';
+import 'package:frontend/services/navigation_service.dart';
+import 'package:get_it/get_it.dart';
 
-class Jobs extends StatelessWidget {
+class Jobs extends StatefulWidget {
   const Jobs({super.key});
 
+  @override
+  State<Jobs> createState() => _JobsState();
+}
+
+class _JobsState extends State<Jobs> {
+  late JobService jobsService;
+  List<JobsCardModel>?jobsModel;
+  //NewsModel? news;
+  NavigationService navigation = NavigationService();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    jobsService = GetIt.instance<JobService>();
+    getJobs().then((value) => {
+          setState(() {
+            jobsModel = value;
+            //debugPrint("NewsModel" + newsModel.toString());
+          })
+        });
+  }
+
+  Future getJobs() async {
+    try {
+      return await jobsService.getAlljobs();
+    } catch (e) {
+      debugPrint("Error: $e");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,7 +64,10 @@ class Jobs extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(navigation.createRoute(route: JobsScreen()));
+                    },
                     child: Text('Show More'),
                   ),
                 ),
@@ -38,28 +75,34 @@ class Jobs extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Container(
+         Container(
             height: MediaQuery.of(context).size.height * 0.3,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 4, 
-              itemBuilder: (context, index) {
-                if (index == 3) {
-                  return CircularViewMore();
-                } else {
-                  return JobsCard();
-                }
-              },
-            ),
+            child: jobsModel == null
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 4,
+                    itemBuilder: (context, index) {
+                      if (index == 3) {
+                        return CircularViewMore(context);
+                      } else {
+                        return JobsCard(
+                          title: jobsModel![index].title,
+                          role: jobsModel![index].job_type,
+                          id: jobsModel![index].id,
+                          description: jobsModel![index].description,
+                          company: jobsModel![index].company_name,
+                        );
+                      }
+                    },
+                  ),
           ),
           const SizedBox(height: 10),
         ],
       ),
     );
   }
- 
-
-  Widget CircularViewMore() {
+  Widget CircularViewMore(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: CircleAvatar(
@@ -73,7 +116,4 @@ class Jobs extends StatelessWidget {
       ),
     );
   }
-
-
-
 }

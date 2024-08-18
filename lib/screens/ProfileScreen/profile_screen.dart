@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/buttonProfile.dart';
 import 'package:frontend/components/bottomnavbar.dart';
-import 'package:frontend/components/formfield.dart';
-import 'package:frontend/constants/constants.dart';
-import 'package:frontend/screens/register/student/register_student_work.dart';
+import 'package:frontend/screens/CreatePost/create_post.dart';
+import 'package:frontend/services/navigation_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,6 +13,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final NavigationService navigation = NavigationService();
   @override
   Widget build(BuildContext context) {
     return  Stack(
@@ -37,7 +37,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 ProfileButton(
                   text: "My Posts",
-                  icons: Icons.add_circle,
+                  icons: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context)
+                          .push(navigation.createRoute(route: CreatePost()));
+                    },
+                    child: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary)),
                 ),
                 SizedBox(
                   height: 30.0,
@@ -50,21 +55,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 ProfileButton(
                   text: "My Digital Cards",
-                  icons: Icons.add_circle,
+                  icons: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary),
                 ),
                 SizedBox(
                   height: 30.0,
                 ),
                 ProfileButton(
                   text: "My Posted Jobs",
-                  icons: Icons.add_circle,
+                  icons: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary),
                 ),
                 SizedBox(
                   height: 30.0,
                 ),
                 ProfileButton(
                   text: "My Posted Interships",
-                  icons: Icons.add_circle,
+                  icons: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary,),
                 ),
               ],
             ),

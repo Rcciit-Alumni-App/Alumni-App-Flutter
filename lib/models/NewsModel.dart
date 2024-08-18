@@ -217,3 +217,26 @@ class NewsCardModel{
     };
   }
 }
+
+class NewsSendModel{
+  String title;
+  String description;
+  String banner;
+  List<String> tags;
+
+  NewsSendModel({
+    required this.title,
+    required this.description,
+    required this.banner,
+    required this.tags
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+      'banner': banner,
+      'tags': tags
+    };
+  }
+}

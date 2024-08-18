@@ -192,7 +192,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
       int index = higherStudiesForms
           .indexWhere((element) => element.higherStudiesModel.id == higherStudiesModel.id);
 
-      if (higherStudiesForms != null) higherStudiesForms.removeAt(index);
+      higherStudiesForms.removeAt(index);
     });
   }
 

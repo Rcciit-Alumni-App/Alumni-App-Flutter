@@ -1,38 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/bottomnavbar.dart';
-import 'package:frontend/models/EventsModel.dart';
-import 'package:frontend/screens/HomeScreen/EventsSection/events_card.dart';
-import 'package:frontend/services/event_service.dart';
+import 'package:frontend/models/JobsModel.dart';
+import 'package:frontend/screens/HomeScreen/JobsSection/jobs_card.dart';
+import 'package:frontend/services/job_service.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';
 
-class EventScreen extends StatefulWidget {
-  const EventScreen({super.key});
+class JobsScreen extends StatefulWidget {
+  const JobsScreen({super.key});
 
   @override
-  State<EventScreen> createState() => _EventScreenState();
+  State<JobsScreen> createState() => _JobsScreenState();
 }
 
-class _EventScreenState extends State<EventScreen> {
-  late EventService eventService;
-  List<EventsCardmodel>? eventsModel;
+class _JobsScreenState extends State<JobsScreen> {
+  late JobService jobsService;
+  List<JobsCardModel>?jobsModel;
+  //NewsModel? news;
   NavigationService navigation = NavigationService();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    eventService= GetIt.instance<EventService>();
-    getEvents().then((value) => {
+    jobsService = GetIt.instance<JobService>();
+    getJobs().then((value) => {
           setState(() {
-            eventsModel = value;
-            debugPrint("EventsModel" + eventsModel.toString());
+            jobsModel = value;
+            //debugPrint("NewsModel" + newsModel.toString());
           })
         });
   }
 
-  Future getEvents() async {
+  Future getJobs() async {
     try {
-      return await eventService.getAllEvents();
+      return await jobsService.getAlljobs();
     } catch (e) {
       debugPrint("Error: $e");
     }
@@ -63,7 +64,7 @@ class _EventScreenState extends State<EventScreen> {
           Row(
             children: [
               Text(
-                'Events',
+                'Jobs/Opportunities',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -75,30 +76,23 @@ class _EventScreenState extends State<EventScreen> {
           const SizedBox(height: 10),
           Container(
             height: MediaQuery.of(context).size.height * 1,
-            child: eventsModel == null
+            child: jobsModel == null
                 ? Center(
                     child: CircularProgressIndicator()) 
                 : ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: eventsModel!.length+1,
+                    itemCount: jobsModel!.length+1,
                     itemBuilder: (context, index) {
-                      if(index == eventsModel!.length){
-                        return Container(
-                          height: 50,
-                          width: 50,
-                          child: Center(
-                            child: Text('No more news'),
-                          ),
+                      if (index == jobsModel!.length) {
+                        return CircularViewMore(context);
+                      } else {
+                        return JobsCard(
+                          title: jobsModel![index].title,
+                          role: jobsModel![index].job_type,
+                          id: jobsModel![index].id,
+                          description: jobsModel![index].description,
+                          company: jobsModel![index].company_name,
                         );
-                      }
-                      else{
-                        return EventsCard(
-                          title: eventsModel![index].eventName,
-                          desc: eventsModel![index].description[0],
-                          id: eventsModel![index].id,
-                          date: eventsModel![index].schedule,
-                        );
-                    
                       }
                     },
                   ),
@@ -109,5 +103,18 @@ class _EventScreenState extends State<EventScreen> {
     );
   }
 
- 
+ Widget CircularViewMore(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: CircleAvatar(
+        radius: 25,
+        backgroundColor: Colors.blue,
+        child: IconButton(
+          icon: Icon(Icons.arrow_forward, color: Colors.white),
+          onPressed: () {
+          },
+        ),
+      ),
+    );
+  }
 }
