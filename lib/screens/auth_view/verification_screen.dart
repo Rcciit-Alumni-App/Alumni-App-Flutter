@@ -7,7 +7,7 @@ import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart';
+import '../../components/FormFields/formfield.dart';
 import '../../services/navigation_service.dart';
 
 class VerificationPage extends StatefulWidget {

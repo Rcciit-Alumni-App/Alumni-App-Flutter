@@ -10,7 +10,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import '../../components/Background/background.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart';
+import '../../components/FormFields/formfield.dart';
 import 'package:frontend/providers/user_provider.dart';
 
 class ForgotPasswordPageEmail extends StatefulWidget {
