@@ -8,7 +8,7 @@ import 'package:frontend/services/navigation_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Background/background.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart'; // If using SvgPicture for SVGs
+import '../../components/FormFields/formfield.dart'; // If using SvgPicture for SVGs
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
