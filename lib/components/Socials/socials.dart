@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:frontend/components/formfield.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/components/Socials/socials_regex.dart';
 
