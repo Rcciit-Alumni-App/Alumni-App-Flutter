@@ -5,6 +5,9 @@ import 'package:frontend/components/Buttons/button3.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/EventsModel.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:frontend/services/event_service.dart';
+import 'package:get_it/get_it.dart';
+import 'package:http/http.dart';
 
 class EventDetails extends StatefulWidget {
   final Eventsmodel? event;
@@ -15,11 +18,30 @@ class EventDetails extends StatefulWidget {
 }
 
 class _EventDetailsState extends State<EventDetails> {
+  late EventService eventService;
+  
+  @override
+  void initState() {
+    super.initState();
+    eventService = GetIt.instance<EventService>();
+  }
   bool isShowingAll = false;
   void isShowingAllFunc() {
     setState(() {
       isShowingAll = !isShowingAll;
     });
+  }
+  Future<void> createInterest(String id) async {
+    try{
+      final responcs = await eventService.createInterest(id);
+      if(responcs){
+        
+        
+      }
+    }catch(e){
+      print(e);
+    }
+    
   }
 
   @override
@@ -226,7 +248,9 @@ class _EventDetailsState extends State<EventDetails> {
                 label: "Show Interest",
                 width: 140,
                 height: 55,
-                onPressed: () {},
+                onPressed: () {
+                  createInterest(widget.event!.id);
+                },
               ),
               SizedBox(width: 10.0),
               CustomButton3(

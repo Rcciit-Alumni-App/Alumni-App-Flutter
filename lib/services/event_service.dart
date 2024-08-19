@@ -46,5 +46,19 @@ class EventService {
   
   }
 
+  Future<bool> createInterest(String eventId) async {
+    final token = await storage.read(key: "accessToken");
+    final response = await http.post(
+      Uri.parse('$baseUrl/events/interest'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(<String, String>{
+        'eventId': eventId,
+      }),
+    );
+    return response.statusCode == 200;
+  }
 
 }
