@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage>
       );
     } catch (e) {
       _alertService.showSnackBar(
-        message: "Login Failed: $e",
+        message: "Login Failed",
         color: Colors.red,
       );
       print(e);

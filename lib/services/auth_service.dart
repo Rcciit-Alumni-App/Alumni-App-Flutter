@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // Reference : https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
 class AuthService {
-  //static const String baseUrl = 'https://alumni-app-backend.onrender.com/api/v1/user/auth';
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user';
+  static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1/user/auth';
+  //static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user';
   final storage = new FlutterSecureStorage();
   Future<Map<String, dynamic>> signup(String personal_email, String college_email, String college_roll, String password) async {
     final response = await http.post(
@@ -56,7 +56,7 @@ class AuthService {
 
   Future<Map<String, dynamic>> login(String personal_email, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/api/v1/user/auth/login'),
+      Uri.parse('$baseUrl/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -121,7 +121,7 @@ class AuthService {
 
   Future<void> updateUserProfile(UserModel user) async {
     String? accessToken = await storage.read(key: "accessToken");
-    final url = Uri.parse('$baseUrl/profile/update');
+    final url = Uri.parse('https://alumni-app-backend-a7b0.onrender.com/api/v1/user/profile/update');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
@@ -140,14 +140,14 @@ class AuthService {
   Future<UserModel> getUserProfile() async {
     String? accessToken = await storage.read(key: "accessToken");
     print(accessToken);
-    final url = Uri.parse('$baseUrl/profile/details');
+    final url = Uri.parse('https://alumni-app-backend-a7b0.onrender.com/api/v1/user/profile/details');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
     };
     final response = await http.get(url, headers: headers);
     final jsonResponse = json.decode(response.body);
-    //print(response.body);
+    print(response.body);
     return UserModel.fromJson(jsonResponse);
   }
 

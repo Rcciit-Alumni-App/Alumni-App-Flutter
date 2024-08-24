@@ -5,7 +5,7 @@ import 'package:frontend/models/EventsModel.dart';
 import 'package:http/http.dart' as http;
 
 class EventService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
+  static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1';
   final storage = new FlutterSecureStorage();
 
  Future<List<EventsCardmodel>> getAllEvents() async {
