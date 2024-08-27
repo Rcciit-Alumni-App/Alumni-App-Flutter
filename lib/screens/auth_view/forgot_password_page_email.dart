@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/auth_view/signup_page.dart';
 import 'package:frontend/screens/HomeScreen/home_screen.dart';
-import 'package:frontend/screens/auth_view/verification_screen.dart';
+import 'package:frontend/screens/auth_view/verification_screen_signup.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/navigation_service.dart';
@@ -63,6 +63,10 @@ class _ForgotPasswordPageEmailState extends State<ForgotPasswordPageEmail> {
     super.dispose();
   }
 
+  String? _validatePersonalEmail() {
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
@@ -75,97 +79,100 @@ class _ForgotPasswordPageEmailState extends State<ForgotPasswordPageEmail> {
               body: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.width * 0.06),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.345,
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.sizeOf(context).width * 0.15),
-                            child: Text(
-                              'Reset Password',
-                              style: TextStyle(
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height * 0.345,
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.sizeOf(context).width * 0.15),
+                              child: Text(
+                                'Reset Password',
+                                style: TextStyle(
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      MyTextField(
-                        label: 'Enter your Personal Email',
-                        onSaved: (v) {
-                          setState(() {
-                            personal_email = v;
-                          });
-                        },
-                      ),
-                      
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      //       return ForgotPasswordPage();
-                      //     }));
-                      //   },
-                      //   child: Padding(
-                      //     padding: EdgeInsets.symmetric(
-                      //         vertical: MediaQuery.sizeOf(context).width * 0.03),
-                      //     child: Text(
-                      //       'Forgot Password?',
-                      //       style: TextStyle(
-                      //           fontWeight: FontWeight.bold,
-                      //           color: Theme.of(context).colorScheme.primary),
-                      //     ),
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                               vertical: MediaQuery.sizeOf(context).width * 0.03),
-                        child: Center(
-                          child: CustomButton(
-                            label: 'Next',
-                            onPressed: () {
-                              if (_formKey.currentState?.validate() ?? false) {
-                                _formKey.currentState?.save();
-                                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                  return VerificationPage(userType: 'Reset Password');
-                                }));
-                              }
-                            },
+                        MyTextField(
+                          validator: (value) => _validatePersonalEmail(),
+                          label: 'Enter your Personal Email',
+                          onSaved: (v) {
+                            setState(() {
+                              personal_email = v;
+                            });
+                          },
+                        ),
+                        
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        //       return ForgotPasswordPage();
+                        //     }));
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(
+                        //         vertical: MediaQuery.sizeOf(context).width * 0.03),
+                        //     child: Text(
+                        //       'Forgot Password?',
+                        //       style: TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Theme.of(context).colorScheme.primary),
+                        //     ),
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                                 vertical: MediaQuery.sizeOf(context).width * 0.03),
+                          child: Center(
+                            child: CustomButton(
+                              label: 'Next',
+                              onPressed: () {
+                                if (_formKey.currentState?.validate() ?? false) {
+                                  _formKey.currentState?.save();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                    return VerificationPage(userType: 'Reset Password');
+                                  }));
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      // Padding(
-                      //   padding: EdgeInsets.only(
-                      //       top: MediaQuery.sizeOf(context).width * 0.12),
-                      //   child: Row(
-                      //     children: [
-                      //       Text(
-                      //         'New Here? ',
-                      //         style: TextStyle(
-                      //             color: Theme.of(context).colorScheme.primary),
-                      //       ),
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           Navigator.of(context).pushReplacement(
-                      //               navigation.createRoute(route: SignUpPage()));
-                      //         },
-                      //         child: Text(
-                      //           'Sign Up',
-                      //           style: TextStyle(
-                      //             color: Theme.of(context).colorScheme.primary,
-                      //             fontWeight: FontWeight.bold,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //       top: MediaQuery.sizeOf(context).width * 0.12),
+                        //   child: Row(
+                        //     children: [
+                        //       Text(
+                        //         'New Here? ',
+                        //         style: TextStyle(
+                        //             color: Theme.of(context).colorScheme.primary),
+                        //       ),
+                        //       GestureDetector(
+                        //         onTap: () {
+                        //           Navigator.of(context).pushReplacement(
+                        //               navigation.createRoute(route: SignUpPage()));
+                        //         },
+                        //         child: Text(
+                        //           'Sign Up',
+                        //           style: TextStyle(
+                        //             color: Theme.of(context).colorScheme.primary,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
               ),

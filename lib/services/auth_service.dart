@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:http/http.dart' as http;
@@ -151,5 +153,27 @@ class AuthService {
     return UserModel.fromJson(jsonResponse);
   }
 
+  Future<void> sendOtp(String token) async {
 
+    print(token);
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/resend-otp'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'token': token,
+      }),
+    );
+
+    print('----------------------' + response.body);
+
+    if (response.statusCode != 200) {
+      debugPrint('--------------------FAILED-------------------');
+    }
+
+    var newToken = jsonDecode(response.body)["verificationToken"];
+    await storage.write(key: "verificationToken", value: newToken);
+  }
 }

@@ -11,6 +11,8 @@ import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/loader_service.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterStudentDomain extends StatefulWidget {
   @override
@@ -22,6 +24,7 @@ class RegisterStudentDomain extends StatefulWidget {
 class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
   final AlertService alertService = AlertService();
   final AuthService authService = AuthService();
+  final LoaderService _loaderService = GetIt.instance.get<LoaderService>();
   final storage = new FlutterSecureStorage();
 
   // Socials List
@@ -34,7 +37,7 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
   @override
   void initState() {
     super.initState();
-    onAddSocials();
+    // onAddSocials();
   }
 
   @override
@@ -43,20 +46,37 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
     bool validateForms() {
       bool allValid = true;
 
-      socialsList
-        .forEach((element) {
-          if (element != null) {
-            allValid = (allValid && element.isValidated());
-          }
-      });
+      for (Socials? element in socialsList) {
+        if (element != null) {
+          allValid = (allValid && element.isValidated());
+        } else {
+          continue;
+        }
+      }
 
       return allValid;
     }
 
     Future<void> updateProfile() async {
       try {
-        UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+        _loaderService.showLoader();
+
+        // UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
         
+        String? userRef = await storage.read(key: "user");
+  
+        if (userRef == null) {
+          return;
+        }
+
+        // UserModel user = UserModel.fromJson(jsonDecode(userRef));
+
+        Map<String, dynamic> json = jsonDecode(userRef);
+
+        print(json);
+
+        UserModel user = UserModel.fromJson(json);
+
         bool isValid = validateForms();
 
         if (!isValid) return;
@@ -68,6 +88,7 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
 
         for (Socials? element in socialsList) {
           if (element != null) {
+            print(element.socialLinkModel.platform);
             element.socialLinkModel.id = id++;
             list.add(element.socialLinkModel);
           }
@@ -78,14 +99,18 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
         await storage.write(key: "user", value: jsonEncode(user));
 
 
-        // HANDLE API CALLS HERE //
+        // // HANDLE API CALLS HERE //
         await authService.updateUserProfile(user);
+
+        _loaderService.hideLoader();
+        
         alertService.showSnackBar(message: "Profile created successfully",
             color: Theme.of(context).colorScheme.secondary);
 
         Navigator.pushNamed(context, '/home');
 
       } catch (e) {
+        _loaderService.hideLoader();
         debugPrint(e.toString());
       }
     }
@@ -112,6 +137,7 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                   label: "Next",
                   onPressed: () {
                     updateProfile();
+                    // validateForms();
                   },
                 ),
               ],
@@ -143,7 +169,7 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: MyTextField(
                               label: 'Domain',
-                              hintText: 'Enter your Domain',
+                              hintText: 'Domain (You can leave this empty)',
                               onChanged: (value) {
                                 _domain = value;
                               },
@@ -169,8 +195,8 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                               alignment: Alignment.centerRight,
                               child: CustomButton2(
                                 height: 35,
-                                width: 100,
-                                label: "Add more",
+                                width: 160,
+                                label: "Add a Social Link",
                                 onPressed: () {
                                   onAddSocials();
                                 },
@@ -193,6 +219,20 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
               ],
             ),
           )),
+          StreamBuilder<bool>(
+          stream: _loaderService.loadingStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!) {
+              return Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
     ]);
   }
 
@@ -213,17 +253,17 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
   }
 
   onRemoveSocials(SocialLink socialLink) {
-    int notNullElements = 0;
+    // int notNullElements = 0;
 
-    for (Socials? element in socialsList) {
-      if (element != null) {
-        notNullElements++;
-      }
-    }
+    // for (Socials? element in socialsList) {
+    //   if (element != null) {
+    //     notNullElements++;
+    //   }
+    // }
 
-    if (notNullElements == 1) {
-      return null;
-    }
+    // if (notNullElements == 1) {
+    //   return null;
+    // }
 
     setState(() {
       int index = socialsList
