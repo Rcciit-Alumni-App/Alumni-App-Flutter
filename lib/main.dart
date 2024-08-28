@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode.copyWith(
           textTheme: GoogleFonts.nunitoTextTheme(),
         ),
-        home: LoginPage(),
+        home: HomePage(),
       ),
     );
   }

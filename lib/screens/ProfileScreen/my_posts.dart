@@ -6,15 +6,15 @@ import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/services/news_service.dart';
 import 'package:get_it/get_it.dart';
 
-class CampusScreen extends StatefulWidget {
-  const CampusScreen({super.key});
+class MyPosts extends StatefulWidget {
+  const MyPosts({super.key});
 
   @override
-  State<CampusScreen> createState() => _CampusScreenState();
+  State<MyPosts> createState() => _MyPostsState();
 }
 
-class _CampusScreenState extends State<CampusScreen> {
-  late NewsService newsService;
+class _MyPostsState extends State<MyPosts> {
+   late NewsService newsService;
   List<NewsCardModel>? newsModel;
   NavigationService navigation = NavigationService();
 
@@ -60,11 +60,12 @@ class _CampusScreenState extends State<CampusScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'CAMPUS NEWS',
+                'My Posts',
                 style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary),
               ),
@@ -73,7 +74,7 @@ class _CampusScreenState extends State<CampusScreen> {
           ),
           const SizedBox(height: 10),
           Container(
-            height: MediaQuery.of(context).size.height * 0.77,
+            height: MediaQuery.of(context).size.height * 0.76,
             child: newsModel == null
                 ? Center(
                     child: CircularProgressIndicator()) 
@@ -106,6 +107,4 @@ class _CampusScreenState extends State<CampusScreen> {
       ),
     );
   }
-
- 
 }
