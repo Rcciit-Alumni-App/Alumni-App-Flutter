@@ -19,7 +19,7 @@ class JobService {
   );
 
   if (response.statusCode == 200 && response.body.isNotEmpty) {
-    print(response.body);
+   // print(response.body);
     final List<dynamic> jobsJson = json.decode(response.body);
     List<JobsCardModel> jobs = jobsJson
         .map((json) => JobsCardModel.fromJson(json as Map<String, dynamic>))

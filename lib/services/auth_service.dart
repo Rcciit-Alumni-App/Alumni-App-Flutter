@@ -7,8 +7,8 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // Reference : https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
 class AuthService {
-  static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1/user/auth';
-  //static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user';
+  //static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1/user/auth';
+  static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user/auth';
   final storage = new FlutterSecureStorage();
   Future<Map<String, dynamic>> signup(String personal_email, String college_email, String college_roll, String password) async {
     final response = await http.post(
