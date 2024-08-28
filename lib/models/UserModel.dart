@@ -153,6 +153,7 @@ class SocialLink {
 }
 
 class UserModel {
+  String id;
   String fullName;
   String phone;
   String personalMail;
@@ -171,6 +172,7 @@ class UserModel {
   List<WorkExperience> workExperiences;
 
   UserModel({
+    required this.id,
     required this.fullName,
     required this.phone,
     required this.personalMail,
@@ -191,6 +193,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      id: json['id'] ?? '',
       fullName: json['full_name'] ?? '',
       phone: json['phone'] ?? '',
       personalMail: json['personal_mail'] ?? '',
@@ -212,6 +215,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'full_name': fullName,
       'phone': phone,
       'personal_mail': personalMail,

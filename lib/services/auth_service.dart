@@ -7,12 +7,12 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // Reference : https://stackoverflow.com/questions/55785581/socketexception-os-error-connection-refused-errno-111-in-flutter-using-djan
 class AuthService {
-  static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1/user/auth';
-  //static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user';
+  //static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1/user/auth';
+  static const String baseUrl = 'http://10.0.2.2:8000/api/v1/user/auth';
   final storage = new FlutterSecureStorage();
   Future<Map<String, dynamic>> signup(String personal_email, String college_email, String college_roll, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/signup'),
+      Uri.parse('$baseUrl/signup'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -35,7 +35,7 @@ class AuthService {
   Future<Map<String, dynamic>> verify(String otp) async {
     String? token = await storage.read(key: "verificationToken");
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/verify'),
+      Uri.parse('$baseUrl/verify'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -111,7 +111,7 @@ class AuthService {
 
   Future<void> logout() async {
     await http.delete(
-      Uri.parse('$baseUrl/auth/logout'),
+      Uri.parse('$baseUrl/logout'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${await storage.read(key: "accessToken")}',
@@ -158,7 +158,7 @@ class AuthService {
     print(token);
 
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/resend-otp'),
+      Uri.parse('$baseUrl/resend-otp'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
