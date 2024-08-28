@@ -96,7 +96,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                         user?.personalMail ?? 'User',
+                        user?.fullName ?? 'User',
                         //'User',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
@@ -113,6 +113,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
           _createDrawerItem(context, text: 'Referrals', index: 3),
           _createDrawerItem(context, text: 'Donations', index: 4),
           _createDrawerItem(context, text: 'Settings', index: 5),
+          if (user?.userType == 'ADMIN') ...[
+            _createDrawerItem(context, text: 'Admin', index: 6),
+          ],
           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -123,6 +126,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
           ),
+           const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: CustomButton(

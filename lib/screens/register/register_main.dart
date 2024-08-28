@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button3.dart';
-import 'package:frontend/components/formfield.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/screens/register/alumni/register_profile_alumni.dart';

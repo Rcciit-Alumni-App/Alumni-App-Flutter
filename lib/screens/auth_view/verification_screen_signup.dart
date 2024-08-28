@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Background/background_verification_page.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/screens/DigitalID/digital_id.dart';
 import 'package:frontend/screens/register/register_main.dart';
@@ -12,7 +13,6 @@ import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/loader_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart';
 import '../../services/navigation_service.dart';
 
 class VerificationPage extends StatefulWidget {

@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_verification_page.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/screens/DigitalID/digital_id.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart';
 import '../../services/navigation_service.dart';
 
 class VerificationPageForgotPassword extends StatefulWidget {

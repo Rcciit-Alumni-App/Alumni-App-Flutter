@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
-import 'package:frontend/components/formfield.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/components/Socials/socials.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';

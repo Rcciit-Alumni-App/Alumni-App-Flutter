@@ -9,7 +9,7 @@ import 'package:frontend/services/loader_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Background/background.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart';
+import '../../components/FormFields/formfield.dart';
 import 'package:frontend/providers/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage>
       );
     } catch (e) {
       _alertService.showSnackBar(
-        message: "Login Failed: $e",
+        message: "Login Failed",
         color: Colors.red,
       );
       print(e);
