@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/screens/CampusScreen/campus_screen.dart';
 import 'package:frontend/screens/CampusScreen/news_details.dart';
 import 'package:frontend/screens/DigitalID/digital_id.dart';
@@ -40,25 +41,60 @@ Future<void> setup() async {
 class MyApp extends StatelessWidget {
   final GetIt getIt = GetIt.instance;
   late NavigationService navigationService;
+  final storage = new FlutterSecureStorage();
 
   MyApp({super.key}) {
     navigationService = getIt.get<NavigationService>();
   }
 
+  Future<String?> _getUserToken() async {
+    return await storage.read(key: "accessToken");
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: MaterialApp(
-        navigatorKey: navigationService.navigatorKey,
-        debugShowCheckedModeBanner: false,
-        // initialRoute: "/home",
-        routes: navigationService.routes,
-        theme: lightMode.copyWith(
-          textTheme: GoogleFonts.nunitoTextTheme(),
-        ),
-        home: HomePage(),
-      ),
+    return FutureBuilder<String?>(
+      future: _getUserToken(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return MaterialApp(
+            home: Stack(
+              children: [
+                Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ], 
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text("An error occurred: ${snapshot.error}"),
+              ),
+            ),
+          );
+        }
+
+        String? token = snapshot.data;
+
+        return ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+          child: MaterialApp(
+            navigatorKey: navigationService.navigatorKey,
+            debugShowCheckedModeBanner: false,
+            routes: navigationService.routes,
+            theme: lightMode.copyWith(
+              textTheme: GoogleFonts.nunitoTextTheme(),
+            ),
+            home: token == null ? LoginPage() : HomePage(),
+          ),
+        );
+      },
     );
   }
 }

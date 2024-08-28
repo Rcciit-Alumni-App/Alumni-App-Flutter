@@ -153,8 +153,6 @@ String? _validateEndDate() {
                                 //Clear All forms Data
                                 widget.internshipExperience.company = null;
                                 widget.internshipExperience.role = null;
-                                widget.internshipExperience.description = null;
-                                // widget.internshipExperience.domain = null;
                                 widget.internshipExperience.skills = null;
                                 widget.internshipExperience.startDate = null;
                                 widget.internshipExperience.endDate = null;
@@ -297,14 +295,6 @@ String? _validateEndDate() {
                   onSaved: (value) => widget.internshipExperience.skills = value,
                   caption: "Skills",
                 ),
-                MyTextField(
-                  controller: widget._descriptionController,
-                  onChanged: (value) => widget.internshipExperience.description = value,
-                  onSaved: (value) => widget.internshipExperience.description = value,
-                  hintText: "Description",
-                  maxLines: 4,
-                  height: 100,
-                )
               ],
             ),
           ),

@@ -43,7 +43,6 @@ class Internship {
   DateTime? startDate;
   DateTime? endDate;
   List<String?>? skills;
-  String? description;
 
   Internship({
     this.id,
@@ -52,8 +51,6 @@ class Internship {
     this.startDate,
     this.endDate,
     this.skills,
-    this.description,
-    // this.domain
   });
 
   factory Internship.fromJson(Map<String, dynamic> json) {
@@ -64,8 +61,6 @@ class Internship {
       startDate: json['start_date'] != null ? DateTime.parse(json['start_date']) : null,
       endDate: json['end_date'] != null ? DateTime.parse(json['end_date']) : null,
       skills: (json['skills'] as List?)?.map((item) => item.toString()).toList() ?? [],
-      description: json['description'] ?? '',
-      // domain: json['domain'],
     );
   }
 
@@ -77,8 +72,6 @@ class Internship {
       'start_date': startDate == null ? startDate : startDate!.toIso8601String(),
       'end_date': endDate == null ? endDate : endDate!.toIso8601String(),
       'skills': skills,
-      'description': description,
-      // 'domain': domain
     };
   }
 }
