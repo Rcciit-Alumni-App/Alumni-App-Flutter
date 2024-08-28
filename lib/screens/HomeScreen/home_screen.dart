@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     _getUser().then((value) {
       setState(() {
         user = value;
-        debugPrint(user.toString());
+        // debugPrint(user.toString());
       });
     });
   }

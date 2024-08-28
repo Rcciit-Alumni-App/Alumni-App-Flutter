@@ -12,6 +12,8 @@ import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/loader_service.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterAlumniEdu extends StatefulWidget {
   @override
@@ -23,6 +25,7 @@ class RegisterAlumniEdu extends StatefulWidget {
 class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   final AlertService alertService = AlertService();
   final AuthService authService = AuthService();
+  final LoaderService _loaderService = GetIt.instance.get<LoaderService>();
   final storage = new FlutterSecureStorage();
 
   // Higher Studies List
@@ -37,7 +40,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   void initState() {
     super.initState();
     onAddHigherStudies();
-    onAddSocials();
+    // onAddSocials();
   }
 
   @override
@@ -61,6 +64,8 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
 
     Future<void> updateProfile() async {
       try {
+        _loaderService.showLoader();
+
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
         
         bool isValid = validateForms();
@@ -95,12 +100,16 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
 
         // WRITE API CALLS HERE //
         await authService.updateUserProfile(user);
+
+        _loaderService.hideLoader();
+
         alertService.showSnackBar(message: "Profile created successfully",
             color: Theme.of(context).colorScheme.secondary);
 
         Navigator.pushNamed(context, '/home');
         
       } catch (e) {
+        _loaderService.hideLoader();
         debugPrint(e.toString());
       }
     }
@@ -126,7 +135,8 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                 CustomButton4(
                   label: "Next",
                   onPressed: () {
-                    updateProfile();
+                    // updateProfile();
+                    validateForms();
                   },
                 ),
               ],
@@ -200,8 +210,8 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                             alignment: Alignment.centerRight,
                             child: CustomButton2(
                               height: 35,
-                              width: 100,
-                              label: "Add more",
+                              width: 160,
+                              label: "Add a Social Link",
                               onPressed: () {
                                 onAddSocials();
                               },
@@ -219,6 +229,20 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
               ],
             ),
           )),
+          StreamBuilder<bool>(
+          stream: _loaderService.loadingStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!) {
+              return Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
     ]);
   }
 
@@ -265,17 +289,17 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   }
 
   onRemoveSocials(SocialLink socialLink) {
-    int notNullElements = 0;
+    // int notNullElements = 0;
 
-    for (Socials? element in socialsList) {
-      if (element != null) {
-        notNullElements++;
-      }
-    }
+    // for (Socials? element in socialsList) {
+    //   if (element != null) {
+    //     notNullElements++;
+    //   }
+    // }
 
-    if (notNullElements == 1) {
-      return null;
-    }
+    // if (notNullElements == 1) {
+    //   return null;
+    // }
 
     setState(() {
       int index = socialsList

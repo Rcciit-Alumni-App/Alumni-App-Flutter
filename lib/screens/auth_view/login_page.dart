@@ -54,6 +54,17 @@ class _LoginPageState extends State<LoginPage>
     }
   }
 
+  bool isPasswordVisible = false;
+
+  String? _validateEmail() {
+    // HANDLE LOGIC
+    return null;
+  }
+
+  String? _validatePasswords() {
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -111,6 +122,7 @@ class _LoginPageState extends State<LoginPage>
                         ),
                       ),
                       MyTextField(
+                        validator: (_) => _validateEmail(),
                         label: 'Personal Email',
                         onSaved: (v) {
                           setState(() {
@@ -120,6 +132,17 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       SizedBox(height: MediaQuery.of(context).size.width * 0.12),
                       MyTextField(
+                        validator: (_) => _validatePasswords(),
+                        button: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                        iconColor: Colors.blue,
+                        icons: !isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        isObscure: !isPasswordVisible,
                         label: 'Password',
                         onSaved: (v) {
                           setState(() {

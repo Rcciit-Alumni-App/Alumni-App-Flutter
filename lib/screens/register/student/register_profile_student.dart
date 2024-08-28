@@ -13,6 +13,15 @@ class RegisterProfileStudent extends StatefulWidget {
 }
 
 class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    // FETCH DATA FROM LOCAL AND JUST DISPLAY
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -42,40 +51,27 @@ class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
                     backgroundImage: AssetImage("assets/default-user.jpg"),
                   ),
                 ),
-                SizedBox(
-                  height: 40.0,
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Full Name",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    enabled: false,
-                    label: "Full Name",
-                  ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Current year of study",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    enabled: false,
-                    label: "Current year of study",
-                  ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Year of Passout",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    enabled: false,
-                    label: "Year of Passout",
-                  ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Department",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    enabled: false,
-                    label: "Department",
-                  ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
                 Center(
                   child: CustomButton4(
                     label: "Next",

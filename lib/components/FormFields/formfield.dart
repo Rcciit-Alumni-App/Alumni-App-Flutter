@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class MyTextField extends StatefulWidget {
   final IconData? leadingIcon;
+  final bool? isObscure;
   final void Function()? button;
   final String? label;
   final String? hintText;
@@ -19,6 +20,7 @@ class MyTextField extends StatefulWidget {
 
   const MyTextField({
     this.button,
+    this.isObscure,
     this.leadingIcon,
     this.label,
     this.hintText,
@@ -41,6 +43,7 @@ class MyTextField extends StatefulWidget {
 class _MyTextFieldState extends State<MyTextField> {
   final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
+  bool _isValid = true;
 
   @override
   void initState() {
@@ -66,7 +69,7 @@ class _MyTextFieldState extends State<MyTextField> {
         Text(
           widget.label ?? "",
           style: TextStyle(
-            color: Color(0xFF2F80ED),
+            color: _isValid ? Color(0xFF2F80ED) : Colors.red[700],
           ),
         ),
         Container(
@@ -75,42 +78,73 @@ class _MyTextFieldState extends State<MyTextField> {
             children: [
               Container(height: widget.height ?? 47.0),
               TextFormField(
-              validator: widget.validator,
-              enabled: widget.enabled,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary
-              ),
-              controller: widget.controller,
-              maxLines: widget.maxLines,
-              onChanged: widget.onChanged,
-              onSaved: widget.onSaved,
-              focusNode: _focusNode,
-              decoration: InputDecoration(
-                hintText: widget.hintText,
-                hintStyle: TextStyle(
-                  color: Color(0xFF2F80ED),
+                obscureText: widget.isObscure ?? false,
+                validator: (value) {
+                  final error = widget.validator?.call(value);
+                  setState(() {
+                    _isValid = error == null;
+                  });
+                  return error;
+                },
+                enabled: widget.enabled,
+                style: TextStyle(
+                  color: _isValid
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.red[700],
                 ),
-                filled: true,
-                fillColor: _isFocused ? Colors.white : Colors.grey[200]!.withOpacity(widget.opacity ?? 1.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(11.1053),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF2F80ED),
-                    width: 2.5,
+                controller: widget.controller,
+                maxLines: widget.isObscure ?? false ? 1 : widget.maxLines,
+                onChanged: widget.onChanged,
+                onSaved: widget.onSaved,
+                focusNode: _focusNode,
+                decoration: InputDecoration(
+                  hintText: widget.hintText,
+                  hintStyle: TextStyle(
+                    color: _isValid ? Color(0xFF2F80ED) : Colors.red[700],
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(11.1053),
-                  borderSide: const BorderSide(
-                    color: Color(0xFF2F80ED),
-                    width: 1.11053,
+                  filled: true,
+                  fillColor: _isFocused
+                      ? Colors.white
+                      : Colors.grey[200]!.withOpacity(widget.opacity ?? 1.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11.1053),
+                    borderSide: BorderSide(
+                      color: _isValid ? Color(0xFF2F80ED) : Colors.red[700]!,
+                      width: 2.5,
+                    ),
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(11.1053),
+                    borderSide: BorderSide(
+                      color: _isValid ? Color(0xFF2F80ED) : Colors.red[700]!,
+                      width: 1.11053,
+                    ),
+                  ),
+                  contentPadding: widget.maxLines == null
+                      ? const EdgeInsets.symmetric(horizontal: 10)
+                      : const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                  suffixIcon: widget.icons != null
+                      ? IconButton(
+                          icon: Icon(
+                            widget.icons,
+                            color: _isValid
+                                ? widget.iconColor
+                                : Colors.red[700],
+                          ),
+                          onPressed: widget.button,
+                        )
+                      : null,
+                  prefixIcon: widget.leadingIcon != null
+                      ? Icon(
+                          widget.leadingIcon,
+                          color: _isValid
+                              ? widget.iconColor
+                              : Colors.red[700],
+                        )
+                      : null,
                 ),
-                contentPadding: widget.maxLines == null ? const EdgeInsets.symmetric(horizontal: 10) : const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                suffixIcon: widget.icons != null ? IconButton(icon: Icon(widget.icons, color: widget.iconColor), onPressed: widget.button,) : null,
-                prefixIcon: widget.leadingIcon != null ? Icon(widget.leadingIcon, color: widget.iconColor,) : null,
               ),
-            ),
             ],
           ),
         ),

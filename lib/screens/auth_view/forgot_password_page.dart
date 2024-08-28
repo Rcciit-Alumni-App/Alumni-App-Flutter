@@ -28,10 +28,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final LoaderService _loaderService = GetIt.instance.get<LoaderService>();
   String? new_password, confirm_password;
 
-
-  _resetPassword(String newPassword, String confirmPassword, UserProvider userProvider) {
-
-  }
+  _resetPassword(
+      String newPassword, String confirmPassword, UserProvider userProvider) {}
 
   @override
   void initState() {
@@ -42,6 +40,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
+
+  String? _validatePasswords() {
+    return null;
   }
 
   @override
@@ -77,39 +82,73 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ),
                         ),
                       ),
-                      MyTextField(
-                        label: 'New Password',
-                        onSaved: (v) {
-                          setState(() {
-                            new_password = v;
-                          });
-                        },
-                      ),
-                      SizedBox(height: MediaQuery.sizeOf(context).width * 0.12),
-                      MyTextField(
-                        label: 'Confirm Password',
-                        onSaved: (v) {
-                          setState(() {
-                            confirm_password = v;
-                          });
-                        },
-                      ),
-                      
-                      SizedBox(height: 20,),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              MyTextField(
+                                validator: (_) => _validatePasswords(),
+                                button: () {
+                                  setState(() {
+                                    isPasswordVisible = !isPasswordVisible;
+                                  });
+                                },
+                                iconColor: Colors.blue,
+                                icons: !isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                isObscure: !isPasswordVisible,
+                                label: 'New Password',
+                                onSaved: (v) {
+                                  setState(() {
+                                    new_password = v;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.sizeOf(context).width * 0.12),
+                              MyTextField(
+                                validator: (_) => _validatePasswords(),
+                                button: () {
+                                  setState(() {
+                                    isConfirmPasswordVisible =
+                                        !isConfirmPasswordVisible;
+                                  });
+                                },
+                                iconColor: Colors.blue,
+                                icons: !isConfirmPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                isObscure: !isConfirmPasswordVisible,
+                                label: 'Confirm Password',
+                                onSaved: (v) {
+                                  setState(() {
+                                    confirm_password = v;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Center(
+                                child: CustomButton(
+                                  label: 'Login',
+                                  onPressed: () {
+                                    if (_formKey.currentState?.validate() ??
+                                        false) {
+                                      _formKey.currentState?.save();
 
-                      Center(
-                        child: CustomButton(
-                          label: 'Login',
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              _formKey.currentState?.save();
-                              
-                              _resetPassword(new_password!, confirm_password!, userProvider);
-                            }
-                          },
+                                      _resetPassword(new_password!,
+                                          confirm_password!, userProvider);
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      
+                      )
                     ],
                   ),
                 ),

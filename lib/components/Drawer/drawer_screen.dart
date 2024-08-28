@@ -1,7 +1,9 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Buttons/button.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/screens/DigitalID/digital_id.dart';
+import 'package:frontend/screens/UploadCSVModal/upload_csv_modal.dart';
 import 'package:frontend/screens/auth_view/login_page.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
@@ -21,6 +23,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final NavigationService navigation = NavigationService();
   late AlertService _alertService;
   UserModel? user;
+  String? userType;
 
   @override
   void initState() {
@@ -29,6 +32,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
     _getUser().then((value) {
       setState(() {
         user = value;
+        if (user == null) return;
+        userType = user!.userType;
         //debugPrint(user.toString());
       });
     });
@@ -50,7 +55,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Future<UserModel> _getUser() async {
     try {
       UserModel? user = await _authService.getUserProfile();
-      //print(user.toJson());
       return user;
     } catch (e) {
       throw e;
@@ -133,8 +137,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
           ),
-          
-          
+          userType == 'ADMIN' ? Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: CustomButton(
+              label: 'Upload a csv...',
+              onPressed: () {
+                _showCsvUploadModal(context);
+              },
+            ),
+          ) : Container()
         ],
       ),
     );
@@ -166,6 +177,26 @@ class _DrawerScreenState extends State<DrawerScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  _showCsvUploadModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Upload CSV File'),
+          content: CsvUploadContent(),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
