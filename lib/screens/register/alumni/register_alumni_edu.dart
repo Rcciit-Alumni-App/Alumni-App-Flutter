@@ -7,11 +7,13 @@ import 'package:frontend/components/Background/background_add_details_page.dart'
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/edu_history.dart';
-import 'package:frontend/components/socials.dart';
+import 'package:frontend/components/Socials/socials.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/loader_service.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterAlumniEdu extends StatefulWidget {
   @override
@@ -23,43 +25,91 @@ class RegisterAlumniEdu extends StatefulWidget {
 class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
   final AlertService alertService = AlertService();
   final AuthService authService = AuthService();
+  final LoaderService _loaderService = GetIt.instance.get<LoaderService>();
   final storage = new FlutterSecureStorage();
 
+  // Higher Studies List
   List<HigherStudiesFormWidget> higherStudiesForms = List.empty(growable: true);
-  List<Socials> socialsList = List.empty(growable: true);
+  int nextAvailableIdStudy = 0;
+
+  // Socials List
+  int nextAvailableIdSocial = 0;
+  List<Socials?> socialsList = List.empty(growable: true);
 
   @override
   void initState() {
     super.initState();
-    onAdd();
-    onAddSocials();
+    onAddHigherStudies();
+    // onAddSocials();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
 
+    bool validateForms() {
+      bool allValid = true;
+
+      higherStudiesForms
+        .forEach((element) => allValid = (allValid && element.isValidated()));
+
+      socialsList
+        .forEach((element) {
+          if (element != null) {
+            allValid = (allValid && element.isValidated());
+          }
+      });
+
+      return allValid;
+    }
+
     Future<void> updateProfile() async {
       try {
+        _loaderService.showLoader();
+
         UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
         
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
         user.higherStudies = higherStudiesForms
           .map((e) => e.higherStudiesModel)
           .toList();
 
-        //user.socials = socialsList.map((e) => e.text ?? "").toList();
+        user.higherStudies = higherStudiesForms
+          .asMap().entries.map((e) {
+          int index = e.key;
+          HigherStudiesFormWidget element = e.value;
+          element.higherStudiesModel.id = index + 1;
+          return element.higherStudiesModel;
+        }).toList();
+
+        List<SocialLink> list = [];
+        int id = 0;
+
+        for (Socials? element in socialsList) {
+          if (element != null) {
+            element.socialLinkModel.id = id++;
+            list.add(element.socialLinkModel);
+          }
+        }
+
+        user.socials = list;
 
         await storage.write(key: "user", value: jsonEncode(user));
 
         // WRITE API CALLS HERE //
         await authService.updateUserProfile(user);
+
+        _loaderService.hideLoader();
+
         alertService.showSnackBar(message: "Profile created successfully",
             color: Theme.of(context).colorScheme.secondary);
 
         Navigator.pushNamed(context, '/home');
-
+        
       } catch (e) {
+        _loaderService.hideLoader();
         debugPrint(e.toString());
       }
     }
@@ -85,7 +135,8 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                 CustomButton4(
                   label: "Next",
                   onPressed: () {
-                    updateProfile();
+                    // updateProfile();
+                    validateForms();
                   },
                 ),
               ],
@@ -137,7 +188,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                               width: 100,
                               label: "Add more",
                               onPressed: () {
-                                onAdd();
+                                onAddHigherStudies();
                               },
                             ),
                           ),
@@ -149,7 +200,7 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                             itemCount: socialsList.length,
                             itemBuilder: (_, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 0.0),
                                 child: socialsList[index],
                               );
                             },
@@ -159,8 +210,8 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
                             alignment: Alignment.centerRight,
                             child: CustomButton2(
                               height: 35,
-                              width: 100,
-                              label: "Add more",
+                              width: 160,
+                              label: "Add a Social Link",
                               onPressed: () {
                                 onAddSocials();
                               },
@@ -178,11 +229,25 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
               ],
             ),
           )),
+          StreamBuilder<bool>(
+          stream: _loaderService.loadingStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!) {
+              return Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
     ]);
   }
 
   //Delete specific form
-  onRemove(HigherStudy higherStudiesModel) {
+  onRemoveHigherStudies(HigherStudy higherStudiesModel) {
 
     if (higherStudiesForms.length == 1) {
       return null;
@@ -196,25 +261,56 @@ class _RegisterAlumniEduState extends State<RegisterAlumniEdu> {
     });
   }
 
-  onAdd() {
+  onAddHigherStudies() {
     setState(() {
-      HigherStudy _higherStudiesModel = HigherStudy(id: higherStudiesForms.length);
+      HigherStudy _higherStudiesModel = HigherStudy(id: nextAvailableIdStudy);
       higherStudiesForms.add(HigherStudiesFormWidget(
         index: higherStudiesForms.length,
         higherStudiesModel: _higherStudiesModel,
-        onRemove: () => onRemove(_higherStudiesModel),
+        onRemove: () => onRemoveHigherStudies(_higherStudiesModel),
       ));
     });
   }
 
   onAddSocials() {
     setState(() {
+      SocialLink _socialLink = SocialLink(id: nextAvailableIdSocial);
+      nextAvailableIdSocial++;
+      
       socialsList.add(
         Socials(
+          socialLinkModel: _socialLink,
           label: 'Social',
-          hintText: 'Link',  
+          hintText: 'Link',
+          onRemove: () => onRemoveSocials(_socialLink),
         )
       );
+    });
+  }
+
+  onRemoveSocials(SocialLink socialLink) {
+    // int notNullElements = 0;
+
+    // for (Socials? element in socialsList) {
+    //   if (element != null) {
+    //     notNullElements++;
+    //   }
+    // }
+
+    // if (notNullElements == 1) {
+    //   return null;
+    // }
+
+    setState(() {
+      int index = socialsList
+          .indexWhere((element) {
+            if (element != null) 
+              return element.socialLinkModel.id == socialLink.id;
+            return false;
+          });
+
+      // if (socialsList != null) socialsList.removeAt(index);
+      if (socialsList != null) socialsList[index] = null;
     });
   }
 }

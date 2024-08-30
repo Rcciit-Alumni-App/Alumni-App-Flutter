@@ -9,7 +9,7 @@ import 'package:frontend/services/loader_service.dart';
 import 'package:get_it/get_it.dart';
 import '../../components/Background/background.dart';
 import '../../components/Buttons/button.dart';
-import '../../components/formfield.dart';
+import '../../components/FormFields/formfield.dart';
 import 'package:frontend/providers/user_provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -45,13 +45,24 @@ class _LoginPageState extends State<LoginPage>
       );
     } catch (e) {
       _alertService.showSnackBar(
-        message: "Login Failed: $e",
+        message: "Login Failed",
         color: Colors.red,
       );
       print(e);
     } finally {
       _loaderService.hideLoader();
     }
+  }
+
+  bool isPasswordVisible = false;
+
+  String? _validateEmail() {
+    // HANDLE LOGIC
+    return null;
+  }
+
+  String? _validatePasswords() {
+    return null;
   }
 
   @override
@@ -111,6 +122,7 @@ class _LoginPageState extends State<LoginPage>
                         ),
                       ),
                       MyTextField(
+                        validator: (_) => _validateEmail(),
                         label: 'Personal Email',
                         onSaved: (v) {
                           setState(() {
@@ -120,6 +132,17 @@ class _LoginPageState extends State<LoginPage>
                       ),
                       SizedBox(height: MediaQuery.of(context).size.width * 0.12),
                       MyTextField(
+                        validator: (_) => _validatePasswords(),
+                        button: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                        iconColor: Colors.blue,
+                        icons: !isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        isObscure: !isPasswordVisible,
                         label: 'Password',
                         onSaved: (v) {
                           setState(() {

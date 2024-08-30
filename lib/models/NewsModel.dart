@@ -29,55 +29,64 @@
 // }
 
 import 'package:frontend/models/UserModel.dart';
-
+// {
+//     "id": "66cedb8bd052170f8ec2c9ff",
+//     "comment": "Saban",
+//     "isEdited": false,
+//     "user": {
+//       "id": "66bba20d934d8024078fd894",
+//       "full_name": "Pratyush Pal",
+//       "profile_pic_url": ""
+//     }
+//   }
 class CommentModel{
   String id;
-  String userId;
+ // String userId;
   UserModel user;
-  String newsId;
-  NewsModel news;
+//  String newsId;
+  //NewsModel news;
   String comment;
   bool isEdited;
-  DateTime created_at;
-  DateTime updated_at;
+ // DateTime? created_at;
+ // DateTime? updated_at;
 
   CommentModel({
     required this.id,
-    required this.userId,
+   // required this.userId,
     required this.user,
-    required this.newsId,
-    required this.news,
+  //  required this.newsId,
+   // required this.news,
     required this.comment,
     required this.isEdited,
-    required this.created_at,
-    required this.updated_at
+    // required this.created_at,
+    // required this.updated_at
   });
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
       id: json['id'] ?? "",
-      userId: json['userId'] ?? "",
+    //  userId: json['userId'] ?? "",
       user: UserModel.fromJson(json['user']),
-      newsId: json['newsId'] ?? "",
-      news: NewsModel.fromJson(json['news']),
+    //  newsId: json['newsId'] ?? "",
+     // news: NewsModel.fromJson(json['news']),
       comment: json['comment'] ?? "",
       isEdited: json['isEdited'] ?? false,
-      created_at: DateTime.parse(json['created_at']),
-      updated_at: DateTime.parse(json['updated_at'])
+      // created_at: DateTime.parse(json['created_at']),
+      // updated_at: DateTime.parse(json['updated_at'])
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'userId': userId,
+   //   'userId': userId,
       'user': user.toJson(),
-      'newsId': newsId,
-      'news': news.toJson(),
+    //  'newsId': newsId,
+     // 'news': news.toJson(),
       'comment': comment,
       'isEdited': isEdited,
-      'created_at': created_at.toIso8601String(),
-      'updated_at': updated_at.toIso8601String()
+      // 'created_at': created_at?.toIso8601String(),
+      // 'updated_at': updated_at?.toIso8601String()
     };
   }
 }

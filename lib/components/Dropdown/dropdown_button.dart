@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DropdownOptionController extends ChangeNotifier {
   String? _selectedItem;
@@ -83,16 +84,19 @@ class _DropdownOptionState extends State<DropdownOption> {
         isExpanded: true,
         hint: Text(
           widget.caption ?? "",
-          style: TextStyle(
+          style: GoogleFonts.nunitoSans(
             color: Color(0xFF2F80ED),
             fontSize: 17.0,
           ),
         ),
         value: widget.controller.selectedItem,
-        icon: Icon(Icons.arrow_drop_down),
+        icon: Icon(Icons.arrow_drop_down, color: Color(0xFF2F80ED)),
         iconSize: 24,
         elevation: 16,
-        style: TextStyle(color: Color(0xFF2F80ED)),
+        style: GoogleFonts.nunitoSans(
+          color: Color(0xFF2F80ED),
+          fontSize: 17.0,
+        ),
         underline: Container(
           height: 2,
           color: Colors.transparent,

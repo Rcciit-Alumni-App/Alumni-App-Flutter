@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/Dropdown/dropdown_button.dart';
 import 'package:frontend/components/Dropdown/dropdown_multiselect.dart';
 import 'package:frontend/components/date.dart';
-import 'package:frontend/components/formfield.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/UserModel.dart';
 
@@ -22,6 +22,8 @@ class InternshipExperienceFormWidget extends StatefulWidget {
     return state;
   }
 
+  bool isValidated() => state.validate();
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _jobRoleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -34,7 +36,80 @@ class InternshipExperienceFormWidget extends StatefulWidget {
 class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFormWidget> {
   final formKey = GlobalKey<FormState>();
 
+  bool _hasError = false;
+
+  bool validate() {
+    // Validate Form Fields
+    bool isValid = formKey.currentState?.validate() ?? false;
+    if (isValid) {
+      formKey.currentState?.save();
+    }
+    setState(() {
+      _hasError = !isValid;
+    });
+    return isValid;
+  }
+
   bool checked = false;
+
+
+  String? _validateStartDate() {
+  String? res;
+
+  if (widget.startDateController.dateTime == null) {
+    res = 'Please enter start date';
+  }
+
+  if (widget.startDateController.dateTime == null && widget.endDateController.dateTime != null) {
+    res = 'Please enter start date';
+  }
+
+  // If only start date exists, check if it's valid
+  if (widget.startDateController.dateTime != null && widget.endDateController.dateTime == null) {
+    DateTime? startDate = widget.startDateController.dateTime;
+    
+    if (startDate != null && startDate.isAfter(DateTime.now())) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  // If both dates exist, check their validity
+  if (widget.startDateController.dateTime != null && widget.endDateController.dateTime != null) {
+    DateTime? startDate = widget.startDateController.dateTime;
+    DateTime? endDate = widget.endDateController.dateTime;
+    
+    if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  return res;
+}
+
+String? _validateEndDate() {
+  String? res;
+
+  if (widget.endDateController.dateTime != null) {
+    DateTime? endDate = widget.endDateController.dateTime;
+    
+    if (endDate != null && endDate.isAfter(DateTime.now())) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  // If both dates exist, check their validity
+  if (widget.startDateController.dateTime != null && widget.endDateController.dateTime != null) {
+    DateTime? startDate = widget.startDateController.dateTime;
+    DateTime? endDate = widget.endDateController.dateTime;
+    
+    if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  return res;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +125,7 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(
               width: 1.11053,
-              color: Color(0xFF2F80ED),
+              color:  _hasError ? Colors.red[700]! : Color(0xFF2F80ED),
             ),
           ),
           child: Padding(
@@ -67,7 +142,7 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary),
+                          color: _hasError ? Colors.red[700]! : Color(0xFF2F80ED)),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -78,8 +153,6 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                                 //Clear All forms Data
                                 widget.internshipExperience.company = null;
                                 widget.internshipExperience.role = null;
-                                widget.internshipExperience.description = null;
-                                widget.internshipExperience.domain = null;
                                 widget.internshipExperience.skills = null;
                                 widget.internshipExperience.startDate = null;
                                 widget.internshipExperience.endDate = null;
@@ -92,15 +165,15 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                                 widget.skillsController.clear();
                               });
                             },
-                            child: const Text(
+                            child: Text(
                               "Clear",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: _hasError ? Colors.red[700]! : Color(0xFF2F80ED)),
                             )),
                           TextButton(
                             onPressed: () => widget.onRemove(),
-                            child: const Text(
+                            child: Text(
                               "Remove",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: _hasError ? Colors.red : Color(0xFF2F80ED),),
                             )),
                       ],
                     ),
@@ -108,14 +181,22 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                 ),
             
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Company Name",
                   controller: widget._nameController,
-                  onChanged: (value) => widget.internshipExperience.company = value,
+                  onChanged: (value) {
+                    widget.internshipExperience.company = value;
+                    validate();
+                  },
                   onSaved: (value) => widget.internshipExperience.company = value,
                   hintText: "Company name",
                 ),
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Job Role",
                   controller: widget._jobRoleController,
-                  onChanged: (value) => widget.internshipExperience.role = value,
+                  onChanged: (value) {
+                    widget.internshipExperience.role = value;
+                    validate();
+                  },
                   onSaved: (value) => widget.internshipExperience.role = value,
                   hintText: "Job role",
                 ),
@@ -123,21 +204,24 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                   height: 20.0,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: DateCal(
+                        validator: (_) => _validateStartDate(),
                         controller: widget.startDateController,
-                        onChanged: (value) => widget.internshipExperience.startDate = DateTime.parse(value!),
-                        onSaved: (value) => widget.internshipExperience.startDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.internshipExperience.startDate = value,
+                        onSaved: (value) => widget.internshipExperience.startDate = value,
                         initialText: "Start Date"
                       ),
                     ),
                     const SizedBox(width: 10.0), // Add some space between the fields
                     !checked ? Expanded(
                       child: DateCal(
+                        validator: (_) => _validateEndDate(),
                         controller: widget.endDateController,
-                        onChanged: (value) => widget.internshipExperience.endDate = DateTime.parse(value!),
-                        onSaved: (value) => widget.internshipExperience.endDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.internshipExperience.endDate = value,
+                        onSaved: (value) => widget.internshipExperience.endDate = value,
                         initialText: "End Date"
                       ),
                     ) : Expanded(child: Container())
@@ -148,35 +232,60 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: checked,
-                        onChanged: (_) {
-                          setState(() {
-                            checked = !checked;
-                          });
-                        }
-                      ),
-                      Text(
-                        'I Currently Work Here',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary
-                        )
-                      )
-                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Row(
+                      children: [
+                        Stack(children: [
+                          Positioned.fill(
+                            child: Checkbox(
+                              value: checked,
+                              onChanged: (_) {},
+                              activeColor: _hasError ? Colors.red[700] : Color(0xFF2F80ED),
+                              checkColor: Colors.white, // Color of the checkmark
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                widget.endDateController.clear();
+                                widget.internshipExperience.endDate = null;
+                                checked = !checked;
+                              });
+                            },
+                            child: Container(
+                              width: 20.0,
+                              height: 20.0,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: _hasError ? Colors.red[700]! : Color(0xFF2F80ED),
+                                  width: 3.5,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(4.0), // Border radius
+                              ),
+                            ),
+                          ),
+                        ]),
+                        SizedBox(width: 10,),
+                        Text('I Currently Study Here',
+                            style: TextStyle(
+                                color: _hasError
+                                    ? Colors.red[700]
+                                    : Color(0xFF2F80ED)))
+                      ],
+                    ),
                   ),
-
                 ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                DropdownOption(
-                  controller: widget.domainController,
-                  onChanged: (value) => widget.internshipExperience.domain = value,
-                  onSaved: (value) => widget.internshipExperience.domain = value,
-                  caption: "Domain",
-                ),
+                // const SizedBox(
+                //   height: 15.0,
+                // ),
+                // DropdownOption(
+                //   controller: widget.domainController,
+                //   onChanged: (value) => widget.internshipExperience.domain = value,
+                //   onSaved: (value) => widget.internshipExperience.domain = value,
+                //   caption: "Domain",
+                // ),
                 const SizedBox(
                   height: 15.0,
                 ),
@@ -186,14 +295,6 @@ class _InternshipExperienceFormWidgetState extends State<InternshipExperienceFor
                   onSaved: (value) => widget.internshipExperience.skills = value,
                   caption: "Skills",
                 ),
-                MyTextField(
-                  controller: widget._descriptionController,
-                  onChanged: (value) => widget.internshipExperience.description = value,
-                  onSaved: (value) => widget.internshipExperience.description = value,
-                  hintText: "Description",
-                  maxLines: 4,
-                  height: 100,
-                )
               ],
             ),
           ),

@@ -4,6 +4,8 @@ import 'package:frontend/components/Buttons/button4.dart';
 import 'package:frontend/components/Buttons/buttonProfile.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/screens/CreatePost/create_post.dart';
+import 'package:frontend/screens/ProfileScreen/edit_profile.dart';
+import 'package:frontend/screens/ProfileScreen/my_posts.dart';
 import 'package:frontend/services/navigation_service.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -48,62 +50,62 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     CustomButton4(
                       label: "Edit Profile",
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(navigation.createRoute(route: EditProfile()));
+                      },
                     ),
                   ],
                 ),
                 SizedBox(
                   height: 20.0,
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        ProfileButton(
-                          text: "My Posts",
-                          icons: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                    navigation.createRoute(route: CreatePost()));
-                              },
-                              child: Icon(Icons.add_circle,
-                                  color: Theme.of(context).colorScheme.primary)),
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        ProfileButton(
-                          text: "My Donations",
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        ProfileButton(
-                          text: "My Digital Cards",
-                          icons: Icon(Icons.add_circle,
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        ProfileButton(
-                          text: "My Posted Jobs",
-                          icons: Icon(Icons.add_circle,
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        ProfileButton(
-                          text: "My Posted Interships",
-                          icons: Icon(
-                            Icons.add_circle,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(navigation.createRoute(route: MyPosts()));
+                  },
+                  child: ProfileButton(
+                    text: "My Posts",
+                    icons: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                        .push(navigation.createRoute(route: CreatePost()));
+                        },
+                        child: Icon(Icons.add_circle,
+                            color: Theme.of(context).colorScheme.primary)),
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                ProfileButton(
+                  text: "My Donations",
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                ProfileButton(
+                  text: "My Digital Cards",
+                  icons: Icon(Icons.add_circle,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                ProfileButton(
+                  text: "My Posted Jobs",
+                  icons: Icon(Icons.add_circle,
+                      color: Theme.of(context).colorScheme.primary),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                ProfileButton(
+                  text: "My Posted Interships",
+                  icons: Icon(
+                    Icons.add_circle,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],

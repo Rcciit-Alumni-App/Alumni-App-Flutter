@@ -5,7 +5,7 @@ import 'package:frontend/models/JobsModel.dart';
 import 'package:http/http.dart' as http;
 
 class JobService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
+  static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1';
   final storage = new FlutterSecureStorage();
 
  Future<List<JobsCardModel>> getAlljobs() async {
@@ -19,7 +19,7 @@ class JobService {
   );
 
   if (response.statusCode == 200 && response.body.isNotEmpty) {
-    print(response.body);
+   // print(response.body);
     final List<dynamic> jobsJson = json.decode(response.body);
     List<JobsCardModel> jobs = jobsJson
         .map((json) => JobsCardModel.fromJson(json as Map<String, dynamic>))
@@ -39,7 +39,7 @@ class JobService {
         'Authorization': 'Bearer $token',
       },
     );
-    print(response.body);
+    //print(response.body);
     JobModel job = JobModel.fromJson(json.decode(response.body));
     return job;
   }

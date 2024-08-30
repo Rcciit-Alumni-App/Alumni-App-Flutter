@@ -38,12 +38,11 @@ class HigherStudy {
 class Internship {
   int? id;
   String? company;
-  String? domain;
+  // String? domain;
   String? role;
   DateTime? startDate;
   DateTime? endDate;
   List<String?>? skills;
-  String? description;
 
   Internship({
     this.id,
@@ -52,20 +51,16 @@ class Internship {
     this.startDate,
     this.endDate,
     this.skills,
-    this.description,
-    this.domain
   });
 
   factory Internship.fromJson(Map<String, dynamic> json) {
     return Internship(
-      id: json['id'],
-      company: json['company'],
-      role: json['role'],
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date']),
-      skills: List<String>.from(json['skills']),
-      description: json['description'],
-      domain: json['domain']
+      id: json['id'] ?? 0,
+      company: json['company'] ?? '',
+      role: json['role'] ?? '',
+      startDate: json['start_date'] != null ? DateTime.parse(json['start_date']) : null,
+      endDate: json['end_date'] != null ? DateTime.parse(json['end_date']) : null,
+      skills: (json['skills'] as List?)?.map((item) => item.toString()).toList() ?? [],
     );
   }
 
@@ -77,8 +72,6 @@ class Internship {
       'start_date': startDate == null ? startDate : startDate!.toIso8601String(),
       'end_date': endDate == null ? endDate : endDate!.toIso8601String(),
       'skills': skills,
-      'description': description,
-      'domain': domain
     };
   }
 }
@@ -132,16 +125,19 @@ class WorkExperience {
 }
 
 class SocialLink {
+  int? id;
   String? platform;
   String? url;
 
   SocialLink({
+    this.id,
     this.platform,
     this.url,
   });
 
   factory SocialLink.fromJson(Map<String, dynamic> json) {
     return SocialLink(
+      id: json['id'],
       platform: json['platform'],
       url: json['url'],
     );
@@ -149,6 +145,7 @@ class SocialLink {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'platform': platform,
       'url': url,
     };
@@ -156,6 +153,7 @@ class SocialLink {
 }
 
 class UserModel {
+  String id;
   String fullName;
   String phone;
   String personalMail;
@@ -174,6 +172,7 @@ class UserModel {
   List<WorkExperience> workExperiences;
 
   UserModel({
+    required this.id,
     required this.fullName,
     required this.phone,
     required this.personalMail,
@@ -194,6 +193,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      id: json['id'] ?? '',
       fullName: json['full_name'] ?? '',
       phone: json['phone'] ?? '',
       personalMail: json['personal_mail'] ?? '',
@@ -215,6 +215,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'full_name': fullName,
       'phone': phone,
       'personal_mail': personalMail,

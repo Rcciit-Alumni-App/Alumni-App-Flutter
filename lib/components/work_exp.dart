@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:frontend/components/date.dart';
 import 'package:frontend/components/Dropdown/dropdown_button.dart';
 import 'package:frontend/components/Dropdown/dropdown_multiselect.dart';
-import 'package:frontend/components/formfield.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/models/UserModel.dart';
 
 class WorkExperienceFormWidget extends StatefulWidget {
@@ -29,7 +29,7 @@ class WorkExperienceFormWidget extends StatefulWidget {
   DropdownOptionController domainController = DropdownOptionController();
   DropdownMultiController skillsController = DropdownMultiController();
 
-  // bool isValidated() => state.validate();
+  bool isValidated() => state.validate();
 }
 
 class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
@@ -37,14 +37,77 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
 
   bool checked = false;
 
+  bool _hasError = false;
+
   bool validate() {
     // Validate Form Fields
     bool isValid = formKey.currentState?.validate() ?? false;
     if (isValid) {
       formKey.currentState?.save();
     }
+    setState(() {
+      _hasError = !isValid;
+    });
     return isValid;
   }
+
+  String? _validateStartDate() {
+  String? res;
+
+  if (widget.startDateController.dateTime == null) {
+    res = 'Please enter start date';
+  }
+
+  if (widget.startDateController.dateTime == null && widget.endDateController.dateTime != null) {
+    res = 'Please enter start date';
+  }
+
+  // If only start date exists, check if it's valid
+  if (widget.startDateController.dateTime != null && widget.endDateController.dateTime == null) {
+    DateTime? startDate = widget.startDateController.dateTime;
+    
+    if (startDate != null && startDate.isAfter(DateTime.now())) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  // If both dates exist, check their validity
+  if (widget.startDateController.dateTime != null && widget.endDateController.dateTime != null) {
+    DateTime? startDate = widget.startDateController.dateTime;
+    DateTime? endDate = widget.endDateController.dateTime;
+    
+    if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  return res;
+}
+
+String? _validateEndDate() {
+  String? res;
+
+  if (widget.endDateController.dateTime != null) {
+    DateTime? endDate = widget.endDateController.dateTime;
+    
+    if (endDate != null && endDate.isAfter(DateTime.now())) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  // If both dates exist, check their validity
+  if (widget.startDateController.dateTime != null && widget.endDateController.dateTime != null) {
+    DateTime? startDate = widget.startDateController.dateTime;
+    DateTime? endDate = widget.endDateController.dateTime;
+    
+    if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+      res = 'Please enter a valid date';
+    }
+  }
+
+  return res;
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +123,7 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(
               width: 1.11053,
-              color: Color(0xFF2F80ED),
+              color:  _hasError ? Colors.red : Color(0xFF2F80ED),
             ),
           ),
           child: Padding(
@@ -78,7 +141,8 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary),
+                          color: _hasError ? Colors.red : Color(0xFF2F80ED)
+                        ),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -103,27 +167,29 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                                 widget.skillsController.clear();
                               });
                             },
-                            child: const Text(
+                            child: Text(
                               "Clear",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: _hasError ? Colors.red : Color(0xFF2F80ED)),
                             )),
                         TextButton(
                             onPressed: () => widget.onRemove(),
-                            child: const Text(
+                            child: Text(
                               "Remove",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: _hasError ? Colors.red : Color(0xFF2F80ED),),
                             )),
                       ],
                     ),
                   ],
                 ),
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Company Name",
                   controller: widget._nameController,
                   onChanged: (value) => widget.workExperience.company = value,
                   onSaved: (value) => widget.workExperience.company = value,
                   hintText: "Company name",
                 ),
                 MyTextField(
+                  validator: (value) => value!.length > 3 ? null : "Enter Job Role",
                   controller: widget._jobRoleController,
                   onChanged: (value) => widget.workExperience.role = value,
                   onSaved: (value) => widget.workExperience.role = value,
@@ -133,29 +199,62 @@ class _WorkExperienceFormWidgetState extends State<WorkExperienceFormWidget> {
                   height: 20.0,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: DateCal(
+                        validator: (_) => _validateStartDate(),
                         controller: widget.startDateController,
-                        onChanged: (value) => widget.workExperience.startDate = DateTime.parse(value!),
-                        onSaved: (value) => widget.workExperience.startDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.workExperience.startDate = value,
+                        onSaved: (value) => widget.workExperience.startDate = value,
                         initialText: "Start Date"
                       ),
                     ),
                     const SizedBox(
                         width: 10.0), // Add some space between the fields
-                    Expanded(
+                    !checked ? Expanded(
                       child: DateCal(
+                        validator: (_) => _validateEndDate(),
                         controller: widget.endDateController,
-                        onChanged: (value) => widget.workExperience.endDate = DateTime.parse(value!),
-                        onSaved: (value) => widget.workExperience.endDate = DateTime.parse(value!),
+                        onChanged: (value) => widget.workExperience.endDate = value,
+                        onSaved: (value) => widget.workExperience.endDate = value,
                         initialText: "End Date"
                       ),
-                    ),
+                    ) : Expanded(child: Container())
                   ],
                 ),
+
                 const SizedBox(
-                  height: 15.0,
+                  height: 10.0,
+                ),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: checked,
+                        onChanged: (_) {
+                          setState(() {
+                            widget.endDateController.clear();
+                            widget.workExperience.endDate = null;
+                            checked = !checked;
+                          });
+                        }
+                      ),
+                      Text(
+                        'I Currently Work Here',
+                        style: TextStyle(
+                          color: _hasError ? Colors.red : Color(0xFF2F80ED),
+                        )
+                      )
+                    ],
+                  ),
+
+                ),
+
+                const SizedBox(
+                  height: 10.0,
                 ),
                 DropdownOption(
                   controller: widget.domainController,

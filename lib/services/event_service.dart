@@ -5,7 +5,8 @@ import 'package:frontend/models/EventsModel.dart';
 import 'package:http/http.dart' as http;
 
 class EventService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
+  //static const String baseUrl = 'https://alumni-app-backend-a7b0.onrender.com/api/v1';
+  static const String baseUrl = 'https://10.0.2.2:8000/api/v1';
   final storage = new FlutterSecureStorage();
 
  Future<List<EventsCardmodel>> getAllEvents() async {
@@ -46,5 +47,19 @@ class EventService {
   
   }
 
+  Future<bool> createInterest(String eventId) async {
+    final token = await storage.read(key: "accessToken");
+    final response = await http.post(
+      Uri.parse('$baseUrl/events/interest'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(<String, String>{
+        'eventId': eventId,
+      }),
+    );
+    return response.statusCode == 200;
+  }
 
 }
