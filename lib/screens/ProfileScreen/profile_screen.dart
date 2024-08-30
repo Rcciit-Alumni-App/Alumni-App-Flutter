@@ -55,41 +55,56 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(
                   height: 20.0,
                 ),
-                ProfileButton(
-                  text: "My Posts",
-                  icons: GestureDetector(
-                    onTap: (){
-                      Navigator.of(context)
-                          .push(navigation.createRoute(route: CreatePost()));
-                    },
-                    child: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary)),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ProfileButton(
-                  text: "My Donations",
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ProfileButton(
-                  text: "My Digital Cards",
-                  icons: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ProfileButton(
-                  text: "My Posted Jobs",
-                  icons: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                ProfileButton(
-                  text: "My Posted Interships",
-                  icons: Icon(Icons.add_circle,color: Theme.of(context).colorScheme.primary,),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        ProfileButton(
+                          text: "My Posts",
+                          icons: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                    navigation.createRoute(route: CreatePost()));
+                              },
+                              child: Icon(Icons.add_circle,
+                                  color: Theme.of(context).colorScheme.primary)),
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        ProfileButton(
+                          text: "My Donations",
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        ProfileButton(
+                          text: "My Digital Cards",
+                          icons: Icon(Icons.add_circle,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        ProfileButton(
+                          text: "My Posted Jobs",
+                          icons: Icon(Icons.add_circle,
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        ProfileButton(
+                          text: "My Posted Interships",
+                          icons: Icon(
+                            Icons.add_circle,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
