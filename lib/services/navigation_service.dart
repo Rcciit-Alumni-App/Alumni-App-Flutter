@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/chat_screen.dart';
-import 'package:frontend/screens/donation_screen.dart';
-import 'package:frontend/screens/home_screen.dart';
-import 'package:frontend/screens/profile_screen.dart';
+import 'package:frontend/screens/ChatScreen/chat_screen.dart';
+import 'package:frontend/screens/DigitalID/digital_id.dart';
+import 'package:frontend/screens/DonationScreen/donation_screen.dart';
+import 'package:frontend/screens/HomeScreen/home_screen.dart';
+import 'package:frontend/screens/ProfileScreen/profile_screen.dart';
+import 'package:frontend/screens/register/alumni/register_alumni_edu.dart';
+import 'package:frontend/screens/register/alumni/register_alumni_work.dart';
+import 'package:frontend/screens/register/alumni/register_profile_alumni.dart';
+import 'package:frontend/screens/register/register_main.dart';
+import 'package:frontend/screens/register/student/register_profile_student.dart';
+import 'package:frontend/screens/register/student/register_student_domain.dart';
+import 'package:frontend/screens/register/student/register_student_work.dart';
+
 
 class NavigationService {
   late GlobalKey<NavigatorState> navigatorKey;
@@ -11,6 +20,14 @@ class NavigationService {
     '/chat': (context) => const ChatPage(),
     '/donation': (context) => const DonationPage(),
     '/profile': (context) => const ProfilePage(),
+    '/alumni-profile': (context) => const RegisterProfileAlumni(),
+    '/alumni-work': (context) => RegisterAlumniWork(),
+    '/alumni-education': (context) => RegisterAlumniEdu(),
+    '/student-profile': (context) => const RegisterProfileStudent(),
+    '/student-work': (context) => RegisterStudentWork(),
+    '/student-other-details': (context) => RegisterStudentDomain(),
+    '/register-main': (context) => const RegisterMain(),
+    '/digitalId': (context) => const DigitalId(),
   };
 
   GlobalKey<NavigatorState>? get nav {

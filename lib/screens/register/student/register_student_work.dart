@@ -104,13 +104,18 @@
 
 
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
+import 'package:frontend/components/internship_exp.dart';
 import 'package:frontend/constants/constants.dart';
-import 'package:frontend/components/work_exp.dart';
-import 'package:frontend/models/work_experience_model.dart';
+import 'package:frontend/models/UserModel.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/screens/register/student/register_student_domain.dart';
+import 'package:frontend/services/alert_services.dart';
 
 class RegisterStudentWork extends StatefulWidget {
   @override
@@ -120,7 +125,11 @@ class RegisterStudentWork extends StatefulWidget {
 }
 
 class _RegisterStudentWorkState extends State<RegisterStudentWork> {
-  List<WorkExperienceFormWidget> contactForms = List.empty(growable: true);
+  final AlertService alertService = AlertService();
+  final storage = new FlutterSecureStorage();
+
+  List<InternshipExperienceFormWidget> internshipExperienceForms = List.empty(growable: true);
+  int nextAvailableIdInternship = 0;
 
   @override
   void initState() {
@@ -130,10 +139,46 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool validateForms() {
+      bool allValid = true;
+
+      internshipExperienceForms
+        .forEach((element) => allValid = (allValid && element.isValidated()));
+
+      return allValid;
+    }
+
+    Future<void> updateProfile() async {
+      try {
+        UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
+        user.internships = internshipExperienceForms
+          .asMap().entries.map((e) {
+          int index = e.key;
+          InternshipExperienceFormWidget element = e.value;
+          element.internshipExperience.id = index + 1;
+          return element.internshipExperience;
+        }).toList();
+
+        await storage.write(key: "user", value: jsonEncode(user));
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return RegisterStudentDomain();
+        }));
+
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
     return Stack(children: [
       BackgroundAddDetailsPage(),
       Scaffold(
-
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Row(
@@ -141,7 +186,13 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return RegisterStudentDomain();
+                    }));
+
+                  },
                 ),
                 SizedBox(
                   width: 25.0,
@@ -149,7 +200,7 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
                 CustomButton4(
                   label: "Next",
                   onPressed: () {
-                    onSave();
+                    updateProfile();
                   },
                 ),
               ],
@@ -184,9 +235,9 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                  itemCount: contactForms.length,
+                  itemCount: internshipExperienceForms.length,
                   itemBuilder: (_, index) {
-                    return contactForms[index];
+                    return internshipExperienceForms[index];
                   })
                 ),
                 SizedBox(
@@ -212,43 +263,29 @@ class _RegisterStudentWorkState extends State<RegisterStudentWork> {
     ]);
   }
 
-  onSave() {
-
-    // --------------------------------------- HANDLE VALIDATION HERE---------------------------------------------
-
-    List<Map?> data = contactForms
-        .map((e) => {
-              'name': e.contactModel.name,
-              'startDate': e.contactModel.startDate,
-              'skills': e.contactModel.skills
-            })
-        .toList();
-
-    print(data);
-  }
-
   //Delete specific form
-  onRemove(WorkExperienceModel contact) {
+  onRemove(Internship internshipExperience) {
 
-    if (contactForms.length == 1) {
+    if (internshipExperienceForms.length == 1) {
       return null;
     }
 
     setState(() {
-      int index = contactForms
-          .indexWhere((element) => element.contactModel.id == contact.id);
+      int index = internshipExperienceForms
+          .indexWhere((element) => element.internshipExperience.id == internshipExperience.id);
 
-      if (contactForms != null) contactForms.removeAt(index);
+      internshipExperienceForms.removeAt(index);
     });
   }
 
   onAdd() {
     setState(() {
-      WorkExperienceModel _contactModel = WorkExperienceModel(id: contactForms.length);
-      contactForms.add(WorkExperienceFormWidget(
-        index: contactForms.length,
-        contactModel: _contactModel,
-        onRemove: () => onRemove(_contactModel),
+      Internship _internshipExperience = Internship(id: nextAvailableIdInternship);
+      nextAvailableIdInternship++;
+      internshipExperienceForms.add(InternshipExperienceFormWidget(
+        index: internshipExperienceForms.length,
+        internshipExperience: _internshipExperience,
+        onRemove: () => onRemove(_internshipExperience),
       ));
     });
   }

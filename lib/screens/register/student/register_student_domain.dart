@@ -1,9 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button2.dart';
 import 'package:frontend/components/Buttons/button4.dart';
-import 'package:frontend/components/socials.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
+import 'package:frontend/components/Socials/socials.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/services/alert_services.dart';
+import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/loader_service.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterStudentDomain extends StatefulWidget {
   @override
@@ -13,19 +22,99 @@ class RegisterStudentDomain extends StatefulWidget {
 }
 
 class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
-  
-  List<Socials> domainList = List.empty(growable: true);
-  List<Socials> socialsList = List.empty(growable: true);
+  final AlertService alertService = AlertService();
+  final AuthService authService = AuthService();
+  final LoaderService _loaderService = GetIt.instance.get<LoaderService>();
+  final storage = new FlutterSecureStorage();
+
+  // Socials List
+  int nextAvailableIdSocial = 0;
+  List<Socials?> socialsList = List.empty(growable: true);
+
+  // Domain
+  String? _domain;
 
   @override
   void initState() {
     super.initState();
-    onAddDomain();
-    onAddSocials();
+    // onAddSocials();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    bool validateForms() {
+      bool allValid = true;
+
+      for (Socials? element in socialsList) {
+        if (element != null) {
+          allValid = (allValid && element.isValidated());
+        } else {
+          continue;
+        }
+      }
+
+      return allValid;
+    }
+
+    Future<void> updateProfile() async {
+      try {
+        _loaderService.showLoader();
+
+        // UserModel user = await storage.read(key: "user").then((value)=>UserModel.fromJson(jsonDecode(value!)));
+        
+        String? userRef = await storage.read(key: "user");
+  
+        if (userRef == null) {
+          return;
+        }
+
+        // UserModel user = UserModel.fromJson(jsonDecode(userRef));
+
+        Map<String, dynamic> json = jsonDecode(userRef);
+
+        print(json);
+
+        UserModel user = UserModel.fromJson(json);
+
+        bool isValid = validateForms();
+
+        if (!isValid) return;
+
+        user.domain = _domain ?? '';
+
+        List<SocialLink> list = [];
+        int id = 0;
+
+        for (Socials? element in socialsList) {
+          if (element != null) {
+            print(element.socialLinkModel.platform);
+            element.socialLinkModel.id = id++;
+            list.add(element.socialLinkModel);
+          }
+        }
+
+        user.socials = list;
+
+        await storage.write(key: "user", value: jsonEncode(user));
+
+
+        // // HANDLE API CALLS HERE //
+        await authService.updateUserProfile(user);
+
+        _loaderService.hideLoader();
+        
+        alertService.showSnackBar(message: "Profile created successfully",
+            color: Theme.of(context).colorScheme.secondary);
+
+        Navigator.pushNamed(context, '/home');
+
+      } catch (e) {
+        _loaderService.hideLoader();
+        debugPrint(e.toString());
+      }
+    }
+
     return Stack(children: [
       BackgroundAddDetailsPage(),
       Scaffold(
@@ -37,7 +126,9 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
               children: [
                 CustomButton2(
                   label: "Skip",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/home');
+                  },
                 ),
                 SizedBox(
                   width: 25.0,
@@ -45,7 +136,8 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                 CustomButton4(
                   label: "Next",
                   onPressed: () {
-                    onSave();
+                    updateProfile();
+                    // validateForms();
                   },
                 ),
               ],
@@ -73,30 +165,17 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                     children: [
                       Column(
                         children: [
-                          // Higher Studies List
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(), // Disable scrolling
-                            itemCount: domainList.length,
-                            itemBuilder: (_, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: domainList[index],
-                              );
-                            },
-                          ),
-
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: CustomButton2(
-                              height: 35,
-                              width: 100,
-                              label: "Add more",
-                              onPressed: () {
-                                onAddDomain();
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: MyTextField(
+                              label: 'Domain',
+                              hintText: 'Domain (You can leave this empty)',
+                              onChanged: (value) {
+                                _domain = value;
                               },
                             ),
                           ),
+
                           // Socials List
                           ListView.builder(
                             shrinkWrap: true,
@@ -104,21 +183,24 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
                             itemCount: socialsList.length,
                             itemBuilder: (_, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding: const EdgeInsets.symmetric(vertical: 0.0),
                                 child: socialsList[index],
                               );
                             },
                           ),
 
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: CustomButton2(
-                              height: 35,
-                              width: 100,
-                              label: "Add more",
-                              onPressed: () {
-                                onAddSocials();
-                              },
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: CustomButton2(
+                                height: 35,
+                                width: 160,
+                                label: "Add a Social Link",
+                                onPressed: () {
+                                  onAddSocials();
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -137,60 +219,62 @@ class _RegisterStudentDomainState extends State<RegisterStudentDomain> {
               ],
             ),
           )),
+          StreamBuilder<bool>(
+          stream: _loaderService.loadingStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!) {
+              return Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
     ]);
-  }
-
-  onSave() {
-
-    // --------------------------------------- HANDLE VALIDATION HERE---------------------------------------------
-
-    // List<Map?> data = higherStudiesForms
-    //     .map((e) => {
-    //           'name': e.contactModel.name,
-    //           'startDate': e.contactModel.startDate,
-    //         })
-    //     .toList();
-
-    // print(data);
-
-
-    // print(domainList);
-    // print(socialsList);
-
-  }
-
-
-  onAddDomain() {
-    // setState(() {
-    //   HigherStudiesModel _higherStudiesModel = HigherStudiesModel(id: higherStudiesForms.length);
-    //   higherStudiesForms.add(HigherStudiesFormWidget(
-    //     index: higherStudiesForms.length,
-    //     contactModel: _higherStudiesModel,
-    //     onRemove: () => onRemove(_higherStudiesModel),
-    //   ));
-    // });
-
-
-      setState(() {
-      domainList.add(
-        Socials(
-          label: 'Domain of Interest',
-          hintText: 'Domain',  
-        )
-      );
-    });
-
-
   }
 
   onAddSocials() {
     setState(() {
+      SocialLink _socialLink = SocialLink(id: nextAvailableIdSocial);
+      nextAvailableIdSocial++;
+      
       socialsList.add(
         Socials(
+          socialLinkModel: _socialLink,
           label: 'Social',
-          hintText: 'Link',  
+          hintText: 'Link',
+          onRemove: () => onRemoveSocials(_socialLink),
         )
       );
+    });
+  }
+
+  onRemoveSocials(SocialLink socialLink) {
+    // int notNullElements = 0;
+
+    // for (Socials? element in socialsList) {
+    //   if (element != null) {
+    //     notNullElements++;
+    //   }
+    // }
+
+    // if (notNullElements == 1) {
+    //   return null;
+    // }
+
+    setState(() {
+      int index = socialsList
+          .indexWhere((element) {
+            if (element != null) 
+              return element.socialLinkModel.id == socialLink.id;
+            return false;
+          });
+
+      // if (socialsList != null) socialsList.removeAt(index);
+      if (socialsList != null) socialsList[index] = null;
     });
   }
 }

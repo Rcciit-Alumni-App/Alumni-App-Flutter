@@ -34,3 +34,8 @@ const kEventNewsHeading = TextStyle(
   fontSize: 25.0,
   fontWeight: FontWeight.w700,
 );
+
+const kProfileNavbarText = TextStyle(
+  fontSize: 20,
+  color: Color(0xFF2F80ED),
+);

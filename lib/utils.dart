@@ -1,8 +1,11 @@
 
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/event_service.dart';
+import 'package:frontend/services/job_service.dart';
 import 'package:frontend/services/loader_service.dart';
 import 'package:frontend/services/navigation_service.dart';
+import 'package:frontend/services/news_service.dart';
 import 'package:get_it/get_it.dart';
 
 Future<void> registerService() async {
@@ -18,5 +21,14 @@ Future<void> registerService() async {
   );
   getIt.registerSingleton<LoaderService>(
     LoaderService(),
+  );
+  getIt.registerSingleton<NewsService>(
+    NewsService(),
+  );
+  getIt.registerSingleton<EventService>(
+    EventService(),
+  );
+  getIt.registerSingleton<JobService>(
+    JobService(),
   );
 }

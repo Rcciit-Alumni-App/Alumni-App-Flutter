@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/Background/background_add_details_page.dart';
 import 'package:frontend/components/Buttons/button4.dart';
-import 'package:frontend/components/formfield.dart';
+import 'package:frontend/components/FormFields/formfield.dart';
 import 'package:frontend/constants/constants.dart';
+import 'package:frontend/screens/register/student/register_student_work.dart';
 
 class RegisterProfileStudent extends StatefulWidget {
   const RegisterProfileStudent({super.key});
@@ -12,6 +13,15 @@ class RegisterProfileStudent extends StatefulWidget {
 }
 
 class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    // FETCH DATA FROM LOCAL AND JUST DISPLAY
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -41,40 +51,35 @@ class _RegisterProfileStudentState extends State<RegisterProfileStudent> {
                     backgroundImage: AssetImage("assets/default-user.jpg"),
                   ),
                 ),
-                SizedBox(
-                  height: 40.0,
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Full Name",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "Full Name",
-                  ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Current year of study",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "Current year of study",
-                  ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Year of Passout",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "Year of Passout",
-                  ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
+                MyTextField(
+                  enabled: false,
+                  label: "Department",
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: MyTextField(
-                    label: "Department",
-                  ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
+                SizedBox(height: MediaQuery.sizeOf(context).width * 0.05),
                 Center(
                   child: CustomButton4(
                     label: "Next",
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return RegisterStudentWork();
+                      }));
+                    },
                   ),
                 )
               ],
