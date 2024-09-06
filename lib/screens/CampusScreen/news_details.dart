@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/bottomnavbar.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/NewsModel.dart';
+import 'package:frontend/models/UserModel.dart';
+import 'package:frontend/screens/HomeScreen/home_screen.dart';
 import 'package:frontend/services/alert_services.dart';
 import 'package:frontend/services/loader_service.dart';
+import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/services/news_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +26,12 @@ class _NewsDetailsState extends State<NewsDetails> {
   late NewsService newsService;
   late AlertService alertService;
   final LoaderService loaderService = LoaderService();
+  final NavigationService navigation = NavigationService();
   final TextEditingController _commentController = TextEditingController();
+  final TextEditingController editController = TextEditingController();
   List<CommentModel> comments = [];
+  final storage = new FlutterSecureStorage();
+  UserModel? user;
 
   @override
   void initState() {
@@ -33,12 +43,37 @@ class _NewsDetailsState extends State<NewsDetails> {
         comments = value;
       });
     });
+    getUser().then((value) {
+      setState(() {
+        user = value;
+      });
+    });
   }
 
   @override
   void dispose() {
     _commentController.dispose();
+    editController.dispose();
     super.dispose();
+  }
+
+  Future<UserModel?> getUser() async {
+    final user = await storage.read(key:"user");
+    return UserModel.fromJson(json.decode(user!));
+  }
+  
+  Future<void> deletePost(String newsId) async {
+    try {
+      await newsService.deleteNews(newsId);
+      alertService.showSnackBar(message: 'Post deleted successfully');
+      Navigator.of(context).pushReplacement(
+        navigation.createRoute(route: HomePage()),
+      );
+    } catch (e) {
+      debugPrint("Error: $e");
+      loaderService.hideLoader();
+      alertService.showSnackBar(message: 'Failed to delete post');
+    }
   }
 
   Future<void> createComment(String newsId, String comment) async {
@@ -103,7 +138,7 @@ class _NewsDetailsState extends State<NewsDetails> {
   }
 
   void _editComment(CommentModel comment) {
-    final TextEditingController editController = TextEditingController(text: comment.comment);
+    editController.text = comment.comment;
 
     showModalBottomSheet(
       context: context,
@@ -154,13 +189,42 @@ class _NewsDetailsState extends State<NewsDetails> {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.news!.title,
-                      style: kEventNewsHeading,
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            widget.news!.title,
+                            style: kEventNewsHeading,
+                            
+                          ),
+                        ),
+                        //Spacer(),
+                        user?.id == widget.news!.author?.id
+                                      ? PopupMenuButton<String>(
+                                          onSelected: (value) {
+                                            if (value == 'edit') {
+                                              // editPost(news[index]);
+                                            } else if (value == 'delete') {
+                                              deletePost(widget.news!.id);
+                                            }
+                                          },
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              value: 'edit',
+                                              child: Text('Edit'),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'delete',
+                                              child: Text('Delete'),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                      ],
                     ),
                     SizedBox(height: 20.0),
                     Container(
@@ -242,18 +306,27 @@ class _NewsDetailsState extends State<NewsDetails> {
                                       ),
                                     ),
                                     Spacer(),
-                                    IconButton(
-                                      onPressed: () {
-                                        _editComment(comments[index]);
-                                      },
-                                      icon: Icon(Icons.edit, color: Colors.blue),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        deleteComment(comments[index].id);
-                                      },
-                                      icon: Icon(Icons.delete, color: Colors.red),
-                                    ),
+                                    user?.id == comments[index].user.id
+                                      ? PopupMenuButton<String>(
+                                          onSelected: (value) {
+                                            if (value == 'edit') {
+                                              _editComment(comments[index]);
+                                            } else if (value == 'delete') {
+                                              deleteComment(comments[index].id);
+                                            }
+                                          },
+                                          itemBuilder: (context) => [
+                                            PopupMenuItem(
+                                              value: 'edit',
+                                              child: Text('Edit'),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'delete',
+                                              child: Text('Delete'),
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
                                   ],
                                 ),
                               ),

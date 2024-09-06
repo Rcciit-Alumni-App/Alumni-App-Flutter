@@ -56,7 +56,7 @@ class AuthService {
     
   }
 
-  Future<Map<String, dynamic>> login(String personal_email, String password) async {
+  Future<void> login(String personal_email, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
       headers: <String, String>{
@@ -67,13 +67,19 @@ class AuthService {
         'password': password,
       }),
     );
-      debugPrint(jsonDecode(response.body)["access_token"]);
+      if(response.statusCode == 201)
+      {
+        print(response.body);
+       // debugPrint(jsonDecode(response.body)["access_token"]);
       var accesslogintoken =jsonDecode(response.body)["access_token"];
       await storage.write(key: "accessToken", value: accesslogintoken);
       UserModel? user = await getUserProfile();
       await storage.write(key: "user", value: jsonEncode(user));
-      return jsonDecode(response.body);
-    
+    }
+    else{
+      print(response.body);
+      throw Exception('Failed to login');
+    }
   }
 
   Future<void> forgotPassword(String email) async {

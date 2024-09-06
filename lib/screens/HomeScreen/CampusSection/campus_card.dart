@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/components/Buttons/button.dart';
 import 'package:frontend/models/NewsModel.dart';
+import 'package:frontend/models/UserModel.dart';
 import 'package:frontend/screens/CampusScreen/news_details.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/services/news_service.dart';
@@ -10,8 +14,9 @@ class CampusCard extends StatefulWidget {
   final String? title;
   final String? desc;
   final String? id;
+  final String? text;
   const CampusCard(
-      {super.key, required this.title, required this.desc, required this.id});
+      {super.key, required this.title, required this.desc, required this.id, this.text});
 
   @override
   State<CampusCard> createState() => _CampusCardState();
@@ -19,6 +24,8 @@ class CampusCard extends StatefulWidget {
 
 class _CampusCardState extends State<CampusCard> {
   NavigationService navigation = NavigationService();
+  final storage = new FlutterSecureStorage();
+  UserModel? user;
 
   late NewsService newsService;
   NewsModel? newsModel;
@@ -28,6 +35,11 @@ class _CampusCardState extends State<CampusCard> {
     // TODO: implement initState
     super.initState();
     newsService = GetIt.instance<NewsService>();
+    getUser().then((value) => {
+          setState(() {
+            user = value;
+          })
+        });
   }
 
   Future getNews() async {
@@ -36,6 +48,11 @@ class _CampusCardState extends State<CampusCard> {
     } catch (e) {
       debugPrint("Error: $e");
     }
+  }
+
+  Future<UserModel?> getUser() async {
+    final user = await storage.read(key:"user");
+    return UserModel.fromJson(json.decode(user!));
   }
 
   @override
@@ -96,15 +113,32 @@ class _CampusCardState extends State<CampusCard> {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 14),
-              Align(
-                alignment: Alignment.centerRight,
-                child: CustomButton(
-                  label: 'View More',
-                  width: 90,
-                  height: 35,
-                  onPressed: () {},
+             
+                Row(
+                  children: [
+
+                    Spacer(),
+                    
+                    CustomButton(
+                      label: widget.text ?? 'View More',
+                      width: 90,
+                      height: 35,
+                      onPressed: () {
+                        getNews().then((value) => {
+                setState(() {
+                  NewsModel newsModel = value;
+                  debugPrint("NewsModel" + newsModel.toString());
+                  Navigator.of(context).push(navigation.createRoute(
+                      route: NewsDetails(
+                    news: newsModel,
+                  )));
+                })
+              });
+                      },
+                    ),
+                  ],
                 ),
-              ),
+            
             ],
           ),
         ),

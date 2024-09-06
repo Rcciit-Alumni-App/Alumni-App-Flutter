@@ -5,67 +5,38 @@ import 'package:frontend/models/UserModel.dart';
 class EventInterests {
   String id;
   String userId;
-  UserModel? user;
+ // UserModel? user;
   String eventId;
-  Eventsmodel event;
+ // Eventsmodel event;
   DateTime expiresAt;
 
   EventInterests(
       {required this.id,
       required this.userId,
-      this.user,
+   //   this.user,
       required this.eventId,
-      required this.event,
+     // required this.event,
       required this.expiresAt});
 
   factory EventInterests.fromJson(Map<String, dynamic> json) {
     return EventInterests(
         id: json['id'],
         userId: json['userId'],
-        user: UserModel.fromJson(json['user']),
+   //     user: UserModel.fromJson(json['user']),
         eventId: json['eventId'],
-        event: Eventsmodel.fromJson(json['event']),
+      //  event: Eventsmodel.fromJson(json['event']),
         expiresAt: DateTime.parse(json['expiresAt']));
   }
   Map<String, dynamic> toJson() => {
         'id': id,
         'userId': userId,
-        'user': user?.toJson(),
+      //  'user': user?.toJson(),
         'eventId': eventId,
-        'event': event.toJson(),
+      //  'event': event.toJson(),
         'expiresAt': expiresAt.toIso8601String()
       };
 }
-// {
-//   "id": "66c0a051ce5e1816793b866a",
-//   "venue": "Grand Ballroom, New York",
-//   "schedule": "07:00 PM - Dinner Served",
-//   "banner_image": "https://example.com/charity-gala-banner.jpg",
-//   "images": [
-//     "https://example.com/gala-image1.jpg",
-//     "https://example.com/gala-image2.jpg"
-//   ],
-//   "announcements": {
-//     "title": "Donation Matching",
-//     "description": "All donations will be matched dollar for dollar!"
-//   },
-//   "event_name": "Annual Charity Gala",
-//   "rules": [
-//     "Formal attire required",
-//     "No photography during the auction"
-//   ],
-//   "description": [
-//     "Dinner and silent auction",
-//     "Guest speeches and awards",
-//     "Fundraising activities"
-//   ],
-//   "attractions": {
-//     "label": "Special Guest",
-//     "value": "celebrity-guest"
-//   },
-//   "eventInterests": [],
-//   "created_at": "2024-08-17T13:06:20.818Z"
-// }
+// {"id":"66c09e55ce5e1816793b8668","venue":"Tech Arena, San Francisco","schedule":"09:00 AM - Opening Remarks","banner_image":"https://example.com/tech-conference-banner.jpg","images":["https://example.com/image1.jpg","https://example.com/image2.jpg"],"announcements":{"title":"Early Bird Registration","description":"Early bird registration is now open!"},"event_name":"Tech Conference 2024","rules":["No recording devices allowed","Respect the speaker's time"],"description":["Introduction to emerging technologies","Keynote speeches from industry leaders","Networking opportunities"],"attractions":{"label":"Keynote Speaker","value":"tech-leader"},"eventInterests":[{"id":"66c34b5d302be251a78bb094","userId":"66bba20d934d8024078fd894","eventId":"66c09e55ce5e1816793b8668","expiresAt":"2024-12-31T23:59:59.000Z"}],"created_at":"2024-08-17T12:57:52.354Z"}
 class Eventsmodel {
   String id;
   String eventName;
@@ -77,7 +48,7 @@ class Eventsmodel {
   EventAttraction attractions;
   List<String> rules;
   EventAnnouncement announcements;
-  List<EventInterests>? eventInterests;
+  List<EventInterests> eventInterests;
   DateTime createdAt;
 
 

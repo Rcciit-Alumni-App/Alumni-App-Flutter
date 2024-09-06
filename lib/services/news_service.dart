@@ -29,6 +29,26 @@ class NewsService {
   }
   return [];
 }
+Future<List<NewsCardModel>> getAllnewsbyUser() async {
+  final token = await storage.read(key: "accessToken");
+  final response = await http.get(
+    Uri.parse('$baseUrl/news/get-all/me'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200 && response.body.isNotEmpty) {
+    final List<dynamic> newsJson = json.decode(response.body);
+    List<NewsCardModel> news = newsJson
+        .map((json) => NewsCardModel.fromJson(json as Map<String, dynamic>))
+        .toList();
+    //debugPrint("News: ${news.toString()}");
+    return news;
+  }
+  return [];
+}
 
   Future<NewsModel> getNewsById(String id) async {
     final token = await storage.read(key: "accessToken");
@@ -54,8 +74,39 @@ class NewsService {
       },
       body: jsonEncode(news.toJson()),
     );
-   // print(response.body);
+   print(response.body);
 }
+
+  Future<void> deleteNews(String id) async {
+    final token = await storage.read(key: "accessToken");
+    final response = await http.delete(
+      Uri.parse('$baseUrl/news/delete-post/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    print(response.body);
+  }
+
+  Future<void> updateNews(String title, String desc, String banner, List<String> tags) async {
+    final token = await storage.read(key:"accessToken");
+    final response = await http.put(
+      Uri.parse('$baseUrl/news/update-post'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'title': title,
+        'description': desc,
+        'banner': banner,
+        'tags': tags
+      }),
+    );
+    print(response.body);
+  }
+
  static const String commentUrl = 'http://10.0.2.2:8000/api/v1/comments';
  Future<void> createComment(String newsId , String comment) async {
     final token = await storage.read(key: "accessToken");

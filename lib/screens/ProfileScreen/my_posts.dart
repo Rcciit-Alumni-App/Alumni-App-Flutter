@@ -32,7 +32,7 @@ class _MyPostsState extends State<MyPosts> {
   }
   Future getNews() async {
     try {
-      return await newsService.getAllnews();
+      return await newsService.getAllnewsbyUser();
     } catch (e) {
       debugPrint("Error: $e");
     }
@@ -96,6 +96,7 @@ class _MyPostsState extends State<MyPosts> {
                           title: newsModel![index].title,
                           desc: newsModel![index].description,
                           id: newsModel![index].id,
+                          text: "Edit",
                         );
                     
                       }
